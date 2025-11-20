@@ -1,5 +1,5 @@
 """
-ASGI config for groupeE project.
+ASGI config for oshiro_navi project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.asgi import get_asgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'groupeE.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'oshiro_navi.settings')
 
 application = get_asgi_application()
