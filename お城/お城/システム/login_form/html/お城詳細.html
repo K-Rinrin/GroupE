@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>お城情報サイト</title>
+<link rel="stylesheet" href="../css/detail.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel="stylesheet">
+</head>
+<body>
+<header>
+    <h1>お城ナビ</h1>
+    <nav>
+    <i class='bx bx-menu'></i>
+    <a href="./アカウント.html"> ログアウト</a>
+    </nav>
+</header>
+<div class="tabs">
+<button class="tab active" data-tab="castle">お城情報</button>
+<button class="tab" data-tab="area">基本情報</button>
+<button class="tab" data-tab="review">口コミ</button>
+</div>
+
+<image src="../image/松本城秋.jpg" alt="お城" class="hero">
+
+<div class="tab-content active" id="castle">
+<h2>鶴ヶ城（会津若松城）</h2>
+<p>鶴ヶ城は福島県会津若松市にある名城で、別名「会津若松城」とも呼ばれています。<br>
+戊辰戦争では激戦の舞台となり、今もその姿は会津の象徴として多くの人に親しまれています。</p>
+</div>
+
+<div class="tab-content" id="area">
+<h2>周辺情報</h2>
+<p>鶴ヶ城周辺には、会津武家屋敷や白虎隊記念館など、歴史的な観光地が多くあります。<br>
+また、城下町の雰囲気を楽しめるカフェやお土産店も充実しています。</p>
+</div>
+
+<div class="tab-content" id="review">
+<h2>鶴ヶ城の口コミ</h2>
+<form id="reviewForm">
+    <label>お名前（任意）</label><br>
+    <input id="name" type="text" placeholder="例：山田 太郎"><br><br>
+
+    <label>タイトル</label><br>
+    <input id="title" type="text" placeholder="例：桜がとても綺麗でした" required><br><br>
+
+    <label>口コミ本文</label><br>
+    <textarea id="body" placeholder="ここに感想を書きましょう（1000文字以内）" maxlength="1000" required></textarea><br>
+    <div>文字数：<span id="charCount">0</span>/1000</div><br>
+
+    <label>評価</label><br>
+    <div class="rating">
+    <input value="5" name="rate" id="star5" type="radio">
+    <label title="text" for="star5"></label>
+    <input value="4" name="rate" id="star4" type="radio">
+    <label title="text" for="star4"></label>
+    <input value="3" name="rate" id="star3" type="radio" checked="">
+    <label title="text" for="star3"></label>
+    <input value="2" name="rate" id="star2" type="radio">
+    <label title="text" for="star2"></label>
+    <input value="1" name="rate" id="star1" type="radio">
+    <label title="text" for="star1"></label>
+    </div>
+    <div>平均評価：<span id="avgRating">0.0</span> / 5</div><br>
+
+    <label>写真（任意）</label><br>
+    <input id="photo" type="file" accept="image/*"> 
+    <div id="photoPreview"></div><br>
+
+    <button type="submit" class="btn">投稿する</button>
+    <button type="button" id="clearBtn" class="btn secondary">フォームをクリア</button>
+</form>
+
+<div class="review-list">
+    <h3>投稿された口コミ</h3>
+    <label>並べ替え：</label>
+    <select id="sortSelect">
+    <option value="new">新着順</option>
+    <option value="rating_desc">評価が高い順</option>
+    <option value="rating_asc">評価が低い順</option>
+    </select>
+    <div>合計口コミ：<span id="totalCount">0</span></div>
+    <div id="list"></div>
+</div>
+</div>
+
+<script src="../JS/detail.js"></script>
+    <!-- フッター -->
+<footer>
+    <a href="./利用者TOP.html"><i class='bx bxs-home'></i><span>ホーム</span></a>
+    <a href="#"><i class='bx bxs-map'></i><span>マップ</span></a>
+    <a href="./スタンプ.html"><i class='bx bxs-bank'></i><span>スタンプ一覧</span></a>
+    <a href="#"><i class='bx bxs-user'></i><span>マイページ</span></a>
+</footer>
+</body>
+</html>

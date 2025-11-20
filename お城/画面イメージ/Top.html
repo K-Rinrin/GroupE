@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>お城ナビ </title>
+    <!-- Google Fonts のインポート (Zen Old Mincho) -->
+    <!-- 和風の雰囲気を出すために、落ち着いた明朝体フォントを使用します -->
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            /* Zen Old Minchoを優先的に使用し、和風の雰囲気を出す */
+            font-family: 'Zen Old Mincho', serif;
+            display: flex;
+            flex-direction: column; /* 要素を縦方向に並べる */
+            justify-content: center; /* 垂直方向の中央揃え */
+            align-items: center; /* 水平方向の中央揃え */
+            min-height: 100vh; /* 画面全体の高さ */
+            margin: 0;
+            background-color: #fcfcf0; /* 生成り色に近い、落ち着いた背景色 */
+            color: #333333; /* 墨色に近い文字色 */
+            line-height: 1.8; /* 行の高さを少し広げ、ゆとりを持たせる */
+            padding: 20px; /* 全体の余白 */
+            box-sizing: border-box;
+        }
+
+        .main-title {
+            font-size: 3.5em; /* タイトルを力強く、大きく */
+            font-weight: 700; /* Zen Old Mincho の太字 */
+            color: #333333; /* 墨色 */
+            margin-bottom: 60px; /* タイトルとグリッドコンテナの間の余白を広げる */
+            text-align: center;
+            letter-spacing: 0.1em; /* 文字間隔を広げ、風格を出す */
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1); /* ほんのり影をつけて立体感を */
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* 2列に均等に分割 */
+            grid-template-rows: repeat(2, 1fr);    /* 2行に均等に分割 */
+            gap: 30px; /* アイテム間の隙間を広げる */
+            width: 85%; /* コンテナの幅を少し広げる */
+            max-width: 700px; /* 最大幅を少し広げる */
+            padding: 40px; /* コンテナの内側の余白を増やす */
+            box-sizing: border-box;
+            background-color: #ffffff; /* 白い背景 */
+            border-radius: 8px; /* 角の丸みを控えめに */
+            border: 1px solid #e0e0e0; /* 薄い枠線でコンテナを区切る */
+        }
+
+        .grid-item {
+            background-color: #ffffff; /* アイテムの背景は白 */
+            border: 1px solid #a0a0a0; /* 薄い墨色の細い枠線 */
+            border-radius: 5px; /* 角の丸みをさらに控えめに */
+            display: flex;
+            justify-content: center; /* 水平方向の中央揃え */
+            align-items: center; /* 垂直方向の中央揃え */
+            font-size: 1.8em; /* 文字サイズ */
+            font-weight: 700; /* 太字 */
+            color: #4a4a4a; /* 落ち着いた墨色 */
+            min-height: 160px; /* アイテムの最小高さを少し高く */
+            cursor: pointer; /* クリック可能であることを示すカーソル */
+            transition: all 0.2s ease-out; /* ホバー時のアニメーションを控えめに */
+            text-decoration: none; /* リンクとして使用する場合の下線を削除 */
+            letter-spacing: 0.05em; /* 文字間隔を少し開ける */
+        }
+
+        .grid-item:hover {
+            background-color: #f0f0e0; /* ホバー時に少し濃い生成り色に変化 */
+            border-color: #777777; /* ホバー時に枠線を少し濃く */
+            color: #222222; /* ホバー時に文字色を濃く */
+            transform: none; /* 浮き上がり効果は削除 */
+            box-shadow: none; /* 影も削除 */
+        }
+
+        /* スマートフォン向け（画面幅が小さい場合） */
+        @media (max-width: 600px) {
+            .main-title {
+                font-size: 2.8em; /* スマホでのタイトル文字サイズ調整 */
+                margin-bottom: 50px;
+            }
+            .grid-container {
+                grid-template-columns: 1fr; /* 1列にする */
+                width: 90%;
+                padding: 30px;
+                gap: 25px;
+                border-radius: 6px;
+            }
+            .grid-item {
+                font-size: 1.6em;
+                min-height: 130px;
+                border-radius: 4px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1 class="main-title">お城ナビ</h1>
+    <div class="grid-container">
+        <!-- 各グリッドアイテムは、リンクとしても機能するようにaタグで囲んでいます -->
+        <a href="#" class="grid-item">お城リスト</a>
+        <a href="#" class="grid-item">マイページ</a>
+        <a href="#" class="grid-item">イベント情報</a>
+        <a href="#" class="grid-item">QR</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>お城リスト </title>
+    <!-- Google Fonts のインポート (Zen Old Mincho) -->
+    <!-- 和風の雰囲気を出すために、落ち着いた明朝体フォントを使用します -->
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            /* Zen Old Minchoを優先的に使用し、和風の雰囲気を出す */
+            font-family: 'Zen Old Mincho', serif;
+            display: flex;
+            flex-direction: column; /* 要素を縦方向に並べる */
+            align-items: center; /* 全体を水平中央に揃える */
+            min-height: 100vh; /* 画面全体の高さ */
+            margin: 0;
+            background-color: #fcfcf0; /* 生成り色に近い、落ち着いた背景色 */
+            color: #333333; /* 墨色に近い文字色 */
+            line-height: 1.8; /* 行の高さを少し広げ、ゆとりを持たせる */
+            padding: 30px 20px; /* 上下の余白を広めに */
+            box-sizing: border-box;
+        }
+
+        /* ヘッダー部分のコンテナ */
+        .header-container {
+            width: 100%;
+            max-width: 800px; /* 全体の最大幅を考慮 */
+            display: flex;
+            align-items: baseline; /* テキストのベースラインを揃える */
+            margin-bottom: 40px; /* ヘッダーと次のセクションの余白を広げる */
+            position: relative; /* 子要素の絶対配置の基準にする */
+            padding-bottom: 15px; /* メインタイトルと他の要素の間に少しスペースを */
+        }
+
+        /* 左上の「お城ナビ」 */
+        .sub-title {
+            font-size: 1.3em; /* 少し大きめに */
+            color: #555555; /* 落ち着いた墨色 */
+            position: absolute; /* 親要素header-containerを基準に配置 */
+            left: 0;
+            top: 0;
+            margin-left: 0; /* 左端からの余白はコンテナのpaddingで調整 */
+            letter-spacing: 0.05em; /* 文字間隔を調整 */
+        }
+
+        /* 中央の「お城リスト」タイトル */
+        .main-title {
+            font-size: 3.2em; /* 大きいタイトル */
+            font-weight: 700; /* 太字 */
+            color: #333333; /* 墨色 */
+            flex-grow: 1; /* 残りのスペースを埋めて中央に寄せる */
+            text-align: center;
+            margin: 0 auto; /* 中央揃え */
+            letter-spacing: 0.1em; /* 文字間隔を広げ、風格を出す */
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.05); /* ほんのり影をつけて立体感を */
+        }
+
+        /* 検索バーセクション */
+        .search-section {
+            width: 100%;
+            max-width: 700px; /* 検索バーの最大幅 */
+            display: flex;
+            gap: 15px; /* アイテム間の隙間を広げる */
+            justify-content: center; /* 水平中央揃え */
+            margin-bottom: 40px; /* 検索バーとタブの間の余白を広げる */
+        }
+
+        /* 検索バーの各アイテム（ボタンや入力フィールド風のdiv） */
+        .search-item {
+            padding: 12px 25px; /* 上下の余白を少し増やし、左右も調整 */
+            border: 1px solid #777777; /* 落ち着いた墨色の細い枠線 */
+            background-color: #ffffff; /* 白い背景 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1em;
+            cursor: pointer;
+            border-radius: 3px; /* 角の丸みを控えめに */
+            white-space: nowrap; /* テキストの折り返しを防ぐ */
+            transition: all 0.2s ease-out; /* ホバー時のアニメーション */
+            color: #4a4a4a; /* 落ち着いた墨色 */
+        }
+
+        .search-item:hover {
+            background-color: #f0f0e0; /* ホバー時に少し濃い生成り色に変化 */
+            border-color: #555555; /* ホバー時に枠線を少し濃く */
+            color: #222222; /* ホバー時に文字色を濃く */
+        }
+
+        /* 検索ボタン */
+        .search-item.search-button {
+            background-color: #f2c253; /* 山吹色に近い落ち着いた黄色 */
+            border-color: #b77e2b; /* 濃いめの枠線 */
+            color: #ffffff; /* 白い文字 */
+            font-weight: 700; /* 太字 */
+            letter-spacing: 0.05em;
+        }
+
+        .search-item.search-button:hover {
+            background-color: #e0b04a; /* ホバー時に少し濃い山吹色 */
+            border-color: #a06b20;
+            color: #ffffff;
+        }
+
+        /* フリーワード入力フィールド風のアイテム */
+        .search-item.free-word {
+            flex-grow: 1; /* 他のボタンより幅を広げる */
+            min-width: 180px; /* 最小幅 */
+        }
+
+        /* タブセクション */
+        .tabs-section {
+            width: 100%;
+            max-width: 700px;
+            display: flex;
+            justify-content: flex-start; /* 左寄せ */
+            gap: 30px; /* タブ間の隙間を広げる */
+            margin-bottom: 30px; /* タブと詳細情報の間の余白を広げる */
+            padding-left: 20px; /* 左端からの余白 */
+            box-sizing: border-box;
+            border-bottom: 1px solid #e0e0e0; /* タブの下に薄い線 */
+            padding-bottom: 10px; /* 下線とタブの間の余白 */
+        }
+
+        /* 各タブのリンク */
+        .tab-item {
+            color: #5c4b5e; /* 京紫に近い落ち着いた色 */
+            text-decoration: none; /* デフォルトの下線を消す */
+            font-size: 1.2em; /* 少し大きめに */
+            cursor: pointer;
+            padding-bottom: 5px; /* 下線のための余白 */
+            transition: color 0.2s ease-out;
+            white-space: nowrap; /* テキストの折り返しを防ぐ */
+        }
+
+        .tab-item:hover {
+            color: #8a2be2; /* ホバー時に少し明るい紫に */
+        }
+
+        /* アクティブなタブ */
+        .tab-item.active {
+            color: #8a2be2; /* アクティブなタブを紫で強調 */
+            border-bottom: 2px solid #8a2be2; /* アクティブなタブに下線 */
+            font-weight: 700; /* アクティブなタブを太字に */
+        }
+
+        /* 詳細情報セクション */
+        .details-section {
+            width: 100%;
+            max-width: 700px;
+            padding: 20px 30px; /* 左右の余白を広げる */
+            box-sizing: border-box;
+            background-color: #ffffff; /* 白い背景 */
+            border: 1px solid #e0e0e0; /* 薄い枠線で囲む */
+            border-radius: 5px; /* 角の丸みを控えめに */
+        }
+
+        /* 詳細情報のリスト（dtとdd） */
+        .details-list {
+            display: grid;
+            grid-template-columns: 100px 1fr; /* 項目名(dt)の列幅を広げる */
+            gap: 15px 25px; /* 行と列の隙間を広げる */
+            font-size: 1.1em; /* 少し大きめに */
+            line-height: 1.8; /* 行の高さ */
+            margin: 0; /* デフォルトのdlの余白を消す */
+            padding: 0;
+        }
+
+        .details-list dt {
+            font-weight: 700; /* 項目名を太字に */
+            color: #333333; /* 墨色 */
+            text-align: left;
+            white-space: nowrap; /* 項目名の折り返しを防ぐ */
+        }
+
+        .details-list dd {
+            margin: 0; /* デフォルトのddの余白を消す */
+            color: #4a4a4a; /* 落ち着いた墨色 */
+            text-align: left;
+        }
+
+        /* レスポンシブ対応 */
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 2.8em;
+                margin-bottom: 30px;
+            }
+            .sub-title {
+                font-size: 1.1em;
+            }
+            .search-section {
+                flex-wrap: wrap; /* 狭い画面では折り返す */
+                justify-content: center; /* 中央揃えにする */
+                gap: 10px;
+                margin-bottom: 30px;
+            }
+            .search-item {
+                flex-basis: calc(50% - 10px); /* 2列にする */
+                padding: 10px 15px;
+                font-size: 1em;
+            }
+            .search-item.free-word {
+                flex-basis: calc(100% - 20px); /* フリーワードは横幅いっぱいに */
+                min-width: auto;
+            }
+            .tabs-section {
+                justify-content: center; /* 中央揃えにする */
+                padding-left: 0; /* 左寄せのパディングをリセット */
+                gap: 20px;
+                margin-bottom: 20px;
+            }
+            .tab-item {
+                font-size: 1.1em;
+            }
+            .details-section {
+                padding: 15px 20px;
+            }
+            .details-list {
+                grid-template-columns: 80px 1fr; /* 項目名を少し広げる */
+                gap: 10px 15px;
+                font-size: 1em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 20px 10px;
+            }
+            .sub-title {
+                font-size: 0.9em;
+            }
+            .main-title {
+                font-size: 2.2em;
+                margin-bottom: 25px;
+            }
+            .header-container {
+                flex-direction: column; /* 縦並びにする */
+                align-items: center;
+                padding-bottom: 0;
+                margin-bottom: 20px;
+            }
+            .sub-title {
+                position: static; /* 絶対配置を解除し、通常のフローに戻す */
+                margin: 0 0 10px 0; /* 上下左右の余白を調整 */
+            }
+            .search-section {
+                flex-direction: column; /* 縦並びにする */
+                align-items: stretch; /* 幅いっぱいに広げる */
+                gap: 10px;
+                margin-bottom: 25px;
+            }
+            .search-item {
+                width: auto; /* 幅を自動調整 */
+                flex-basis: auto;
+                padding: 10px 15px;
+                font-size: 0.95em;
+            }
+            .search-item.free-word {
+                width: auto;
+                flex-basis: auto;
+            }
+            .tabs-section {
+                gap: 12px;
+                margin-bottom: 15px;
+                flex-wrap: wrap; /* タブも折り返す */
+                justify-content: center;
+            }
+            .tab-item {
+                font-size: 0.95em;
+            }
+            .details-section {
+                padding: 10px 15px;
+            }
+            .details-list {
+                grid-template-columns: 70px 1fr; /* 項目名をさらに狭く */
+                gap: 8px 10px;
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header-container">
+        <span class="sub-title">お城ナビ</span>
+        <h1 class="main-title">お城リスト</h1>
+    </div>
+
+    <div class="search-section">
+        <div class="search-item">都道府県</div>
+        <div class="search-item free-word">フリーワード</div>
+        <div class="search-item search-button">検索</div>
+    </div>
+
+    <div class="tabs-section">
+        <a href="#" class="tab-item active">お城情報</a>
+        <a href="#" class="tab-item">基本情報</a>
+        <a href="#" class="tab-item">モデルコース</a>
+    </div>
+
+    <div class="details-section">
+        <dl class="details-list">
+            <dt>名称</dt>
+            <dd>鶴ヶ城</dd>
+            <dt>住所</dt>
+            <dd>福島県会津若松市追手町1-1</dd>
+            <dt>築城年</dt>
+            <dd>1684年</dd>
+            <dt>遺構</dt>
+            <dd></dd> <!-- 画像に値がないので空 -->
+            <dt>構造</dt>
+            <dd></dd> <!-- 画像に値がないので空 -->
+            <dt>重要度</dt>
+            <dd></dd> <!-- 画像に値がないので空 -->
+        </dl>
+    </div>
+</body>
+</html>

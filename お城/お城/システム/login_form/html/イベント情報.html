@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>お城イベントカレンダー</title>
+    <link rel="stylesheet" href="../css/home.css">
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@400;700&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel="stylesheet">
+</head>
+<body>
+        <!-- ======= ヘッダーナビバー ======= -->
+<header>
+    <h1>お城ナビ</h1>
+    <nav>
+    <i class='bx bx-menu'></i>
+    <a href="./アカウント.html"> ログアウト</a>
+    </nav>
+</header>
+<main>
+    <div class="header-container">
+        <h1 class="main-title">イベント情報</h1>
+    </div>
+
+    <div class="calendar-wrapper">
+        <div class="calendar-nav">
+            <button class="nav-button prev-month">◀ 前の月</button>
+            <div class="current-month-year">2023年 11月</div>
+            <button class="nav-button next-month">次の月 ▶</button>
+        </div>
+
+        <table class="calendar-table">
+            <thead>
+                <tr>
+                    <th>日</th>
+                    <th>月</th>
+                    <th>火</th>
+                    <th>水</th>
+                    <th>木</th>
+                    <th>金</th>
+                    <th>土</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- 2023年11月のカレンダー例 -->
+                <tr>
+                    <td class="outside-month">29</td> <!-- 10月 -->
+                    <td class="outside-month">30</td> <!-- 10月 -->
+                    <td class="outside-month">31</td> <!-- 10月 -->
+                    <td>
+                        1
+                        <div class="event-marker"></div>
+                        <div class="event-text">鶴ヶ城 紅葉ライトアップ</div>
+                    </td>
+                    <td>2</td>
+                    <td>
+                        3
+                        <div class="event-marker"></div>
+                        <div class="event-text">名古屋城 秋祭り</div>
+                    </td>
+                    <td>4</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>6</td>
+                    <td>7</td>
+                    <td>8</td>
+                    <td>9</td>
+                    <td>
+                        10
+                        <div class="event-marker"></div>
+                        <div class="event-text">姫路城 世界遺産登録記念イベント</div>
+                    </td>
+                    <td>11</td>
+                </tr>
+                <tr>
+                    <td>12</td>
+                    <td>13</td>
+                    <td>14</td>
+                    <td>15</td>
+                    <td>16</td>
+                    <td>17</td>
+                    <td>
+                        18
+                        <div class="event-marker"></div>
+                        <div class="event-text">松本城 夜間特別公開</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>19</td>
+                    <td>20</td>
+                    <td>21</td>
+                    <td>
+                        22
+                        <div class="event-marker"></div>
+                        <div class="event-text">彦根城 ゆるキャラ祭り</div>
+                    </td>
+                    <td>23</td>
+                    <td>24</td>
+                    <td>25</td>
+                </tr>
+                <tr>
+                    <td>26</td>
+                    <td>27</td>
+                    <td>28</td>
+                    <td>29</td>
+                    <td>30</td>
+                    <td class="outside-month">1</td> <!-- 12月 -->
+                    <td class="outside-month">2</td> <!-- 12月 -->
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+    <!-- フッター -->
+<footer>
+    <a href="./利用者TOP.html"><i class='bx bxs-home'></i><span>ホーム</span></a>
+    <a href="#"><i class='bx bxs-map'></i><span>マップ</span></a>
+    <a href="./スタンプ.html"><i class='bx bxs-bank'></i><span>スタンプ一覧</span></a>
+    <a href="#"><i class='bx bxs-user'></i><span>マイページ</span></a>
+</footer>
+</body>
+</html>

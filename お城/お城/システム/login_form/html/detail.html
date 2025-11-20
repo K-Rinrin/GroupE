@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>お城情報サイト</title>
+<link rel="stylesheet" href="../css/detail.css">
+
+</head>
+<body>
+
+<div class="tabs">
+<button class="tab active" data-tab="castle">お城情報</button>
+<button class="tab" data-tab="area">周辺情報</button>
+<button class="tab" data-tab="review">口コミ</button>
+</div>
+
+<image src="../image/松本城秋.jpg" alt="お城" class="hero">
+
+<div class="tab-content active" id="castle">
+<h2>鶴ヶ城（会津若松城）</h2>
+<p>鶴ヶ城は福島県会津若松市にある名城で、別名「会津若松城」とも呼ばれています。<br>
+戊辰戦争では激戦の舞台となり、今もその姿は会津の象徴として多くの人に親しまれています。</p>
+</div>
+
+<div class="tab-content" id="area">
+<h2>周辺情報</h2>
+<p>鶴ヶ城周辺には、会津武家屋敷や白虎隊記念館など、歴史的な観光地が多くあります。<br>
+また、城下町の雰囲気を楽しめるカフェやお土産店も充実しています。</p>
+</div>
+
+<div class="tab-content" id="review">
+<h2>鶴ヶ城の口コミ</h2>
+<form id="reviewForm">
+    <label>お名前（任意）</label><br>
+    <input id="name" type="text" placeholder="例：山田 太郎"><br><br>
+
+    <label>タイトル</label><br>
+    <input id="title" type="text" placeholder="例：桜がとても綺麗でした" required><br><br>
+
+    <label>口コミ本文</label><br>
+    <textarea id="body" placeholder="ここに感想を書きましょう（1000文字以内）" maxlength="1000" required></textarea><br>
+    <div>文字数：<span id="charCount">0</span>/1000</div><br>
+
+    <label>評価</label><br>
+    <div class="stars">
+    <span class="star off" data-value="1">★</span>
+    <span class="star off" data-value="2">★</span>
+    <span class="star off" data-value="3">★</span>
+    <span class="star off" data-value="4">★</span>
+    <span class="star off" data-value="5">★</span>
+    </div>
+    <div>平均評価：<span id="avgRating">0.0</span> / 5</div><br>
+
+    <label>写真（任意）</label><br>
+    <input id="photo" type="file" accept="image/*">
+    <div id="photoPreview"></div><br>
+
+    <button type="submit" class="btn">投稿する</button>
+    <button type="button" id="clearBtn" class="btn secondary">フォームをクリア</button>
+</form>
+
+<div class="review-list">
+    <h3>投稿された口コミ</h3>
+    <label>並べ替え：</label>
+    <select id="sortSelect">
+    <option value="new">新着順</option>
+    <option value="rating_desc">評価が高い順</option>
+    <option value="rating_asc">評価が低い順</option>
+    </select>
+    <div>合計口コミ：<span id="totalCount">0</span></div>
+    <div id="list"></div>
+</div>
+</div>
+
+<script>
+const STORAGE_KEY = 'castle_reviews_v1';
+const qs = s => document.querySelector(s);
+const qsa = s => Array.from(document.querySelectorAll(s));
+const form = qs('#reviewForm');
+const nameInput = qs('#name');
+const titleInput = qs('#title');
+const bodyInput = qs('#body');
+const starEls = qsa('.star');
+const avgRatingEl = qs('#avgRating');
+const listEl = qs('#list');
+const charCount = qs('#charCount');
+const photoInput = qs('#photo');
+const photoPreview = qs('#photoPreview');
+const sortSelect = qs('#sortSelect');
+const totalCount = qs('#totalCount');
+const clearBtn = qs('#clearBtn');
+let currentRating = 0;
+let reviews = [];
+
+function saveReviews(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(reviews)); }
+function loadReviews(){ try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [] } catch { return [] } }
+
+function formatDate(ts){
+const d = new Date(ts);
+return `${d.getFullYear()}/${(d.getMonth()+1).toString().padStart(2,'0')}/${d.getDate().toString().padStart(2,'0')} ${d.getHours().toString().padStart(2,'0')}:${d.getMinutes().toString().padStart(2,'0')}`;
+}
+
+function escapeText(s){ return s.replace(/[&<>]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])) }
+
+function render(){
+listEl.innerHTML = '';
+let items = [...reviews];
+const sort = sortSelect.value;
+if(sort==='rating_desc') items.sort((a,b)=>b.rating - a.rating);
+else if(sort==='rating_asc') items.sort((a,b)=>a.rating - b.rating);
+else items.sort((a,b)=>b.createdAt - a.createdAt);
+totalCount.textContent = items.length;
+
+items.forEach(r=>{
+    const starsDisplay = '★'.repeat(r.rating) + '☆'.repeat(5 - r.rating);
+    const el = document.createElement('div');
+    el.className = 'review card';
+    el.innerHTML = `
+    <div class="avatar">${r.name ? escapeText(r.name.slice(0,2)) : '訪'}</div>
+    <div class="content">
+        <div class="meta">
+        <span>${formatDate(r.createdAt)}</span>
+        <span style="color:#FFD700">${starsDisplay}</span>
+        </div>
+        <h3>${escapeText(r.title)}</h3>
+        <p>${escapeText(r.body)}</p>
+        ${r.photo ? `<img src="${r.photo}" class="image-thumb">` : ''}
+        <div class="controls">
+        <button class="btn secondary" data-action="edit" data-id="${r.id}">編集</button>
+        <button class="btn" data-action="delete" data-id="${r.id}">削除</button>
+        </div>
+    </div>`;
+    listEl.appendChild(el);
+
+    el.querySelectorAll('button[data-action]').forEach(btn=>{
+    btn.addEventListener('click', e=>{
+        const id = e.currentTarget.dataset.id;
+        if(btn.dataset.action==='delete'){
+        if(confirm('この口コミを削除しますか？')){
+            reviews = reviews.filter(x=>x.id!==id);
+            saveReviews(); render(); updateAvg();
+        }
+        } else {
+        const rdata = reviews.find(x=>x.id===id);
+        nameInput.value = rdata.name || '';
+        titleInput.value = rdata.title;
+        bodyInput.value = rdata.body;
+        setRating(rdata.rating);
+        if(rdata.photo){ photoPreview.innerHTML = `<img src="${rdata.photo}" class="image-thumb">`; }
+        reviews = reviews.filter(x=>x.id!==id);
+        saveReviews(); render(); updateAvg();
+        window.scrollTo({top:0,behavior:'smooth'});
+        }
+    });
+    });
+});
+}
+
+function updateAvg(){
+if(reviews.length===0){ avgRatingEl.textContent = '0.0'; return }
+const avg = reviews.reduce((a,b)=>a+b.rating,0)/reviews.length;
+avgRatingEl.textContent = avg.toFixed(1);
+}
+
+function setRating(n){
+currentRating = +n;
+starEls.forEach(st=>{
+    st.style.color = st.dataset.value <= n ? '#FFD700' : '#ccc';
+});
+}
+
+starEls.forEach(st=>st.addEventListener('click', ()=>setRating(st.dataset.value)));
+
+photoInput.addEventListener('change', ()=>{
+const f = photoInput.files[0];
+if(!f) return photoPreview.innerHTML='';
+const reader = new FileReader();
+reader.onload = e=>photoPreview.innerHTML=`<img src="${e.target.result}" class="image-thumb">`;
+reader.readAsDataURL(f);
+});
+
+bodyInput.addEventListener('input', ()=>charCount.textContent = bodyInput.value.length);
+
+form.addEventListener('submit', async e=>{
+e.preventDefault();
+const title = titleInput.value.trim();
+const body = bodyInput.value.trim();
+if(!title||!body){ alert('タイトルと本文を入力してください'); return; }
+
+let photoData=null;
+const f = photoInput.files[0];
+if(f){
+    if(f.size>3*1024*1024){ alert('画像は3MB以下にしてください'); return; }
+    photoData = await new Promise(res=>{
+    const r=new FileReader(); r.onload=()=>res(r.result); r.readAsDataURL(f);
+    });
+}
+
+const newReview={id:Date.now()+Math.random().toString(36).slice(2),name:nameInput.value,title,body,rating:currentRating,photo:photoData,createdAt:Date.now()};
+reviews.unshift(newReview);
+saveReviews(); render(); updateAvg();
+form.reset(); photoPreview.innerHTML=''; setRating(0); charCount.textContent='0';
+});
+
+clearBtn.addEventListener('click', ()=>{ form.reset(); photoPreview.innerHTML=''; setRating(0); charCount.textContent='0'; });
+
+sortSelect.addEventListener('change', render);
+
+document.addEventListener('DOMContentLoaded', ()=>{
+reviews=loadReviews(); render(); updateAvg(); setRating(0);
+});
+
+// タブ切り替え
+document.querySelectorAll('.tab').forEach(tab=>{
+tab.addEventListener('click',()=>{
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById(tab.dataset.tab).classList.add('active');
+});
+});
+</script>
+</body>
+</html>

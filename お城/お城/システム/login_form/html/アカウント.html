@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Conpatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>お城ナビ | 利用者TOP</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel="stylesheet">
+</head>
+<body>
+    <div class="container" id="container">
+
+        <div class="form-container signup-container">
+            <form action="#">
+                <!-- 新しくアカウントを作る -->
+                <div class="title"><h1>Signup here</h1></div>
+                <input type="text" placeholder="アカウント名" id="name">
+                <input type="email" placeholder="Email" id="email" required>
+                <input type="pass" placeholder="Pass" id="pass" required>
+                <button onclick="location.href='./アカウント.html'">Signup</button>
+                <div class="social-container">
+                </div>
+            </form>
+        </div>
+        <div class="form-container login-container">
+            <form action="#">
+                <!-- アカウントにログインする -->
+                <div class="title"><h1>Login here</h1></div>
+                <input type="email" placeholder="Email" id="email" required>
+                <input type="pass" placeholder="Pass" id="pass" required>
+
+                <div class="content">
+                    <!-- ログインしたままにする -->
+                    <div class="checkbox">
+                        <input type="checkbox" name="checkbox" id="checkbox">
+                        <label>パスワードを覚えておく</label>
+                    </div>
+                </div>
+                <button onclick="location.href='./利用者TOP.html'">Login</button>
+                <div class="social-container">
+
+                </div>
+            </form>
+        </div>
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-panel overlay-left">
+                    <div class="title"><h1>始めよう <br>新たな城巡り</h1></div>
+                    <p>アカウントをお持ちの方は<br>こちらからログインして楽しんでください。</p>
+                    <button class="ghost" id="login">Login ←</button>
+                </div>
+                <div class="overlay-panel overlay-right">
+                    <div class="title"><h1>始めよう <br> 新たな城巡り</h1></div>
+                    <p>アカウントがまだない方は<br>こちらから登録できます。</p>
+                    <button class="ghost" id="signup">Sign up→</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../JS/main.js"></script>
+
+</body>
+</html>

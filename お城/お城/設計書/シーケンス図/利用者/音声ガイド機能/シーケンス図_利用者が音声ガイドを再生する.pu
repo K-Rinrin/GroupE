@@ -1,0 +1,37 @@
+@startuml 利用者が音声ガイドを再生する
+
+
+' ========================================
+' 登場モノの定義
+' ========================================
+actor "利用者" as User
+boundary "QR読み込み画面" as b1
+control "表示" as c1
+boundary "TOP画面" as b2
+boundary "カメラ画面" as b3
+control "処理" as c2
+boundary "音声ガイド読み込み後画面" as b4
+control "処理" as c3
+entity "音声ガイド" as e1
+' ========================================
+' シーケンスの流れ
+' ========================================
+c1 -> b1   : 表示する():method=GET()
+User -> b1 : ボタンを押下する
+alt 「戻る」ボタンを押下した場合
+    b1 -> b2 :表示する():method=GET()
+else 「スキャン」ボタンを押下した場合
+    b1 -> b3 :表示する():method=GET()
+    User -> b3 :カメラにQRをかざす
+    b3 -> c2 :起動する():method=POST()
+    c2 ->  e1 : 参照する()
+    c2 <-- e1
+    c2 -> b4 :表示する():method=GET()
+    User -> b4 :「再生」ボタンを押下する
+    b4 -> c3 :起動する():method=GET()
+    c3 ->  e1 : 参照する()
+    c3 <-- e1
+    c3 -> b4 :再生する():method=GET()
+end
+
+@enduml
