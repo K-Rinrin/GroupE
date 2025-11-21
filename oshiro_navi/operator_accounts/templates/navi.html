@@ -1,0 +1,40 @@
+{% load static %}
+
+<div class="sidebar">
+    <div class="logo_content">
+        <div class="logo">
+            <div class="logo_name">運営用画面</div>
+        </div>
+        <i class='bx bx-menu' id="btn"></i>
+    </div>
+
+    <ul class="nav">
+        <li>
+            <a href="{% url 'operator_top' %}">
+                <i class="material-symbols-outlined">home</i>
+                <span class="link_name">運営TOP画面</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="{% url 'oshiro_info_list' %}">
+                <i class="material-symbols-outlined">edit_document</i>
+                <span class="link_name">お城情報機能</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="{% url 'event_info_list' %}">
+                <i class="material-symbols-outlined">calendar_month</i>
+                <span class="link_name">イベント情報機能</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="{% url 'admin_account_list' %}">
+                <i class="material-symbols-outlined">manage_accounts</i>
+                <span class="link_name">アカウント機能</span>
+            </a>
+        </li>
+    </ul>
+</div>
