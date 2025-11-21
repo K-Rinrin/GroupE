@@ -1,0 +1,265 @@
+:root{
+    --bg: #fff7e6;
+    --tabs-bg: #f8e4cc;
+    --tab-bg: #f0f4f8;
+    --accent: #4a3b2a;
+    --accent-text: #ffffff;
+    --panel-bg: #f5f5f5;
+    --star: #FFD700;
+    --card-bg: #ffffff;
+    --btn-bg: #4a3b2a;
+    --btn-text: #ffffff;
+    --btn-sec-bg: #ffffff;
+    --btn-sec-text: #183153;
+    --btn-sec-border: #183153;
+    --muted: #555555;
+}
+
+/* 以下は元のスタイルを変数化したもの */
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: var(--bg);
+    margin: 0;
+    padding: 0;
+}
+
+.tabs {
+    display: flex;
+    justify-content: space-around;
+    background: var(--tabs-bg);
+    border-radius: 20px;
+    margin: 10px auto;
+    width: 90%;
+    max-width: 900px;
+}
+
+.tab {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    background: var(--tab-bg);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.tab.active {
+    background: var(--accent);
+    color: var(--accent-text);
+}
+
+.tab-content {
+    display: none;
+    background: var(--panel-bg);
+    border-radius: 10px;
+    padding: 20px;
+    margin: 0 auto;
+    width: 90%;
+    max-width: 900px;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+img.hero {
+    width: 90%;
+    max-width: 900px;
+    border-radius: 10px;
+    display: block;
+    margin: 10px auto;
+}
+
+.star {
+    color: var(--star);
+    font-size: 1.2em;
+}
+
+.image-thumb {
+    width: 100px;
+    height: auto;
+    border-radius: 8px;
+    margin-top: 8px;
+}
+
+.card {
+    background: var(--card-bg);
+    border-radius: 10px;
+    padding: 15px;
+    margin-top: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.btn {
+    background: var(--btn-bg);
+    color: var(--btn-text);
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.btn.secondary {
+    background: var(--btn-sec-bg);
+    color: var(--btn-sec-text);
+    border: 1px solid var(--btn-sec-border);
+}
+
+.btn:hover {
+    opacity: 0.8;
+}
+
+.avatar {
+    background: #ccc;
+    color: white;
+    font-weight: bold;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    margin-right: 10px;
+}
+
+.review {
+    display: flex;
+    align-items: flex-start;
+    margin-top: 15px;
+}
+
+.content {
+    flex: 1;
+}
+
+.meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: var(--muted);
+}
+
+.controls {
+    margin-top: 8px;
+}
+
+/* ヘッダー */
+header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+background-color: #fff7e6;
+padding: 10px 20px;
+box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+header h1 {
+font-size: 1.5em;
+color: #5c4026;
+}
+
+nav a {
+margin-left: 15px;
+text-decoration: none;
+color: #5c4026;
+font-weight: bold;
+}
+
+
+/* フッター */
+footer {
+position: fixed;
+bottom: 0;
+width: 100%;
+background-color: #fff7e6;
+display: flex;
+justify-content: space-around;
+border-top: 1px solid #e0d2b2;
+padding: 8px 0;
+}
+
+footer a {
+text-decoration: none;
+color: #5c4026;
+display: flex;
+flex-direction: column;
+align-items: center;
+font-size: 0.8em;
+}
+
+footer i {
+font-size: 1.4em;
+}
+
+/* プロフィール */
+.profile {
+display: flex;
+align-items: center;
+background: linear-gradient(to bottom, #f8e7cc, #f9f4eb);
+padding: 15px;
+border-bottom: 2px solid #e0d2b2;
+}
+
+.profile-icon i {
+font-size: 60px;
+color: #c98337;
+}
+
+.profile-info {
+margin-left: 10px;
+}
+
+.profile-info h2 {
+margin: 0;
+font-size: 1.2em;
+}
+
+.profile-info p {
+margin: 5px 0 0;
+font-size: 0.9em;
+color: #6e5a43;
+}
+
+/* From Uiverse.io by andrew-demchenk0 */ 
+.rating:not(:checked) > input {
+position: absolute;
+appearance: none;
+}
+
+.rating:not(:checked) > label {
+float: right;
+cursor: pointer;
+font-size: 30px;
+color: #666;
+}
+
+.rating:not(:checked) > label:before {
+content: '★';
+}
+
+.rating > input:checked + label:hover,
+.rating > input:checked + label:hover ~ label,
+.rating > input:checked ~ label:hover,
+.rating > input:checked ~ label:hover ~ label,
+.rating > label:hover ~ input:checked ~ label {
+color: #e58e09;
+}
+
+.rating:not(:checked) > label:hover,
+.rating:not(:checked) > label:hover ~ label {
+color: #ff9e0b;
+}
+
+.rating > input:checked ~ label {
+color: #ffa723;
+}
+
+
+
+
+
+
