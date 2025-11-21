@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class OperatorOhiroInfoConfig(AppConfig):
+class EventInfoManagementConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'operator_ohiro_info'
+    name = 'event_info_management'
