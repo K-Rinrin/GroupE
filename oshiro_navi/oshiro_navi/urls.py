@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin_site/', admin.site.urls),
 
     # --- 運営アカウント機能 ---
     path('operator/', include('operator_accounts.urls')),
@@ -25,8 +25,8 @@ urlpatterns = [
     # # --- お城情報管理 ---
     # path('operator/oshiro/', include('operator_oshiro_info.urls')),
 
-    # # --- 管理者アカウント機能 ---
-    # path('admin/accounts/', include('admin_accounts.urls')),
+    # --- 管理者アカウント機能 ---
+    path('admin/', include('admin_accounts.urls')),
 
     # # --- 管理者周辺MAP機能 ---
     # path('admin/area_map/', include('admin_area_map.urls')),
