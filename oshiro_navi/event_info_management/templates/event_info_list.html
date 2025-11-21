@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -5,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>運営TOP</title>
 
-        <link rel="stylesheet" href="../../login_form/css/home.css">
+        <link href="{% static 'css/home.css' %}" rel="stylesheet" />
         <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
     <!-- アイコン -->
@@ -68,13 +69,70 @@
     <div class="home_content" id="no name">
 
 
-        メイン部分
+        <h1 class="page-title">イベント登録</h1>
+
+    <div class="form-container">
+
+        
+<div class="form-container">
+
+        <form action="event_create.html" method="POST" enctype="multipart/form-data">
+
+            <!-- イベント名 -->
+            <div class="form-group">
+                <label for="title">イベント名</label>
+                <input type="text" id="title" name="title" required>
+            </div>
+
+            <!-- お城の選択 -->
+            <div class="form-group">
+                <label for="castle">開催するお城</label>
+                <select id="castle" name="castle">
+                    <option value="1">鶴ヶ城</option>
+                    <option value="2">名古屋城</option>
+                    <option value="3">姫路城</option>
+                    <option value="4">松本城</option>
+                    <option value="5">彦根城</option>
+                </select>
+            </div>
+
+            <!-- 開催日 -->
+            <div class="form-group">
+                <label for="start_date">開始日</label>
+                <input type="date" id="start_date" name="start_date" required>
+            </div>
+
+            <div class="form-group">
+                <label for="end_date">終了日</label>
+                <input type="date" id="end_date" name="end_date" required>
+            </div>
+
+            <!-- 説明 -->
+            <div class="form-group">
+                <label for="description">イベント説明</label>
+                <textarea id="description" name="description" rows="5"></textarea>
+            </div>
+
+            <!-- 画像アップロード -->
+            <div class="form-group">
+                <label for="image">イベント画像（任意）</label>
+                <input type="file" id="image" name="image">
+            </div>
+
+            <!-- ボタン -->
+            <div class="form-buttons">
+                <button type="submit" class="btn-submit">登録する</button>
+                <a href="event_list.html" class="btn-cancel">戻る</a>
+            </div>
+
+        </form>
 
 
-    </div>
+</div>
 
 
-    </div>
+
+</div>
         <!-- ナビゲーションバーの動き -->
         <script src="../../login_form/JS/home.js"></script>
 
