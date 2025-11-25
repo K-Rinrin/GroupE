@@ -1,78 +1,70 @@
+{% extends "operator_base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>イベント登録完了</title>
+{% block content %}
+<body>
+<div class="home_content" id="no name">
 
-        <link href="{% static 'css/home.css' %}" rel="stylesheet" />
-        <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
-    <!-- アイコン -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+    <h1 class="page-title">イベント削除</h1>    
 
-    <style>
-                /* ボタンカード */
-        .menu-grid {
-            grid-template-columns: repeat(3, 200px);
-        }
-    </style>
-</head>
+<div class="form-container">
 
-<body>  
+<div class="form-container">
 
-    <!-- サイドバークラス -->
-    <div class="sidebar">
-        <div class="logo_content">
-            <div class="logo">
-                <a href="../TOP画面/operator_top.html" class="logo_name">運営用画面</a>
+        <form action="{% url 'event_info_management:event_info_delete_check' %}" method="GET" enctype="multipart/form-data">
+
+            <!-- イベント名 -->
+            <div class="form-group">
+                <label for="title">イベント名</label>
+                <input type="text" id="title" name="title" required>
             </div>
-            <i class='bx bx-menu' id="btn"></i>
-        </div>
 
-        <ul class="nav">
-        <li>
-            <a href="../TOP画面/operator_top.html">
-                <i class="material-symbols-outlined">home</i>
-                <span class="link_name">運営TOP画面</span>
-            </a>
-            <span class="tooltip">運営TOP画面</span>
-        </li>
-        
-        <li>
-            <a href="../お城情報機能/oshiro_info_list.html">
-                <i class="material-symbols-outlined">edit_document</i>
-                <span class="link_name">お城情報機能</span>
-            </a>
-            <span class="tooltip">お城情報機能</span>
-        </li>
+            <!-- お城の選択 -->
+            <div class="form-group">
+                <label for="castle">開催場所</label>
+                <input type="text" id="title" name="title" required>
+            </div>
 
-            <li>
-                <a href="../イベント情報機能/event_info_list.html">
-                    <i class="material-symbols-outlined">calendar_month</i>
-                    <span class="link_name">イベント情報機能</span>
-                </a>
-                <span class="tooltip">イベント情報機能</span>
-            </li>
-            <li>
-                <a href="../運営アカウント機能/admin_account_list.html">
-                    <i class="material-symbols-outlined">manage_accounts</i>
-                    <span class="link_name">アカウント機能</span>
-                </a>
-                <span class="tooltip">アカウント機能</span>
-            </li>
-            </li>
-        </ul>
-    </div>
+            <!-- 開催日 -->
+            <div class="form-group">
+                <label for="start_date">開始日</label>
+                <input type="date" id="start_date" name="start_date" required>
+            </div>
 
-    <div class="home_content" id="no name">
+            <div class="form-group">
+                <label for="end_date">終了日</label>
+                <input type="date" id="end_date" name="end_date" required>
+            </div>
+            
+            <div class="form-group">
+            <label>開催時間（任意）</label>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <input type="time" id="start_time" name="start_time">
+                    <span>〜</span>
+                    <input type="time" id="end_time" name="end_time">
+                </div>
+            </div>
+
+            <!-- 説明 -->
+            <div class="form-group">
+                <label for="description">イベント説明</label>
+                <textarea id="description" name="description" rows="5"></textarea>
+            </div>
+
+            <!-- 画像アップロード -->
+            <div class="form-group">
+                <label for="image">イベント画像（任意）</label>
+                <input type="file" id="image" name="image">
+            </div>
+
+            <!-- ボタン -->
+            <div class="form-buttons">
+                <button type="submit" class="btn-delete">削除する</button>
+                <a href="{% url 'event_info_management:event_info_delete' %}" class="btn-cancel">戻る</a>
+            </div>
+
+        </form>
 
 
-        <h1 class="page-title">イベント削除</h1>
-
-        <!-- ナビゲーションバーの動き -->
-        <script src="../../login_form/JS/home.js"></script>
-
+</div>
 </body>
-</html>
+{% endblock %}
