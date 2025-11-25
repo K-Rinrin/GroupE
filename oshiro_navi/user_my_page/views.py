@@ -11,8 +11,8 @@ class MyListRegistarView(TemplateView):
 class MyListDeleteCheckView(TemplateView):
     template_name = "my_list_delete_check.html"
 
-class OshiroStampRegistar(TemplateView):
-    template_name = "oshiro_stamp_registar.html"
+class UserOshiroStampRegistar(TemplateView):
+    template_name = "user_oshiro_stamp_registar.html"
 
 class UserProfileUpdateView(TemplateView):
     template_name = "user_profile_update.html"
