@@ -96,7 +96,30 @@
     <div class="home_content" id="no name">
 
 
-        メイン部分（周辺MAP情報一覧画面）
+        <h1>メイン部分（周辺MAP情報一覧画面）</h1>
+        
+        
+        鶴ヶ城<br>
+        <ul>
+            <a href= "{% url 'admin_area_map:area_map_info_registar' %}" class="register-btn">
+                <span class="link_name">登録</span>
+            </a>       
+        </ul>
+
+        <ul>
+            <a href= "{% url 'admin_area_map:area_map_info_update' %}" class="update-btn">
+                <span class="link_name">更新</span>
+            </a>       
+        </ul>
+
+        <ul>
+            <a href= "{% url 'admin_area_map:area_map_info_delete' %}" class="delete-btn">
+                <span class="link_name">削除</span>
+            </a>       
+        </ul>
+        
+        
+        
 
 
     </div>
