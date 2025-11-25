@@ -1,20 +1,3 @@
-let btn = document.querySelector('#btn')
-let sidebar = document.querySelector('.sidebar')
-let srcBtn = document.querySelector('.bx-search'); 
-
-btn.onclick = function () {
-    sidebar.classList.toggle('active')
-}
-
-srcBtn.onclick = function () {
-    sidebar.classList.toggle('active')
-}
-
-
-document.querySelector(".register_btn").addEventListener("click", () => {
-    document.getElementById("stamp_register").style.display = "none";
-    document.getElementById("stamp_register_done").style.display = "block";
-});
 
 document.getElementById("imageInput").addEventListener("change", function(e) {
     const file = e.target.files[0];

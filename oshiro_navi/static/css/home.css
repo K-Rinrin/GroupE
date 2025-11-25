@@ -20,9 +20,7 @@
 }
 
 
-.sidebar.active {
-    left: 0; /* 完全表示 */
-}
+
 
 .sidebar .logo_content .logo {
     display: flex;
@@ -37,9 +35,6 @@
     transition: opacity .3s ease;
 }
 
-.sidebar.active .logo_content .logo {
-    opacity: 1;
-}
 
 .sidebar .logo_content .logo .logo_name {
     font-size: 23px;
@@ -64,9 +59,6 @@
     transition: left .4s ease;
 }
 
-.sidebar.active #btn {
-    left: calc(100% - 30px);
-}
 
 /* アイコン */
 .sidebar i {
@@ -117,10 +109,6 @@
     transition: opacity .3s ease;
 }
 
-.sidebar.active .link_name {
-    opacity: 1;
-    pointer-events: auto;
-}
 
 /* ツールチップの動き改善 */
 .sidebar ul li .tooltip {
@@ -156,12 +144,6 @@
     width: 100%;
     left: 0;
     transition: all .5s ease;
-}
-
-/* サイドバーが開いたときだけ自然にスライド */
-.sidebar.active ~ .home_content {
-    width: calc(100% - 240px); /* サイドバー240pxに合わせる */
-    left: 240px;               /* サイドバー240pxに合わせる */
 }
 
 .home_content .text {
