@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -5,7 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>管理者TOP</title>
 
-        <link rel="stylesheet" href="../../login_form/css/home.css">
+        <link href="{% static 'css/home.css' %}" rel="stylesheet" />
+        <!-- <link rel="stylesheet" href="../../login_form/css/home.css"> -->
         <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
     <!-- アイコン -->
@@ -96,7 +99,7 @@
             <div class="menu-card" onclick="location.href='../基本情報機能/basic_info_list.html'">
                 <i class="material-symbols-outlined">edit_document</i> 基本情報機能
             </div>
-            <div class="menu-card" onclick="location.href='../周辺MAP機能/area_map_info_list.html'">
+            <div class="menu-card" onclick="location.href='{% url 'area_map' %}'">
                 <i class="material-symbols-outlined">map_pin_review</i> 周辺MAP機能
             </div>
             <div class="menu-card" onclick="location.href='../イベント情報機能/event_info_list.html'">

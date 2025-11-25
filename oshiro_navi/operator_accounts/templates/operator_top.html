@@ -58,7 +58,7 @@
                 <span class="tooltip">イベント情報機能</span>
             </li>
             <li>
-                <a href="../運営アカウント機能/admin_account_list.html">
+                <a href="{% url 'account_list' %}">
                     <i class="material-symbols-outlined">manage_accounts</i>
                     <span class="link_name">アカウント機能</span>
                 </a>
@@ -80,7 +80,7 @@
             <div class="menu-card" onclick="location.href='../イベント情報機能/event_info_list.html'">
                 <i class="material-symbols-outlined">calendar_month</i> イベント情報機能
             </div>
-            <div class="menu-card" onclick="location.href='../運営アカウント機能/admin_account_list.html'">
+            <div class="menu-card" onclick="location.href='{% url 'account_list' %}'">
                 <i class="material-symbols-outlined">manage_accounts</i> アカウント機能
             </div>
         </div>
