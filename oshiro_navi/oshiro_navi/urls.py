@@ -23,7 +23,7 @@ urlpatterns = [
     path('operator/', include('operator_accounts.urls')),
 
     # # --- お城情報管理 ---
-    # path('operator/oshiro/', include('operator_oshiro_info.urls')),
+    path('operator/oshiro/', include('operator_oshiro_info.urls')),
 
     # --- 管理者アカウント機能 ---
     path('admin/', include('admin_accounts.urls')),
@@ -32,7 +32,7 @@ urlpatterns = [
     path('admin/area_map/', include('admin_area_map.urls')),
 
     # # --- 管理者音声ガイド機能 ---
-    # path('admin/audio_guide/', include('admin_audio_guide.urls')),
+    path('admin/audio_guide/', include('admin_audio_guide.urls')),
 
     # --- 管理者お城スタンプ機能 ---
     path("admin_oshiro_stamp/", include("admin_oshiro_stamp.urls")),
