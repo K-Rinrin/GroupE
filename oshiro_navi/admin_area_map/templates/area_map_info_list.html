@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -5,7 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>管理者TOP</title>
 
-        <link rel="stylesheet" href="../../login_form/css/home.css">
+        <link href="{% static 'css/home.css' %}" rel="stylesheet" />
+        <!-- <link rel="stylesheet" href="../../login_form/css/home.css"> -->
         <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
     <!-- アイコン -->
@@ -93,7 +96,7 @@
     <div class="home_content" id="no name">
 
 
-        メイン部分
+        メイン部分（周辺MAP情報一覧画面）
 
 
     </div>
