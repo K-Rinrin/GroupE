@@ -56,5 +56,5 @@ urlpatterns = [
     # path('user/my_page/', include('user_my_page.urls')),
 
     # # --- イベント情報機能 ---
-    # path('event_management/', include('event_info_management.urls')),
+    path('event_management/', include('event_info_management.urls')),
 ]

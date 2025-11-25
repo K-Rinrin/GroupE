@@ -5,5 +5,26 @@ from django.views.generic import TemplateView
 # class OperatorTopView(TemplateView):
 #     template_name = "operator_top.html"
 
-class EventInfoManagementView(TemplateView):
-    template_name = "event_info_management.html"
+class EventInfoListView(TemplateView):
+    template_name = "event_info_list.html"
+
+class EventInfoRegisterView(TemplateView):
+    template_name = "event_info_register.html"
+
+class EventInfoRegisterSuccessView(TemplateView):
+    template_name = "event_info_register_success.html"
+    
+class EventInfoUpdateView(TemplateView):
+    template_name = "event_info_update.html"
+
+class EventInfoUpdateSuccessView(TemplateView):
+    template_name = "event_info_update_success.html"
+
+class EventInfoDeleteView(TemplateView):
+    template_name = "event_info_delete.html"
+
+class EventInfoDeleteCheckView(TemplateView):
+    template_name = "event_info_delete_check.html"
+
+class EventInfoDeleteSuccessView(TemplateView):
+    template_name = "event_info_delete_success.html"
