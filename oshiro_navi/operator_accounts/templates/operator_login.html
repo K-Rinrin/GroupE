@@ -1,34 +1,16 @@
+{% extends "operator_base.html" %}
 {% load static %}
-
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ログイン</title>
-
-        <link href="{% static 'css/home.css' %}" rel="stylesheet" />
-
-        <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
-    <!-- アイコン -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
-
-
-
-    
-    <!-- メイン -->
+{% block title %}ログイン{% endblock %}
+{% block content %}
+<body>  
     <div class="content">
-        <h1 style="color:white; text-shadow:0 0 8px black;">ろぐいん画面</h1>
-        </div>
-
-        <div class="menu-card" onclick="location.href='{% url 'operator_accounts:top' %}'">
-                <i class="material-symbols-outlined">home</i> トップ画面へごー（ログイン）
+        <h1 style="color:white; text-shadow:0 0 8px black;">ログイン画面</h1>
+            <div class="menu-grid">
+                <div class="menu-card" onclick="location.href='{% url 'operator_accounts:top' %}'">
+                    <i class="material-symbols-outlined">home</i> トップ画面へゴー(ログイン)
+                </div>
             </div>
-
-
     </div>
 
-
 </body>
-</html>
+{% endblock %}
