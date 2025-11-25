@@ -38,7 +38,7 @@ urlpatterns = [
     path("admin_oshiro_stamp/", include("admin_oshiro_stamp.urls")),
 
     # # --- 管理者モデルコース機能 ---
-    # path('admin/model_course/', include('admin_model_course.urls')),
+    path('admin/model_course/', include('admin_model_course.urls')),
 
     # # --- 管理者基本情報機能 ---
     # path('admin/basic_info/', include('admin_basic_info.urls')),
