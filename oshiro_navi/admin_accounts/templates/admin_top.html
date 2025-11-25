@@ -38,7 +38,7 @@
             
         </li>
         <li>
-            <a href="../お城スタンプ機能/oshiro_stamp_registar.html">
+            <a href="{% url 'admin_oshiro_stamp:oshiro_stamp_registar' %}">
                 <i class="material-symbols-outlined">approval</i>
                 <span class="link_name">お城スタンプ機能</span>
             </a>
@@ -108,7 +108,7 @@
             <div class="menu-card" onclick="location.href='../音声ガイド機能/audio_guide_list.html'">
                 <i class="material-symbols-outlined">record_voice_over</i> 音声ガイド機能
             </div>
-            <div class="menu-card" onclick="location.href='../お城スタンプ機能/oshiro_stamp_registar.html'">
+            <div class="menu-card" onclick="location.href='{% url "admin_oshiro_stamp:oshiro_stamp_registar" %}'">
                 <i class="material-symbols-outlined">approval</i> お城スタンプ機能
             </div>
             <div class="menu-card" onclick="location.href='../音声ガイド機能/qr_generetor.html'">

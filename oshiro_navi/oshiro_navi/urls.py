@@ -34,6 +34,9 @@ urlpatterns = [
     # # --- 管理者音声ガイド機能 ---
     # path('admin/audio_guide/', include('admin_audio_guide.urls')),
 
+    # --- 管理者お城スタンプ機能 ---
+    path("admin_oshiro_stamp/", include("admin_oshiro_stamp.urls")),
+
     # # --- 管理者モデルコース機能 ---
     # path('admin/model_course/', include('admin_model_course.urls')),
 
@@ -57,4 +60,5 @@ urlpatterns = [
 
     # # --- イベント情報機能 ---
     path('event_management/', include('event_info_management.urls')),
+
 ]
