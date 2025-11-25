@@ -41,7 +41,7 @@ urlpatterns = [
     # path('admin/basic_info/', include('admin_basic_info.urls')),
 
     # # --- 利用者アカウント機能 ---
-    # path('user/accounts/', include('user_accounts.urls')),
+    path('user/', include('user_accounts.urls')),
 
     # # --- 利用者音声ガイド機能 ---
     # path('user/audio_guide/', include('user_audio_guide.urls')),
@@ -53,7 +53,7 @@ urlpatterns = [
     # path('user/my_list/', include('user_my_list.urls')),
     
     # # --- 利用者マイページ機能 ---
-    # path('user/my_page/', include('user_my_page.urls')),
+    path('usermy_page/', include('user_my_page.urls')),
 
     # # --- イベント情報機能 ---
     path('event_management/', include('event_info_management.urls')),
