@@ -1,3 +1,12 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.views.generic import TemplateView
 
-# Create your views here.
+
+
+class OshiroStampRegistarView(TemplateView):
+    template_name = "oshiro_stamp_registar.html"
+
+class OshiroStampRegistarSuccessView(TemplateView):
+    template_name = "oshiro_stamp_registar_success.html"
+
+
