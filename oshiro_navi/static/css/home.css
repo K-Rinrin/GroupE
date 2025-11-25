@@ -11,17 +11,17 @@
 .sidebar {
     position: fixed;
     top: 0;
-    left: 0;
-    width: 50px;
-    background: #ffffff;
-    padding: 6px 16px;
+    left: -190px; /* ← これで隠す（240 - 50 = 190） */
+    width: 240px;
     height: 100%;
-    box-shadow: 5px 0 30px rgba(0, 0, 0, .1);
+    background: #ffffff;
     transition: all .5s ease;
+    z-index: 999;
 }
 
+
 .sidebar.active {
-    width: 240px;
+    left: 0; /* 完全表示 */
 }
 
 .sidebar .logo_content .logo {
@@ -34,6 +34,7 @@
     align-items: center;
     pointer-events: none;
     opacity: 0;
+    transition: opacity .3s ease;
 }
 
 .sidebar.active .logo_content .logo {
@@ -47,8 +48,6 @@
     cursor: pointer;
     color: inherit;
     text-decoration: none;
-
-    
 }
 
 .sidebar #btn {
@@ -61,21 +60,15 @@
     width: 50px;
     text-align: center;
     line-height: 50px;
-    transform: translate(-50%);
+    transform: translateX(-50%);
+    transition: left .4s ease;
 }
 
 .sidebar.active #btn {
-    left: 85%;
+    left: calc(100% - 30px);
 }
 
-.sidebar .src {
-    position: relative;
-    height: 50px;
-    width: 100%;
-    margin-top: 20px;
-}
-
-
+/* アイコン */
 .sidebar i {
     height: 50px;
     min-width: 50px;
@@ -83,6 +76,14 @@
     line-height: 50px;
     text-align: center;
     font-size: 25px;
+    transition: background .3s ease;
+}
+
+/* ホバーしたときの自然な動き */
+.sidebar ul li a:hover {
+    color: #4a3b2a;
+    background: #e7e9f5;
+    transition: .3s ease;
 }
 
 .sidebar ul {
@@ -106,18 +107,27 @@
     border-radius: 20px;
     font-size: 13px;
     white-space: nowrap;
+    transition: padding-left .3s ease;
 }
 
-.sidebar ul li a:hover {
-    color: #4a3b2a;
-    background: #e7e9f5;
+/* 開閉時の文字表示 */
+.sidebar .link_name {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .3s ease;
 }
 
+.sidebar.active .link_name {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* ツールチップの動き改善 */
 .sidebar ul li .tooltip {
     position: absolute;
-    left: 130px;
-    top: 0;
-    transform: translate(-45%, -50%);
+    left: 70px;
+    top: 50%;
+    transform: translateY(-50%);
     border-radius: 10px;
     height: 35px;
     width: 130px;
@@ -130,34 +140,28 @@
     box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
     pointer-events: none;
     opacity: 0;
-    transition: all 0.5s ease;
+    transition: opacity .4s ease;
+}
+
+.sidebar ul li:hover .tooltip {
+    opacity: 1;
 }
 
 .sidebar.active ul li .tooltip {
     display: none;
 }
 
-.sidebar .link_name {
-    opacity: 0;
-    pointer-events: none;
-}
-
-.sidebar.active .link_name {
-    opacity: 1;
-    pointer-events: auto;
-}
-
-.sidebar ul li:hover .tooltip {
-    opacity: 1;
-    top: 50%;
-}
-
 .home_content {
-    position: absolute;
-    height: 100%;
-    width: calc(100% - 300px);
-    left: 80px;
+    position: relative;
+    width: 100%;
+    left: 0;
     transition: all .5s ease;
+}
+
+/* サイドバーが開いたときだけ自然にスライド */
+.sidebar.active ~ .home_content {
+    width: calc(100% - 240px); /* サイドバー240pxに合わせる */
+    left: 240px;               /* サイドバー240pxに合わせる */
 }
 
 .home_content .text {
@@ -167,9 +171,6 @@
     padding: 12px 24px;
 }
 
-.sidebar.active~.home_content {
-    left: 300px;
-}
 
 header {
     background-color: #4a3b2a;
