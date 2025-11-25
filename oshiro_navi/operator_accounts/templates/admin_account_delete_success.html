@@ -1,0 +1,16 @@
+{% extends "operator_base.html" %}
+{% load static %}
+{% block title %}作成完了{% endblock %}
+{% block content %}
+<body>  
+    <div class="content">
+        <h1 style="color:white; text-shadow:0 0 8px black;">管理者アカウント登録完了画面</h1>
+            <div class="menu-grid">
+                <div class="menu-card" onclick="location.href='{% url 'operator_accounts:account_delete' %}'">
+                    <i class="material-symbols-outlined">home</i> 戻る
+                </div>
+            </div>
+    </div>
+
+</body>
+{% endblock %}
