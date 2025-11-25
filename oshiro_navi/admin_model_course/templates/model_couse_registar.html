@@ -1,224 +1,124 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>管理者TOP</title>
+{% extends "admin_base.html" %}
 
-        <link rel="stylesheet" href="../../login_form/css/home.css">
-        <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
-    <!-- アイコン -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+{% block title %}モデルコース登録{% endblock %}
 
+{% block content %}
 
-</head>
+<h1>モデルコース登録</h1>
 
-<body>  
+<h2>コース基本情報</h2>
 
-    <!-- サイドバークラス -->
-    <div class="sidebar">
-        <div class="logo_content">
-            <div class="logo">
-                <div class="logo_name">管理者用画面</div>
-            </div>
-            <i class='bx bx-menu' id="btn"></i>
-        </div>
+<div>
+    <label>モデルコース名 *</label><br>
+    <input type="text" name="course_name"
+           placeholder="例: 会津若松城とその周辺を巡る1日コース">
+</div>
 
-        <ul class="nav">
-        <li>
-            <a href="../TOP画面/admin_top.html">
-                <i class="material-symbols-outlined">home</i>
-                <span class="link_name">管理者TOP画面</span>
-            </a>
-            <span class="tooltip">管理者TOP画面</span>
-            
-        </li>
+<div>
+    <label>コース概要 *</label><br>
+    <textarea name="course_overview" rows="4"
+              placeholder="このモデルコースの簡単な紹介文を入力してください。"></textarea>
+</div>
 
-        <li>
-            <a href="../お城スタンプ機能/oshiro_stamp_registar.html">
-                <i class="material-symbols-outlined">approval</i>
-                <span class="link_name">お城スタンプ機能</span>
-            </a>
-            <span class="tooltip">お城スタンプ機能</span>
-        </li>
+<div>
+    <label>所要時間 *</label><br>
+    <input type="text" name="required_time" placeholder="例: 約5時間">
+</div>
 
-            <li>
-                <a href="../イベント情報機能/event_info_list.html">
-                    <i class="material-symbols-outlined">calendar_month</i>
-                    <span class="link_name">イベント情報機能</span>
-                </a>
-                <span class="tooltip">イベント情報機能</span>
-            </li>
-            <li>
-                <a href="../周辺MAP機能/area_map_info_list.html">
-                    <i class="material-symbols-outlined">map_pin_review</i>
-                    <span class="link_name">周辺MAP機能</span>
-                </a>
-                <span class="tooltip">周辺MAP機能</span>
-            </li>
-            <li>
-                <a href="../音声ガイド機能/audio_guide_list.html">
-                    <i class="material-symbols-outlined">record_voice_over</i>
-                    <span class="link_name">音声ガイド機能</span>
-                </a>
-                <span class="tooltip">音声ガイド機能</span>
-            </li>
-            <li>
-                <a href="../基本情報機能/basic_info_list.html">
-                    <i class="material-symbols-outlined">edit_document</i>
-                    <span class="link_name">基本情報機能</span>
-                </a>
-                <span class="tooltip">基本情報機能</span>
-            </li>
-            <li>
-                <a href="../モデルコース機能/model_couse_list.html">
-                    <i class="material-symbols-outlined">alt_route</i> 
-                    <span class="link_name">モデルコース機能</span>
-                </a>
-                <span class="tooltip">モデルコース機能</span>
-            </li>
-            <li>
-                <a href="../音声ガイド機能/qr_generetor.html">
-                    <i class="material-symbols-outlined">qr_code_2_add</i>
-                    <span class="link_name">QRコード生成</span>
-                </a>
-                <span class="tooltip">QRコード生成</span>
-            </li>
-        </ul>
-    </div>
+<div>
+    <label>距離 *</label><br>
+    <input type="text" name="distance" placeholder="例: 約4km">
+</div>
 
-    </div>
+<div>
+    <label>難易度 *</label><br>
+    <select name="difficulty">
+        <option value="">選択してください</option>
+        <option value="easy">やさしい</option>
+        <option value="normal">ふつう</option>
+        <option value="hard">むずかしい</option>
+    </select>
+</div>
 
-    <div class="home_content" id="no name">
+<hr>
 
-        <h1>モデルコース登録</h1>
+<h2>スポット1</h2>
 
-        <h2>コース基本情報</h2>
+<div>
+    <label>スポット名 *</label><br>
+    <input type="text" name="spot1_name" placeholder="例: 史跡若松城『鶴ヶ城』">
+</div>
 
-        <div>
-            <label>モデルコース名 *</label><br>
-            <input type="text" name="course_name"
-                   placeholder="例: 会津若松城とその周辺を巡る1日コース">
-        </div>
+<div>
+    <label>短い説明文</label><br>
+    <textarea name="spot1_short" rows="3"
+              placeholder="例: 会津若松市のシンボル『鶴ヶ城』。白虎隊も見た国内唯一の赤瓦の天守閣が聳えます！"></textarea>
+</div>
 
-        <div>
-            <label>コース概要 *</label><br>
-            <textarea name="course_overview" rows="4"
-                      placeholder="このモデルコースの簡単な紹介文を入力してください。"></textarea>
-        </div>
+<div>
+    <label>詳細説明文</label><br>
+    <textarea name="spot1_detail" rows="4"
+              placeholder="詳しい歴史や見どころなどを入力してください。"></textarea>
+</div>
 
-        <div>
-            <label>所要時間 *</label><br>
-            <input type="text" name="required_time" placeholder="例: 約5時間">
-        </div>
+<div>
+    <label>スポット画像</label><br>
+    <input type="file" name="spot1_image" accept="image/*">
+</div>
 
-        <div>
-            <label>距離 *</label><br>
-            <input type="text" name="distance" placeholder="例: 約4km">
-        </div>
+<div>
+    <label>補足情報</label><br>
+    <textarea name="spot1_note" rows="2"
+              placeholder="見学時間、料金、ボランティアガイドの有無など"></textarea>
+</div>
 
-        <div>
-            <label>難易度 *</label><br>
-            <select name="difficulty">
-                <option value="">選択してください</option>
-                <option value="easy">やさしい</option>
-                <option value="normal">ふつう</option>
-                <option value="hard">むずかしい</option>
-            </select>
-        </div>
+<hr>
 
-        <hr>
+<h2>スポット2</h2>
 
-        <h2>スポット1</h2>
+<div>
+    <label>スポット名 *</label><br>
+    <input type="text" name="spot2_name" placeholder="例: 茶室麟閣（県指定重要文化財）">
+</div>
 
-        <div>
-            <label>スポット名 *</label><br>
-            <input type="text" name="spot1_name" placeholder="例: 史跡若松城『鶴ヶ城』">
-        </div>
+<div>
+    <label>短い説明文</label><br>
+    <textarea name="spot2_short" rows="3"
+              placeholder="例: 茶室麟閣の敷地内でお抹茶をお楽しみいただけます。"></textarea>
+</div>
 
-        <div>
-            <label>短い説明文</label><br>
-            <textarea name="spot1_short" rows="3"
-                      placeholder="例: 会津若松市のシンボル『鶴ヶ城』。白虎隊も見た国内唯一の赤瓦の天守閣が聳えます！"></textarea>
-        </div>
+<div>
+    <label>詳細説明文</label><br>
+    <textarea name="spot2_detail" rows="4"
+              placeholder="詳しい歴史や見どころなどを入力してください。"></textarea>
+</div>
 
-        <div>
-            <label>詳細説明文</label><br>
-            <textarea name="spot1_detail" rows="4"
-                      placeholder="詳しい歴史や見どころなどを入力してください。"></textarea>
-        </div>
+<div>
+    <label>スポット画像</label><br>
+    <input type="file" name="spot2_image" accept="image/*">
+</div>
 
-        <div>
-            <label>スポット画像</label><br>
-            <input type="file" name="spot1_image" accept="image/*">
-        </div>
+<div>
+    <label>補足情報</label><br>
+    <textarea name="spot2_note" rows="2"
+              placeholder="見学時間、料金、ボランティアガイドの有無など"></textarea>
+</div>
 
-        <div>
-            <label>補足情報</label><br>
-            <textarea name="spot1_note" rows="2"
-                      placeholder="見学時間、料金、ボランティアガイドの有無など"></textarea>
-        </div>
+<hr>
 
-        <hr>
+<div>
+    <button type="button">＋ スポットを追加</button>
+</div>
 
-        <h2>スポット2</h2>
+<hr>
 
-        <div>
-            <label>スポット名 *</label><br>
-            <input type="text" name="spot2_name" placeholder="例: 茶室麟閣（県指定重要文化財）">
-        </div>
+<div>
+    <a href="{% url 'admin_model_course:model_couse_list' %}">キャンセル</a>
 
-        <div>
-            <label>短い説明文</label><br>
-            <textarea name="spot2_short" rows="3"
-                    placeholder="例: 茶室麟閣の敷地内でお抹茶をお楽しみいただけます。"></textarea>
-        </div>
+    <button type="button"
+            onclick="location.href='{% url 'admin_model_course:model_couse_registar_success' %}'">
+        登録
+    </button>
+</div>
 
-        <div>
-            <label>詳細説明文</label><br>
-            <textarea name="spot2_detail" rows="4"
-                    placeholder="詳しい歴史や見どころなどを入力してください。"></textarea>
-        </div>
-
-        <div>
-            <label>スポット画像</label><br>
-            <input type="file" name="spot2_image" accept="image/*">
-        </div>
-
-        <div>
-            <label>補足情報</label><br>
-            <textarea name="spot2_note" rows="2"
-                    placeholder="見学時間、料金、ボランティアガイドの有無など"></textarea>
-        </div>
-
-        <hr>
-
-        <div>
-            <button type="button">＋ スポットを追加</button>
-        </div>
-
-        <hr>
-
-        <div>
-            <!-- キャンセルは一覧へ -->
-            <a href="{% url 'admin_model_course:model_couse_list' %}">キャンセル</a>
-
-            <!-- 登録ボタン押下で成功画面へ遷移（GET） -->
-            <button type="button"
-                    onclick="location.href='{% url 'admin_model_course:model_couse_registar_success' %}'">
-                登録
-            </button>
-        </div>
-
-    </div>
-
-
-
-    </div>
-
-        <!-- ナビゲーションバーの動き -->
-        <script src="../../login_form/JS/home.js"></script>
-
-</body>
-</html>
+{% endblock %}
