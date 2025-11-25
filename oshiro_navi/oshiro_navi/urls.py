@@ -29,7 +29,7 @@ urlpatterns = [
     path('admin/', include('admin_accounts.urls')),
 
     # --- 管理者周辺MAP機能 ---
-    path('admin/area_map/', include('admin_area_map.urls')),
+    # path('admin/area_map/', include('admin_area_map.urls')),
 
     # # --- 管理者音声ガイド機能 ---
     # path('admin/audio_guide/', include('admin_audio_guide.urls')),
@@ -56,5 +56,5 @@ urlpatterns = [
     # path('user/my_page/', include('user_my_page.urls')),
 
     # # --- イベント情報機能 ---
-    # path('event_management/', include('event_info_management.urls')),
+    path('event_management/', include('event_info_management.urls')),
 ]
