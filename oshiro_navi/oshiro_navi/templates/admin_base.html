@@ -22,15 +22,15 @@
 
     <ul class="nav">
     <li>
-        <a href="../TOP画面/admin_top.html">
+        <a href="{% url 'admin_accounts:top' %}">
             <i class="material-symbols-outlined">home</i>
             <span class="link_name">管理者TOP画面</span>
-        </a>
-        <span class="tooltip">管理者TOP画面</span>
-        
-    </li>
+            </a>
+            <span class="tooltip">管理者TOP画面</span>
+        </li>
+    
     <li>
-        <a href="../お城スタンプ機能/oshiro_stamp_registar.html">
+        <a href="{% url 'admin_oshiro_stamp:oshiro_stamp_registar' %}">
             <i class="material-symbols-outlined">approval</i>
             <span class="link_name">お城スタンプ機能</span>
         </a>
@@ -44,13 +44,15 @@
             </a>
             <span class="tooltip">イベント情報機能</span>
         </li>
-        <li>
-            <a href="../周辺MAP機能/area_map_info_list.html">
-                <i class="material-symbols-outlined">map_pin_review</i>
-                <span class="link_name">周辺MAP機能</span>
-            </a>
-            <span class="tooltip">周辺MAP機能</span>
-        </li>
+
+    <li>
+        <a href= "{% url 'admin_area_map:area_map' %}" class="register-btn">
+            <i class="material-symbols-outlined">map_pin_review</i>
+            <span class="link_name">周辺MAP機能</span>
+        </a>
+        <span class="tooltip">周辺MAP機能</span>
+    </li>
+
         <li>
             <a href="../音声ガイド機能/audio_guide_list.html">
                 <i class="material-symbols-outlined">record_voice_over</i>
