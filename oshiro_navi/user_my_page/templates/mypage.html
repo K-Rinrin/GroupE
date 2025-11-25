@@ -1,0 +1,67 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>マイページ</title>
+    <style>
+        /* スタイルは前回の提案と同一です */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f4f4f4;
+        }
+        .link-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px; /* ボタン間のスペース */
+            max-width: 300px;
+            margin: auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .nav-button {
+            display: inline-block;
+            padding: 10px 15px;
+            background-color: #007bff; /* ボタンの色 */
+            color: white;
+            text-align: center;
+            text-decoration: none; /* リンクの下線を削除 */
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            font-weight: bold;
+        }
+        .nav-button:hover {
+            background-color: #0056b3; /* ホバー時の色 */
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <h1>マイページ</h1>
+    <div class="link-container">
+        <a href="{% url 'mylistdeletecheck' %}" class="nav-button">
+            リスト削除確認へ
+        </a>
+        
+        <a href="{% url 'mylistregistar' %}" class="nav-button">
+            リスト登録へ
+        </a>
+
+        <a href="{% url 'oshirostampregistar' %}" class="nav-button">
+            スタンプ登録へ
+        </a>
+
+        <a href="{% url 'profileupdate' %}" class="nav-button">
+            プロフィール更新へ
+        </a>
+    </div>
+</body>
+</html>
