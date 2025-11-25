@@ -29,7 +29,7 @@ urlpatterns = [
     path('admin/', include('admin_accounts.urls')),
 
     # --- 管理者周辺MAP機能 ---
-    path('admin/area_map/', include('admin_area_map.urls')),
+    # path('admin/area_map/', include('admin_area_map.urls')),
 
     # # --- 管理者音声ガイド機能 ---
     # path('admin/audio_guide/', include('admin_audio_guide.urls')),
