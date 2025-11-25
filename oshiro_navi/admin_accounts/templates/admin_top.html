@@ -9,7 +9,7 @@
         <h1 style="color:white; text-shadow:0 0 8px black;">管理者 TOP</h1>
 
         <div class="menu-grid">
-            <div class="menu-card" onclick="location.href='../基本情報機能/basic_info_list.html'">
+            <div class="menu-card" onclick="location.href='{% url 'admin_basic_info:basic_info_list' %}'">
                 <i class="material-symbols-outlined">edit_document</i> 基本情報機能
             </div>
             <div class="menu-card" onclick="location.href='{% url 'admin_area_map:area_map' %}'">
