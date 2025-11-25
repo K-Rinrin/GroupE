@@ -74,7 +74,7 @@
                 <span class="tooltip">基本情報機能</span>
             </li>
             <li>
-                <a href="../モデルコース機能/model_couse_list.html">
+                <a href="{% url 'admin_model_course:model_couse_list' %}">
                     <i class="material-symbols-outlined">alt_route</i> 
                     <span class="link_name">モデルコース機能</span>
                 </a>
@@ -111,7 +111,7 @@
             <div class="menu-card" onclick="location.href='{% url "admin_oshiro_stamp:oshiro_stamp_registar" %}'">
                 <i class="material-symbols-outlined">approval</i> お城スタンプ機能
             </div>
-            <div class="menu-card" onclick="location.href=''">
+            <div class="menu-card" onclick="location.href='{% url 'admin_model_course:model_couse_list' %}'">
                 <i class="material-symbols-outlined">alt_route</i> モデルコース
             </div>
             <div class="menu-card" onclick="location.href='../音声ガイド機能/qr_generetor.html'">

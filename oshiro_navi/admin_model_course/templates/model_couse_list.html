@@ -92,8 +92,44 @@
 
     <div class="home_content" id="no name">
 
+        <h1>モデルコース機能</h1>
 
-        メイン部分
+        
+        <div>
+            <form method="get">
+                <label for="q">モデルコース検索</label>
+                <input id="q" type="text" name="q" placeholder="モデルコース検索">
+                <button type="submit">検索</button>
+            </form>
+
+        
+            <a href="{% url 'admin_model_course:model_couse_registar' %}">新規登録</a>
+        </div>
+
+        <hr>
+
+        
+        <div>
+            <div>
+                <span>見どころ3スポット巡り</span>
+                <a href="{% url 'admin_model_course:model_couse_update' %}">編集</a>
+            </div>
+            <hr>
+
+            <div>
+                <span>天守＆本丸コース</span>
+                <a href="{% url 'admin_model_course:model_couse_update' %}">編集</a>
+            </div>
+            <hr>
+
+            <div>
+                <span>歴史じっくり散策コース</span>
+                <a href="{% url 'admin_model_course:model_couse_update' %}">編集</a>
+            </div>
+        </div>
+
+    </div>
+
 
 
     </div>
