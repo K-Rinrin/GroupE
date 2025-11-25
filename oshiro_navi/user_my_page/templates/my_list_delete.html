@@ -2,11 +2,13 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>リスト削除完了</title>
+    <title>リスト削除確認</title>
 </head>
 <body>
-    <h1>リスト削除完了ページ</h1>
+    <h1>リスト削除確認ページ</h1>
     <p>このページに遷移しました。</p>
+    <a href="{% url 'usermy_page:mylistdelete' %}" class="nav-button">
+            マイリスト削除実行 </a>   
     <a href="{% url 'usermy_page:mypage' %}">マイページに戻る</a>
 </body>
 </html>

@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>マイページ</title>
     <style>
-        /* スタイルは前回の提案と同一です */
         body {
             font-family: Arial, sans-serif;
             margin: 40px;
@@ -15,7 +14,7 @@
         .link-container {
             display: flex;
             flex-direction: column;
-            gap: 15px; /* ボタン間のスペース */
+            gap: 15px;
             max-width: 300px;
             margin: auto;
             padding: 20px;
@@ -26,16 +25,16 @@
         .nav-button {
             display: inline-block;
             padding: 10px 15px;
-            background-color: #007bff; /* ボタンの色 */
+            background-color: #007bff;
             color: white;
             text-align: center;
-            text-decoration: none; /* リンクの下線を削除 */
+            text-decoration: none;
             border-radius: 5px;
             transition: background-color 0.3s ease;
             font-weight: bold;
         }
         .nav-button:hover {
-            background-color: #0056b3; /* ホバー時の色 */
+            background-color: #0056b3;
         }
         h1 {
             text-align: center;
@@ -47,21 +46,23 @@
 <body>
     <h1>マイページ</h1>
     <div class="link-container">
-        <a href="{% url 'mylistdeletecheck' %}" class="nav-button">
-            リスト削除確認へ
+        <a href="{% url 'usermy_page:profile' %}" class="nav-button">
+            プロフィール
         </a>
         
-        <a href="{% url 'mylistregistar' %}" class="nav-button">
-            リスト登録へ
+        <a href="{% url 'usermy_page:oshirostampregistar' %}" class="nav-button">
+            お城スタンプ
+        </a>
+        
+        <a href="{% url 'usermy_page:mylistregistar' %}" class="nav-button">
+            お城マイリスト
         </a>
 
-        <a href="{% url 'oshirostampregistar' %}" class="nav-button">
-            スタンプ登録へ
+        <a href="{% url 'user_accounts:logout' %}" class="nav-button">
+            ログアウト
         </a>
 
-        <a href="{% url 'profileupdate' %}" class="nav-button">
-            プロフィール更新へ
-        </a>
+        
     </div>
 </body>
 </html>

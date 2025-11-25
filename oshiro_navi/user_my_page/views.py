@@ -17,3 +17,8 @@ class OshiroStampRegistar(TemplateView):
 class UserProfileUpdateView(TemplateView):
     template_name = "user_profile_update.html"
 
+class UserProfileView(TemplateView):
+    template_name = "user_profile.html"
+
+class MyListDeleteView(TemplateView):
+    template_name = "my_list_delete.html"
