@@ -40,7 +40,7 @@
         </li>
 
         <li>
-            <a href="">
+            <a href="{% url 'event_info_management:event_info_list' %}">
                 <i class="material-symbols-outlined">calendar_month</i>
                 <span class="link_name">イベント情報機能</span>
             </a>
@@ -66,8 +66,6 @@
     {% endblock %}
 </div>
 <!-- ▲ ページごとの中身 ▲ -->
-
-<script src="{% static 'JS/detail.js' %}"></script>
 
 </body>
 </html>
