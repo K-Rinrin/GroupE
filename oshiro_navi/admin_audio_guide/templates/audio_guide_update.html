@@ -1,0 +1,25 @@
+{% extends 'admin_base.html' %}
+{% load static %}
+{% block title %}音声ガイド{% endblock %}
+{% block content %}
+
+
+    <h1>メイン部分（音声ガイド更新画面）</h1><br>
+        
+        
+    鶴ヶ城<br>
+
+    <ul>
+        <a href= "{% url 'admin_audio_guide:audio_guide_update_success' %}" class="register-btn">
+            <span class="link_name">更新</span>
+        </a>       
+    </ul>
+
+    <ul>
+        <a href= "{% url 'admin_audio_guide:audio_guide' %}" class="register-btn">
+            <span class="link_name">戻る</span>
+        </a>       
+    </ul>
+
+
+{% endblock %}
