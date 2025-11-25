@@ -53,7 +53,7 @@ urlpatterns = [
     # path('user/model_course/', include('user_model_course.urls')),
     
     # # --- 利用者お城リスト機能 ---
-    # path('user/my_list/', include('user_my_list.urls')),
+    path('usermy_list/', include('user_my_list.urls')),
     
     # # --- 利用者マイページ機能 ---
     path('usermy_page/', include('user_my_page.urls')),

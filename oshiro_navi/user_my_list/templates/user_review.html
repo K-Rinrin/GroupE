@@ -8,8 +8,14 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel="stylesheet">
 </head>
 <body>
+
+
 <header>
     <h1>お城ナビ</h1>
+     <a href="{% url 'usermy_list:oshiroinfo' %}">お城情報</a> 
+    <a href="{% url 'usermy_list:oshirobasicinfo' %}">基本情報</a> 
+    
+    <a href="{% url 'usermy_list:oshiroreview' %}">口コミ</a> 
     <nav>
     <i class='bx bx-menu'></i>
     <a href="../アカウント機能/user_account.html"> ログアウト</a>
