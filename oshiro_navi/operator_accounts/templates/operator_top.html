@@ -1,73 +1,8 @@
+{% extends "operator_base.html" %}
 {% load static %}
-
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>運営TOP</title>
-
-        <link href="{% static 'css/home.css' %}" rel="stylesheet" />
-        <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
-    <!-- アイコン -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
-
-    <style>
-                /* ボタンカード */
-        .menu-grid {
-            grid-template-columns: repeat(3, 200px);
-        }
-    </style>
-</head>
-
-<body>  
-
-    <!-- サイドバークラス -->
-    <div class="sidebar">
-        <div class="logo_content">
-            <div class="logo">
-                <div class="logo_name">運営用画面</div>
-            </div>
-            <i class='bx bx-menu' id="btn"></i>
-        </div>
-
-        <ul class="nav">
-        <li>
-            <a href="{}">
-                <i class="material-symbols-outlined">home</i>
-                <span class="link_name">運営TOP画面</span>
-            </a>
-            <span class="tooltip">運営TOP画面</span>
-        </li>
-
-        <li>
-            <a href="../お城情報機能/oshiro_info_list.html">
-                <i class="material-symbols-outlined">edit_document</i>
-                <span class="link_name">お城情報機能</span>
-            </a>
-            <span class="tooltip">お城情報機能</span>
-        </li>
-
-            <li>
-                <a href="../イベント情報機能/event_info_list.html">
-                    <i class="material-symbols-outlined">calendar_month</i>
-                    <span class="link_name">イベント情報機能</span>
-                </a>
-                <span class="tooltip">イベント情報機能</span>
-            </li>
-            <li>
-                <a href="{% url 'operator_accounts:account_list' %}">
-                    <i class="material-symbols-outlined">manage_accounts</i>
-                    <span class="link_name">アカウント機能</span>
-                </a>
-                <span class="tooltip">アカウント機能</span>
-            </li>
-        </li>
-        </ul>
-    </div>
-
-    
+{% block title %}運営TOP{% endblock %}
+{% block content %}
+    <body>
     <!-- メイン -->
     <div class="content">
         <h1 style="color:white; text-shadow:0 0 8px black;">運営 TOP</h1>
@@ -76,7 +11,7 @@
             <div class="menu-card" onclick="location.href='../お城情報機能/oshiro_info_list.html'">
                 <i class="material-symbols-outlined">edit_document</i> お城情報機能
             </div>
-            <div class="menu-card" onclick="location.href='../イベント情報機能/event_info_list.html'">
+            <div class="menu-card" onclick="location.href='{% url 'event_info_management:event_info_list' %}'">
                 <i class="material-symbols-outlined">calendar_month</i> イベント情報機能
             </div>
             <div class="menu-card" onclick="location.href='{% url 'operator_accounts:account_list' %}'">
@@ -88,10 +23,7 @@
         <div class="contact-box">
             <a href="../お問い合わせ/contact.html" class="contact-btn">管理者からのお問い合わせ</a>
         </div>
-
     </div>
-        <!-- ナビゲーションバーの動き -->
-        <script src="../../login_form/JS/home.js"></script>
 
-</body>
-</html>
+    </body>
+{% endblock %}
