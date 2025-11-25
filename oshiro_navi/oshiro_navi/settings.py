@@ -70,7 +70,6 @@ ROOT_URLCONF = 'oshiro_navi.urls'
 TEMPLATES = [
 {
     'BACKEND': 'django.template.backends.django.DjangoTemplates',
-    # 'oshiro_navi' を追加して、パスをつなげます
     'DIRS': [BASE_DIR / 'oshiro_navi' / 'templates'],
     # 'DIRS': [],
     'APP_DIRS': True,
