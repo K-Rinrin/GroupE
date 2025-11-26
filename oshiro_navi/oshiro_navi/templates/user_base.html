@@ -20,6 +20,7 @@
     </div>
 
     <ul class="nav">
+<<<<<<< HEAD
         <li>
             <a href="">
                 <input type="radio" name="nav" id="nav1" class="nav-radio">
@@ -52,6 +53,29 @@
             <a href="../音声ガイド機能/qr_generetor.html">
                 <input type="radio" name="nav" id="nav1" class="nav-radio">
             <label for="nav1" class="nav-label">
+=======
+    <li>
+        <a href="{% url 'usermy_list:oshirolist' %}">
+            <i class="material-symbols-outlined">manage_search</i>
+            <span class="link_name">お城リスト</span>
+        </a>
+    </li>
+
+        <li>
+            <a href="{% url 'user_event_info:event_info' %}">
+                <i class="material-symbols-outlined">calendar_month</i>
+                <span class="link_name">イベント</span>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'user_model_course:modelcourselist' %}">
+                <i class="material-symbols-outlined">alt_route</i> 
+                <span class="link_name">モデルコース</span>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'user_audio_guide:guide_list' %}">
+>>>>>>> ddd640db678d595b10f0380b8a4460f9d2513487
                 <i class="material-symbols-outlined">qr_code_2_add</i>
                 <span class="link_name">QRコード読み込み</span>
             </a>
@@ -65,10 +89,10 @@
 
         <!-- ▼ ドロップダウンメニュー ▼ -->
         <ul class="dropdown-menu">
-            <li><a href="/account/profile/">プロフィール</a></li>
-            <li><a href="/castle/stamp/">お城スタンプ</a></li>
-            <li><a href="/castle/mylist/">お城マイリスト</a></li>
-            <li><a href="/logout/">ログアウト</a></li>
+            <li> <a href="{% url 'usermy_page:profile' %}" >プロフィール</a></li>
+            <li><a href="{% url 'usermy_page:oshirostampregistar' %}">お城スタンプ</a></li>
+            <li><a href="{% url 'usermy_page:mylistregistar' %}">お城マイリスト</a></li>
+            <li><a href="{% url 'user_accounts:logout' %}">ログアウト</a></li>
         </ul>
     </div>
 </div>
