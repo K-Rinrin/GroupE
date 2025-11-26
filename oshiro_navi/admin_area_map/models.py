@@ -12,33 +12,23 @@ class AreaMapInfo(models.Model):
         "admin_basic_info.BasicInfo",
         on_delete=models.CASCADE,
         db_column="basic_info",
-        null=True,
-        blank=True,
         help_text="紐づく基本情報（どのお城のMAPか）"
     )
 
     icon_name = models.CharField(
         max_length=20,
-        null=True,
-        blank=True,
         help_text="アイコン名（例：トイレ・駐車場）"
     )
 
     icon_image = models.ImageField(
         upload_to="area_map_icons/",
-        null=True,
-        blank=True,
         help_text="アイコンの画像"
     )
 
     latitude = models.FloatField(
-        null=True,
-        blank=True,
         help_text="緯度"
     )
     longitude = models.FloatField(
-        null=True,
-        blank=True,
         help_text="経度"
     )
 

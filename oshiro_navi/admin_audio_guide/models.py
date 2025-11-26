@@ -12,8 +12,6 @@ class AudioGuide(models.Model):
         "operator_oshiro_info.OshiroInfo",
         on_delete=models.CASCADE,
         db_column="oshiro_info",
-        null=True,
-        blank=True,
         help_text="対象のお城情報"
     )
 
@@ -21,20 +19,15 @@ class AudioGuide(models.Model):
         "admin_accounts.Admin",
         on_delete=models.CASCADE,
         db_column="admin",
-        null=True,
-        blank=True,
         help_text="登録した管理者"
     )
 
     title = models.CharField(
         max_length=20,
-        null=True,
-        blank=True,
         help_text="音声ガイドのタイトル"
     )
 
     guide_explanation = models.TextField(
-        null=True,
         blank=True,
         help_text="ガイド内容の説明"
     )
