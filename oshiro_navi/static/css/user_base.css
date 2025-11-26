@@ -8,7 +8,7 @@ PC / Web 表示
     height: 65px;
     
     /* 柔らかい色味に変更 */
-    background: #f8fafc; /* 優しいグレーがかった白 */
+    background: #f8fafc; /* 優しいグレーがかった白! */
     backdrop-filter: blur(6px);
 
     box-shadow: 0 2px 8px rgba(0,0,0,0.08);
