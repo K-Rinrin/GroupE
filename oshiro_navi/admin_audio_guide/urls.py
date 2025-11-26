@@ -6,7 +6,7 @@ app_name = 'admin_audio_guide'
 urlpatterns = [
 
     # 音声ガイド一覧ページ
-    path('audio_guide/', AudioGuideListtView.as_view(), name='udio_guide'),
+    path('audio_guide/', AudioGuideListtView.as_view(), name='audio_guide'),
 
 
     # 音声ガイドP登録ページ
