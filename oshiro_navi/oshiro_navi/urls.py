@@ -47,10 +47,10 @@ urlpatterns = [
     path('user/', include('user_accounts.urls')),
 
     # # --- 利用者音声ガイド機能 ---
-    # path('user/audio_guide/', include('user_audio_guide.urls')),
+    path('user/audio_guide/', include('user_audio_guide.urls')),
 
     # # --- 利用者モデルコース機能 ---
-    # path('user/model_course/', include('user_model_course.urls')),
+    path('user_model_course/', include('user_model_course.urls')),
     
     # # --- 利用者お城リスト機能 ---
     path('usermy_list/', include('user_my_list.urls')),
