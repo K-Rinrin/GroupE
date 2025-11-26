@@ -38,7 +38,9 @@
                         <label>パスワードを覚えておく</label>
                     </div>
                 </div>
-                <button onclick="location.href='../TOP画面/利用者TOP.html'">Login</button>
+                {% url 'user_accounts:top' as top_url %}
+                <button onclick="location.href='{{ top_url }}'">Login</button>
+
                 <div class="social-container">
 
                 </div>
