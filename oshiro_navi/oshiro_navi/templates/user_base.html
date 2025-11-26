@@ -14,52 +14,18 @@
 <!-- コンテナ! -->
 <div class="user-container">
     <div class="logo_content">
-        <div class="logo">
+        <a href="{% url 'user_accounts:top' %}" class="logo">
             <img src="{% static 'image/お城ナビアイコン.png' %}" alt="お城ナビロゴ" class="logo_img">
-        </div>
+        </a>
     </div>
 
     <ul class="nav">
-<<<<<<< HEAD
         <li>
-            <a href="">
-                <input type="radio" name="nav" id="nav1" class="nav-radio">
-                <label for="nav1" class="nav-label">
-                    <i class="material-symbols-outlined">manage_search</i>
-                    <span class="link_name">お城リスト</span>
-                </label>
+            <a href="{% url 'usermy_list:oshirolist' %}">
+                <i class="material-symbols-outlined">manage_search</i>
+                <span class="link_name">お城リスト</span>
             </a>
         </li>
-
-        <li>
-            <a href="">
-                <input type="radio" name="nav" id="nav1" class="nav-radio">
-                <label for="nav1" class="nav-label">
-                    <i class="material-symbols-outlined">calendar_month</i>
-                    <span class="link_name">イベント</span>
-                </label>
-            </a>
-        </li>
-        <li>
-            <a href="">
-                <input type="radio" name="nav" id="nav1" class="nav-radio">
-                <label for="nav1" class="nav-label">    
-                    <i class="material-symbols-outlined">alt_route</i> 
-                    <span class="link_name">モデルコース</span>
-                </label>
-            </a>
-        </li>
-        <li>
-            <a href="../音声ガイド機能/qr_generetor.html">
-                <input type="radio" name="nav" id="nav1" class="nav-radio">
-            <label for="nav1" class="nav-label">
-=======
-    <li>
-        <a href="{% url 'usermy_list:oshirolist' %}">
-            <i class="material-symbols-outlined">manage_search</i>
-            <span class="link_name">お城リスト</span>
-        </a>
-    </li>
 
         <li>
             <a href="{% url 'user_event_info:event_info' %}">
@@ -75,7 +41,6 @@
         </li>
         <li>
             <a href="{% url 'user_audio_guide:guide_list' %}">
->>>>>>> ddd640db678d595b10f0380b8a4460f9d2513487
                 <i class="material-symbols-outlined">qr_code_2_add</i>
                 <span class="link_name">QRコード読み込み</span>
             </a>
