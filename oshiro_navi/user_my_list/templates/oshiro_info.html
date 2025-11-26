@@ -1,3 +1,7 @@
+{% extends "user_base.html" %}
+{% load static %}
+{% block title %}{% endblock %}
+{% block content %}
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -12,3 +16,4 @@
     <a href="{% url 'usermy_list:oshiroreview' %}">口コミ</a> 
 </body>
 </html>
+{% endblock %}
