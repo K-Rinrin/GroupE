@@ -8,3 +8,6 @@ class UserTopView(TemplateView):
 
 class UserlogoutView(TemplateView):
     template_name = "user_logout.html"
+
+class UserAccountView(TemplateView):
+    template_name = "user_account.html"
