@@ -51,7 +51,10 @@ urlpatterns = [
 
     # # --- 利用者モデルコース機能 ---
     path('user_model_course/', include('user_model_course.urls')),
-    
+
+    # # --- 利用者イベント機能 ---
+    path('user_event_info/', include('user_event_info.urls')),
+
     # # --- 利用者お城リスト機能 ---
     path('usermy_list/', include('user_my_list.urls')),
     

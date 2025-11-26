@@ -45,6 +45,7 @@ INSTALLED_APPS = [
 'user_accounts.apps.UserAccountsConfig',
 'user_audio_guide.apps.UserAudioGuideConfig',
 'user_model_course.apps.UserModelCourseConfig',
+'user_event_info.apps.UserEventInfoConfig',
 'user_my_list.apps.UserMyListConfig',
 'user_my_page.apps.UserMyPageConfig',
 'django.contrib.admin',
