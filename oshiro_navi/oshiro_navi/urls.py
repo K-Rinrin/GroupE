@@ -41,19 +41,19 @@ urlpatterns = [
     path('admin/model_course/', include('admin_model_course.urls')),
 
     # # --- 管理者基本情報機能 ---
-    # path('admin/basic_info/', include('admin_basic_info.urls')),
+    path('admin/basic_info/', include('admin_basic_info.urls')),
 
     # # --- 利用者アカウント機能 ---
     path('user/', include('user_accounts.urls')),
 
     # # --- 利用者音声ガイド機能 ---
-    # path('user/audio_guide/', include('user_audio_guide.urls')),
+    path('user/audio_guide/', include('user_audio_guide.urls')),
 
     # # --- 利用者モデルコース機能 ---
-    # path('user/model_course/', include('user_model_course.urls')),
+    path('user_model_course/', include('user_model_course.urls')),
     
     # # --- 利用者お城リスト機能 ---
-    # path('user/my_list/', include('user_my_list.urls')),
+    path('usermy_list/', include('user_my_list.urls')),
     
     # # --- 利用者マイページ機能 ---
     path('usermy_page/', include('user_my_page.urls')),

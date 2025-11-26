@@ -1,0 +1,89 @@
+{% extends "admin_base.html" %}
+
+{% block title %}基本情報更新{% endblock %}
+
+{% block content %}
+
+<h1>基本情報更新</h1>
+
+<div class="basic-info-form">
+
+    <!-- お城名 -->
+    <div class="form-group">
+        <label>お城名 <span class="required">*</span></label><br>
+        <input type="text" name="castle_name"
+               placeholder="例: 鶴ヶ城"
+               value="{{ castle.castle_name|default:'' }}">
+    </div>
+
+    <!-- 営業時間 -->
+    <div class="form-group">
+        <label>営業時間 <span class="required">*</span></label><br>
+        <input type="text" name="business_hours"
+               placeholder="例: 9:00-18:00（最終入場17:00）"
+               value="{{ castle.business_hours|default:'' }}">
+    </div>
+
+    <!-- 入場料 -->
+    <div class="form-group">
+        <label>入場料 <span class="required">*</span></label><br>
+        <input type="text" name="admission_fee"
+               placeholder="例: 大人1,000円 / 小人500円"
+               value="{{ castle.admission_fee|default:'' }}">
+    </div>
+
+    <!-- アクセス情報 -->
+    <div class="form-group">
+        <label>アクセス情報 <span class="required">*</span></label><br>
+        <textarea name="access_info" rows="4"
+                  placeholder="交通手段や最寄りの駅・バス停からの情報などを入力してください。">{{ castle.access_info|default:'' }}</textarea>
+    </div>
+
+    <hr>
+
+    <!-- 御城印 -->
+    <div class="form-group">
+        <label>御城印</label><br>
+        <input type="file" name="goshuin_image" accept="image/*"><br><br>
+        <textarea name="goshuin_info" rows="3"
+                  placeholder="御城印の販売場所・柄・価格などの情報を入力してください。">{{ castle.goshuin_info|default:'' }}</textarea>
+    </div>
+
+    <hr>
+
+    <!-- 見どころポイント -->
+    <div class="form-group">
+        <label>見どころポイント</label><br>
+        <input type="file" name="highlight_image" accept="image/*"><br><br>
+        <textarea name="highlight_info" rows="4"
+                  placeholder="お城の見どころやおすすめスポット、歴史的背景などを詳しく入力してください。">{{ castle.highlight_info|default:'' }}</textarea>
+    </div>
+
+    <hr>
+
+    <!-- お城画像 -->
+    <div class="form-group">
+        <label>お城画像</label><br>
+        <input type="file" name="castle_image" accept="image/*">
+    </div>
+
+    <hr>
+
+    <!-- ボタンエリア -->
+    <div class="form-actions">
+        <a href="{% url 'admin_basic_info:basic_info_list' %}" class="btn-cancel">
+            キャンセル
+        </a>
+
+        
+        <button type="button" class="btn-update"
+                onclick="location.href='{% url 'admin_basic_info:basic_info_update_success' %}'">
+            更新
+        </button>
+
+        
+    </div>
+
+</div>
+
+{% endblock %}

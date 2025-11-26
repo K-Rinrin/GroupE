@@ -53,22 +53,23 @@
         <span class="tooltip">周辺MAP機能</span>
     </li>
 
+    <li>
+        <a href= "{% url 'admin_audio_guide:audio_guide' %}" class="register-btn">
+            <i class="material-symbols-outlined">record_voice_over</i>
+            <span class="link_name">音声ガイド機能</span>
+        </a>
+        <span class="tooltip">音声ガイド機能</span>
+    </li>
+
         <li>
-            <a href="../音声ガイド機能/audio_guide_list.html">
-                <i class="material-symbols-outlined">record_voice_over</i>
-                <span class="link_name">音声ガイド機能</span>
-            </a>
-            <span class="tooltip">音声ガイド機能</span>
-        </li>
-        <li>
-            <a href="../基本情報機能/basic_info_list.html">
+            <a href="{% url 'admin_basic_info:basic_info_list' %}">
                 <i class="material-symbols-outlined">edit_document</i>
                 <span class="link_name">基本情報機能</span>
             </a>
             <span class="tooltip">基本情報機能</span>
         </li>
         <li>
-            <a href="../モデルコース機能/model_couse_list.html">
+            <a href="{% url 'admin_model_course:model_couse_list' %}">
                 <i class="material-symbols-outlined">alt_route</i> 
                 <span class="link_name">モデルコース機能</span>
             </a>
