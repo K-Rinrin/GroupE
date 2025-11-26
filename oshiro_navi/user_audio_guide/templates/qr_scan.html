@@ -1,15 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <script src="html5-qrcode.min.js"></script>
-</head>
-<body>
+{% extends "user_base.html" %}
+{% load static %}
+{% block title %}音声ガイド読み込み後{% endblock %}
+{% block content %}
 
 <div style="width: 500px" id="reader"></div>
-
+<script src="{% static 'JS/html5-qrcode.min.js' %}"></script>
 <script>
     function onScanSuccess(decodedText, decodedResult) {
         // Handle on success condition with the decoded text or result.
@@ -21,5 +16,5 @@
     html5QrcodeScanner.render(onScanSuccess);
         
 </script>
-</body>
-</html>
+
+{% endblock %}

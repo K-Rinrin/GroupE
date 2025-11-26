@@ -40,7 +40,7 @@
             </a>
         </li>
         <li>
-            <a href="{% url 'user_audio_guide:guide_list' %}">
+            <a href="{% url 'user_audio_guide:qr_scan' %}">
                 <i class="material-symbols-outlined">qr_code_2_add</i>
                 <span class="link_name">QRコード読み込み</span>
             </a>
@@ -69,8 +69,11 @@
 <div class="home_content" id="no name">
     {% block content %}
     {% endblock %}
+
 </div>
 <!-- ▲ ページごとの中身 ▲ -->
+
+
 
 <script src="{% static 'JS/user.js' %}"></script>
 
