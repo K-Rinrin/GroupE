@@ -1,3 +1,68 @@
+# admin_basic_info/models.py
 from django.db import models
 
-# Create your models here.
+
+class BasicInfo(models.Model):
+    """
+    基本情報テーブル（basic_info）。
+    お城ごとの詳細情報（入場料・営業時間・見どころ等）を管理する。
+    """
+
+    # お城情報（1対1）
+    oshiro_info = models.OneToOneField(
+        "operator_oshiro_info.OshiroInfo",
+        on_delete=models.CASCADE,
+        db_column="oshiro_info",
+        help_text="対象のお城情報（1対1）"
+    )
+
+    admission = models.IntegerField(
+        null=True,
+        blank=True,
+        help_text="入場料"
+    )
+    business_hours = models.DateTimeField(
+        null=True,
+        blank=True,
+        help_text="営業時間（日時情報）"
+    )
+    access_info = models.TextField(
+        null=True,
+        blank=True,
+        help_text="アクセス情報"
+    )
+    highlights_img = models.ImageField(
+        upload_to="highlights/",
+        null=True,
+        blank=True,
+        help_text="見どころ画像"
+    )
+    highlights = models.TextField(
+        null=True,
+        blank=True,
+        help_text="見どころ説明"
+    )
+    gojoin_stamp = models.ImageField(
+        upload_to="gojoin_stamp/",
+        null=True,
+        blank=True,
+        help_text="御城印画像"
+    )
+    gojoin = models.TextField(
+        null=True,
+        blank=True,
+        help_text="御城印説明"
+    )
+
+    # MapField 相当。JSON でピン情報などを保存する想定。
+    stamp_map = models.JSONField(
+        null=True,
+        blank=True,
+        help_text="周辺MAP情報（JSON形式）"
+    )
+
+    class Meta:
+        db_table = "basic_info"
+
+    def __str__(self) -> str:
+        return f"BasicInfo(oshiro={self.oshiro_info_id})"
