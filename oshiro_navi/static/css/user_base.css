@@ -1,0 +1,195 @@
+/* ====================================
+PC / Web 表示
+==================================== */
+.user-container {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 65px;
+    
+    /* 柔らかい色味に変更 */
+    background: #f8fafc; /* 優しいグレーがかった白 */
+    backdrop-filter: blur(6px);
+
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    border-bottom: 1px solid rgba(150,150,150,0.15);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 18px;
+
+    z-index: 999;
+}
+
+/* ロゴ周り */
+.logo_content {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    width: 40px;
+    height: 40px;
+}
+
+.logo_img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;  /* 少し丸く */
+}
+
+/* ナビゲーション */
+.user-container .nav {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    padding-left: 20px;
+}
+
+.user-container .nav li {
+    list-style: none;
+}
+
+.user-container .nav li a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #334155;  /* 柔らかい青みのグレー */
+    font-weight: 500;
+    padding: 8px 10px;
+    border-radius: 8px;
+    transition: 0.2s;
+}
+
+.user-container .nav li a:hover {
+    background: #e2e8f0;  /* ホバー時にふんわり */
+}
+
+.user-container .nav i {
+    font-size: 23px;
+    margin-right: 5px;
+}
+
+/* メインコンテンツ（PC）*/
+.home_content {
+    margin-top: 90px;
+    padding: 20px;
+}
+
+/* ▼▼ ドロップダウン ▼▼ */
+.dropdown {
+    position: relative;
+}
+
+/* マイページボタン */
+.dropdown-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 12px;
+    text-decoration: none;
+    color: #334155;
+
+    border-radius: 10px;
+    transition: 0.2s;
+}
+
+.dropdown-btn:hover {
+    background: #e2e8f0;
+}
+
+/* ▼ メニュー ▼ */
+.dropdown-menu {
+    position: absolute;
+    top: 50px;
+    right: 0;
+
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.12);
+    border: 1px solid rgba(200,200,200,0.25);
+
+    list-style: none;
+    padding: 10px 0;
+    width: 180px;
+    display: none;
+}
+
+.dropdown-menu li a {
+    display: block;
+    padding: 12px 16px;
+    text-decoration: none;
+    color: #334155;
+    border-radius: 6px;
+    transition: 0.15s;
+}
+
+.dropdown-menu li a:hover {
+    background: #f1f5f9;
+}
+
+/* ホバーで表示（PC） */
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+/* ▼ の矢印 */
+.dropdown-btn .link_name::after {
+    content: "▼";
+    font-size: 11px;
+    margin-left: 4px;
+    opacity: 0.7;
+}
+
+
+/* ====================================
+スマホ表示 600px以下
+==================================== */
+@media screen and (max-width: 600px) {
+
+    /* 上部 → 下部メニューに */
+    .user-container {
+        top: auto;
+        bottom: 0;
+        height: 75px;
+        padding: 0 10px;
+
+        border-top: 1px solid rgba(180,180,180,0.2);
+        border-bottom: none;
+        background: #ffffffee; 
+    }
+
+    .logo_content {
+        display: none; /* ロゴ消してスッキリ */
+    }
+
+    .user-container .nav {
+        width: 100%;
+        display: flex;
+        justify-content: space-around;
+        gap: 0;
+    }
+
+    .user-container .nav li a {
+        flex-direction: column;
+        font-size: 11px;
+        padding: 6px;
+        color: #475569;
+    }
+
+    .user-container .nav i {
+        font-size: 28px;
+        margin: 0;
+    }
+
+    .home_content {
+        margin-top: 20px;
+        margin-bottom: 100px;
+    }
+
+    /* ▼マイページは矢印なし */
+    .dropdown-btn .link_name::after {
+        content: "";
+    }
+}
