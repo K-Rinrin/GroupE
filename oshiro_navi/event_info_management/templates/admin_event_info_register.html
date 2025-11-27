@@ -1,4 +1,4 @@
-{% extends "operator_base.html" %}
+{% extends "admin_base.html" %}
 {% load static %}
 {% block content %}
 <body>
@@ -10,7 +10,7 @@
 
 <div class="form-container">
 
-        <form action="{% url 'event_info_management:event_info_register_success' %}" method="GET" enctype="multipart/form-data">
+        <form action="{% url 'event_info_management:admin_event_info_register_success' %}" method="GET" enctype="multipart/form-data">
 
             <!-- イベント名 -->
             <div class="form-group">

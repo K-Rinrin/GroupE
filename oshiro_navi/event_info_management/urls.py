@@ -5,12 +5,21 @@ from .views import *
 app_name = 'event_info_management'
 
 urlpatterns = [
-    path('list/', EventInfoListView.as_view(), name='event_info_list'),
-    path('register/',EventInfoRegisterView.as_view(), name='event_info_register'),
-    path('register_success/',EventInfoRegisterSuccessView.as_view(), name='event_info_register_success'),
-    path('update/',EventInfoUpdateView.as_view(), name='event_info_update'),
-    path('update_success/',EventInfoUpdateSuccessView.as_view(), name='event_info_update_success'),
-    path('delete/',EventInfoDeleteView.as_view(), name='event_info_delete'),
-    path('delete_check/',EventInfoDeleteCheckView.as_view(), name='event_info_delete_check'),
-    path('delete_success/',EventInfoDeleteSuccessView.as_view(), name='event_info_delete_success'),
+    path('admin/list/', AdminEventInfoListView.as_view(), name='admin_event_info_list'),
+    path('admin/register/',AdminEventInfoRegisterView.as_view(), name='admin_event_info_register'),
+    path('admin/register_success/',AdminEventInfoRegisterSuccessView.as_view(), name='admin_event_info_register_success'),
+    path('admin/update/',AdminEventInfoUpdateView.as_view(), name='admin_event_info_update'),
+    path('admin/update_success/',AdminEventInfoUpdateSuccessView.as_view(), name='admin_event_info_update_success'),
+    path('admin/delete/',AdminEventInfoDeleteView.as_view(), name='admin_event_info_delete'),
+    path('admin/delete_check/',AdminEventInfoDeleteCheckView.as_view(), name='admin_event_info_delete_check'),
+    path('admin/delete_success/',AdminEventInfoDeleteSuccessView.as_view(), name='admin_event_info_delete_success'),
+
+    path('operator/list/', OperatorEventInfoListView.as_view(), name='operator_event_info_list'),
+    path('operator/register/',OperatorEventInfoRegisterView.as_view(), name='operator_event_info_register'),
+    path('operator/register_success/',OperatorEventInfoRegisterSuccessView.as_view(), name='operator_event_info_register_success'),
+    path('operator/update/',OperatorEventInfoUpdateView.as_view(), name='operator_event_info_update'),
+    path('operator/update_success/',OperatorEventInfoUpdateSuccessView.as_view(), name='operator_event_info_update_success'),
+    path('operator/delete/',OperatorEventInfoDeleteView.as_view(), name='operator_event_info_delete'),
+    path('operator/delete_check/',OperatorEventInfoDeleteCheckView.as_view(), name='operator_event_info_delete_check'),
+    path('operator/delete_success/',OperatorEventInfoDeleteSuccessView.as_view(), name='operator_event_info_delete_success'),
 ]

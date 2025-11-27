@@ -1,9 +1,9 @@
-{% extends "operator_base.html" %}
+{% extends "admin_base.html" %}
 {% load static %}
 {% block content %}
 <body>  
         <h1 class="page-title">イベント登録完了</h1>
-        <a href="{% url 'event_info_management:event_info_list' %}" class="btn-cancel">イベント一覧へ戻る</a>
+        <a href="{% url 'event_info_management:admin_event_info_list' %}" class="btn-cancel">イベント一覧へ戻る</a>
 </body>
 {% endblock %}
 
