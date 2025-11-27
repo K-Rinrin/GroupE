@@ -1,32 +1,32 @@
 # user_accounts/models.py
 from django.db import models
+from django.conf import settings
 
 
 class User(models.Model):
     """
-    利用者テーブル（user）。
-    1アカウント = 1利用者 になるように、Account と OneToOne で紐づける。
-    Django側では account_id というカラム名になる。
+    利用者（一般ユーザー）のプロフィール。
+    クラス図の「利用者」に相当。
+    Account(アカウント) と 1対1 で紐づく。
     """
 
-    # アカウント（一対一・これが主キー）
     account = models.OneToOneField(
-        "accounts.Account",
+        settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        primary_key=True,        # Userテーブルの主キーにする → 自動idは作られない
+        related_name="user_profile",
         help_text="紐づくアカウント（1アカウント = 1利用者）"
     )
 
-    # プロフィール画像（ファイル名やパス）
-    profile_image = models.CharField(
-        max_length=20,
+    # プロフィール画像
+    profile_image = models.ImageField(
+        upload_to="profile_images/",
         null=True,
-        help_text="プロフィール画像（ファイル名 or パス）"
+        blank=True,
+        help_text="プロフィール画像"
     )
 
-    # 自己紹介文
-    user_about = models.CharField(
-        max_length=100,
+    # 自己紹介
+    user_about = models.TextField(
         null=True,
         blank=True,
         help_text="自己紹介文"
@@ -34,9 +34,11 @@ class User(models.Model):
 
     class Meta:
         db_table = "user"
+        verbose_name = "利用者"
+        verbose_name_plural = "利用者"
 
-    def __str__(self) -> str:
-        return f"User({self.account_id})"
+    def __str__(self):
+        return f"User({self.account.username})"
 
 
 class UserReview(models.Model):

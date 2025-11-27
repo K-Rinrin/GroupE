@@ -1,25 +1,26 @@
 # operator_accounts/models.py
 from django.db import models
+from django.conf import settings
 
 
 class Operator(models.Model):
     """
-    運営テーブル（operator）。
-    サイト運営側のアカウント情報。
+    運営プロファイル。
+    クラス図の「運営」に相当。
+    アカウントと1対1で紐づく。
     """
 
-    # アカウントと1対1で紐づく
     account = models.OneToOneField(
-        "accounts.Account",
+        settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        db_column="account",
-        null=True,
-        blank=True,
-        help_text="運営として使用するアカウント"
+        related_name="operator_profile",
+        help_text="運営としてのアカウント"
     )
 
     class Meta:
         db_table = "operator"
+        verbose_name = "運営"
+        verbose_name_plural = "運営"
 
-    def __str__(self) -> str:
-        return f"Operator({self.account_id})"
+    def __str__(self):
+        return f"Operator({self.account.username})"

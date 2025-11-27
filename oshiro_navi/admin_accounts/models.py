@@ -1,27 +1,27 @@
 # admin_accounts/models.py
 from django.db import models
+from django.conf import settings
 
 
 class Admin(models.Model):
     """
-    管理者テーブル（admin）。
-    アカウントと1対1で紐づき、担当するお城を最大5件まで持つ。
+    管理者プロファイル。
+    クラス図の「管理者」に相当。
+    アカウントと1対1で紐づき、管理するお城1〜5を持つ。
     """
 
-    # アカウント（主キー＆FK）
     account = models.OneToOneField(
-        "accounts.Account",
+        settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         primary_key=True,
-        db_column="account",
-        help_text="管理者に対応するアカウント（主キー）"
+        related_name="admin_profile",
+        help_text="管理者としてのアカウント"
     )
 
-    # 管理するお城1〜5（Oshiro_info FK）
+    # 管理するお城1〜5
     oshiro_management1 = models.ForeignKey(
         "operator_oshiro_info.OshiroInfo",
         on_delete=models.CASCADE,
-        db_column="oshiro_manegement1",
         null=True,
         blank=True,
         related_name="admin_slot1",
@@ -30,7 +30,6 @@ class Admin(models.Model):
     oshiro_management2 = models.ForeignKey(
         "operator_oshiro_info.OshiroInfo",
         on_delete=models.CASCADE,
-        db_column="oshiro_manegement2",
         null=True,
         blank=True,
         related_name="admin_slot2",
@@ -39,7 +38,6 @@ class Admin(models.Model):
     oshiro_management3 = models.ForeignKey(
         "operator_oshiro_info.OshiroInfo",
         on_delete=models.CASCADE,
-        db_column="oshiro_manegement3",
         null=True,
         blank=True,
         related_name="admin_slot3",
@@ -48,7 +46,6 @@ class Admin(models.Model):
     oshiro_management4 = models.ForeignKey(
         "operator_oshiro_info.OshiroInfo",
         on_delete=models.CASCADE,
-        db_column="oshiro_manegement4",
         null=True,
         blank=True,
         related_name="admin_slot4",
@@ -57,7 +54,6 @@ class Admin(models.Model):
     oshiro_management5 = models.ForeignKey(
         "operator_oshiro_info.OshiroInfo",
         on_delete=models.CASCADE,
-        db_column="oshiro_manegement5",
         null=True,
         blank=True,
         related_name="admin_slot5",
@@ -66,6 +62,8 @@ class Admin(models.Model):
 
     class Meta:
         db_table = "admin"
+        verbose_name = "管理者"
+        verbose_name_plural = "管理者"
 
-    def __str__(self) -> str:
-        return f"Admin({self.account_id})"
+    def __str__(self):
+        return f"Admin({self.account.username})"
