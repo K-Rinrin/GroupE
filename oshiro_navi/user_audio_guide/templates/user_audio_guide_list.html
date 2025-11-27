@@ -1,15 +1,131 @@
-{% extends "user_base.html" %}
 {% load static %}
-{% block title %}音声ガイド読み込み後{% endblock %}
-{% block content %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>音声ガイド</title>
+    <link rel="stylesheet" href="{% static 'css/audio_guide.css' %}">
+</head>  
+<body>
 
-    <!-- メイン -->
-    <div class="content">
-        <h1 style="color:white; text-shadow:0 0 8px black;">音声ガイド読み込み後</h1>
+<div class="content">
+    <h1 style="color:white; text-shadow:0 0 8px black;">音声ガイド</h1>
 
-        <p>再生ボタン</p>
-        <p>再生ボタン</p>
+    <!-- 音声ガイドプレイヤー -->
+    <div class="audio-player">
+        <div class="plate-set">
+            <div class="plate">
+                <div class="black">
+                    <div class="border">
+                        <div class="white">
+                            <div class="center"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="player">
+                <div class="rect"></div>
+                <div class="circ"></div>
+            </div>
+        </div>
 
+        <div class="guide1">
+            <div class="player-controls">
+                <div class="song-info">
+                    <div class="song-title">お城ガイド：天守閣の説明</div>
+                    <p class="artist">ガイドナレーション：偉い人佐藤</p>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress"></div>
+                </div>
+                <div class="buttons">
+                    <button class="play-btn">
+                        ▶
+                    </button>
+                    <button class="pause-btn">
+                        ❚❚
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 
-{% endblock %}
+    <!-- 2個目 -->
+    <div class="audio-player">
+        <div class="plate-set">
+            <div class="plate">
+                <div class="black">
+                    <div class="border">
+                        <div class="white">
+                            <div class="center"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="player">
+                <div class="rect"></div>
+                <div class="circ"></div>
+            </div>
+        </div>
+
+        <div class="guide1">
+            <div class="player-controls">
+                <div class="song-info">
+                    <div class="song-title">石垣の構造と役割</div>
+                    <p class="artist">ガイドナレーション：かわいい山田</p>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress"></div>
+                </div>
+                <div class="buttons">
+                    <button class="play-btn">▶</button>
+                    <button class="pause-btn">❚❚</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3つ目 -->
+    <div class="audio-player">
+        <div class="plate-set">
+            <div class="plate">
+                <div class="black">
+                    <div class="border">
+                        <div class="white">
+                            <div class="center"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="player">
+                <div class="rect"></div>
+                <div class="circ"></div>
+            </div>
+        </div>
+
+        <div class="guide1">
+            <div class="player-controls">
+                <div class="song-info">
+                    <div class="song-title">城門の防御機能について</div>
+                    <p class="artist">ガイドナレーション：硬派な高橋</p>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress"></div>
+                </div>
+                <div class="buttons">
+                    <button class="play-btn">▶</button>
+                    <button class="pause-btn">❚❚</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<audio id="audio" src="../../static/JS/audio_guide.js"></audio>
+
+<script src="script.js"></script>
+</body>
+</html>
+    

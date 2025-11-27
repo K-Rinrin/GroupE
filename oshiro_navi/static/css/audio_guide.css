@@ -1,0 +1,116 @@
+/* 背景：和紙をイメージ */
+body {
+    background: #f4f1e8;
+    font-family: "Hiragino Mincho Pro", "Yu Mincho", serif;
+}
+
+/* コンテンツ余白 */
+.content {
+    align-items: center;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;   /* 画面の高さ全部使う */
+
+}
+
+/* 音声ガイドタイトル */
+h1 {
+    color: #3b2f2f !important;
+    text-shadow: 0 0 4px #ffffff !important;
+    font-family: "Yu Mincho", "Hiragino Mincho Pro", serif;
+}
+
+/* --- 和風オーディオプレイヤー全体 --- */
+.audio-player {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 330px;
+    min-height: 90px;
+
+    background: #fffdf7;                   /* 和紙風の白 */
+    border: 2px solid #c1a98e;             /* 木材のような色 */
+    border-radius: 12px;
+
+    padding: 10px;
+    margin-bottom: 18px;
+
+    box-shadow: 3px 3px 0 #b59b7b;         /* 和風の影 */
+}
+
+/* アイコン部分：丸ではなく “家紋風” */
+.album-cover {
+    width: 60px;
+    height: 60px;
+    background: radial-gradient(circle, #e8e2d1, #d6c9a5);
+    border: 2px solid #6b5c4a;
+    border-radius: 50%;
+    margin-right: 15px;
+}
+
+/* コントロール部分 */
+.player-controls {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 曲名・ナレーション名 */
+.song-title {
+    font-size: 16px;
+    color: #3b2f2f;
+    margin: 0;
+    font-weight: bold;
+}
+
+.artist {
+    font-size: 13px;
+    color: #6b5c4a;
+    margin: 0 0 8px 0;
+}
+
+/* プログレスバー：木の板をイメージ */
+.progress-bar {
+    width: 100%;
+    height: 6px;
+    background-color: #d8cbb3;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 6px;
+}
+
+.progress {
+    width: 50%;
+    height: 100%;
+    background-color: #9c6b30;     /* 木材の濃い色 */
+    transform-origin: left;
+    animation: progress-animation 10s linear infinite;
+}
+
+/* 再生/停止ボタン：筆描き風のアイコン */
+button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    outline: none;
+}
+
+.play-btn,
+.pause-btn {
+    font-size: 20px;
+    color: #3b2f2f;
+    margin-right: 10px;
+    transition: transform 0.15s ease-in-out;
+}
+
+.play-btn:hover,
+.pause-btn:hover {
+    transform: scale(1.15);
+}
+
+/* プログレスアニメ */
+@keyframes progress-animation {
+    0% { transform: scaleX(0); }
+    100% { transform: scaleX(1); }
+}
