@@ -12,8 +12,6 @@ class ModelCourse(models.Model):
         "operator_oshiro_info.OshiroInfo",
         on_delete=models.CASCADE,
         db_column="oshiro_info",
-        null=True,
-        blank=True,
         help_text="対象のお城情報"
     )
 
@@ -21,46 +19,33 @@ class ModelCourse(models.Model):
         "admin_accounts.Admin",
         on_delete=models.CASCADE,
         db_column="admin",
-        null=True,
-        blank=True,
         help_text="モデルコースを登録した管理者"
     )
 
     model_course_name = models.CharField(
         max_length=30,
-        null=True,
-        blank=True,
         help_text="モデルコース名"
     )
 
     distance = models.FloatField(
-        null=True,
-        blank=True,
         help_text="コースの距離"
     )
 
     required_time = models.TimeField(
-        null=True,
-        blank=True,
         help_text="コースの所要時間"
     )
 
     course_overview = models.TextField(
-        null=True,
         blank=True,
         help_text="コース概要"
     )
 
     difficulty = models.CharField(
         max_length=20,
-        null=True,
-        blank=True,
         help_text="難易度（文字列）"
     )
 
     five_star_review = models.FloatField(
-        null=True,
-        blank=True,
         help_text="評価（5段階などの数値）"
     )
 

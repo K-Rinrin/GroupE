@@ -12,8 +12,6 @@ class OshiroStampInfo(models.Model):
         "operator_oshiro_info.OshiroInfo",
         on_delete=models.CASCADE,
         db_column="oshiro_info",
-        null=True,
-        blank=True,
         help_text="対象のお城情報（1対1）"
     )
 
@@ -21,22 +19,16 @@ class OshiroStampInfo(models.Model):
         "admin_accounts.Admin",
         on_delete=models.CASCADE,
         db_column="admin",
-        null=True,
-        blank=True,
         help_text="登録した管理者"
     )
 
     oshiro_stamp_image = models.ImageField(
         upload_to="oshiro_stamp_images/",
-        null=True,
-        blank=True,
         help_text="お城スタンプ画像"
     )
 
     stamp_name = models.CharField(
         max_length=20,
-        null=True,
-        blank=True,
         help_text="スタンプ名"
     )
 
@@ -63,14 +55,10 @@ class OshiroStamp(models.Model):
     )
 
     oshiro_stamp = models.IntegerField(
-        null=True,
-        blank=True,
         help_text="お城スタンプ数"
     )
 
     date = models.DateField(
-        null=True,
-        blank=True,
         help_text="スタンプ取得日"
     )
 
@@ -78,8 +66,7 @@ class OshiroStamp(models.Model):
         "user_accounts.User",
         on_delete=models.CASCADE,
         db_column="user",
-        null=True,
-        blank=True,
+
         help_text="スタンプを持っている利用者"
     )
 
