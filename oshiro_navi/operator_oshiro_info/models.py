@@ -14,23 +14,16 @@ class OshiroInfo(models.Model):
     )
     oshiro_images = models.ImageField(
         upload_to="oshiro_images/",
-        null=True,
-        blank=True,
         help_text="お城の代表画像"
     )
     address = models.CharField(
         max_length=100,
-        null=True,
-        blank=True,
         help_text="住所"
     )
     built_year = models.IntegerField(
-        null=True,
-        blank=True,
         help_text="築城年（西暦など）"
     )
     structure = models.TextField(
-        null=True,
         blank=True,
         help_text="お城の構造の説明"
     )

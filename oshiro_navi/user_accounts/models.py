@@ -21,7 +21,6 @@ class User(models.Model):
     profile_image = models.CharField(
         max_length=20,
         null=True,
-        blank=True,
         help_text="プロフィール画像（ファイル名 or パス）"
     )
 
@@ -51,21 +50,16 @@ class UserReview(models.Model):
         "user_accounts.User",
         on_delete=models.CASCADE,
         db_column="user",
-        null=True,
-        blank=True,
         help_text="口コミ投稿者（利用者）"
     )
 
     review_title = models.CharField(
         max_length=20,
-        null=True,
-        blank=True,
         help_text="口コミタイトル"
     )
 
     review_comments = models.CharField(
         max_length=50,
-        null=True,
         blank=True,
         help_text="口コミコメント"
     )
@@ -73,7 +67,6 @@ class UserReview(models.Model):
     review_image = models.ImageField(
         upload_to="review_images/",
         null=True,
-        blank=True,
         help_text="口コミに添付された画像"
     )
 
@@ -82,8 +75,6 @@ class UserReview(models.Model):
     )
 
     post_date_time = models.DateTimeField(
-        null=True,
-        blank=True,
         help_text="口コミを投稿した日時"
     )
 
