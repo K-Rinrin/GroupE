@@ -1,0 +1,11 @@
+{% extends 'admin_base.html' %}
+{% load static %}
+{% block title %}お問い合わせ{% endblock %}
+{% block content %}
+
+<body>  
+        <h1 class="page-title">お問い合わせありがとうございます。</h1>
+        <a href="{% url 'admin_accounts:top' %}" class="btn-cancel">戻る</a>
+</body>
+
+{% endblock %}
