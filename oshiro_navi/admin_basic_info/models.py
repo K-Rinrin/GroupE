@@ -13,41 +13,51 @@ class BasicInfo(models.Model):
         "operator_oshiro_info.OshiroInfo",
         on_delete=models.CASCADE,
         db_column="oshiro_info",
-        help_text="対象のお城情報（1対1）"
+        help_text="対象のお城情報"
     )
 
+    # 入場料
     admission = models.IntegerField(
-        null=True,
-        blank=True,
         help_text="入場料"
     )
-    business_hours = models.DateTimeField(
-        null=True,
-        blank=True,
-        help_text="営業時間（日時情報）"
+
+   # 営業開始時間
+    business_opening_hours = models.DateTimeField(
+        help_text="営業開始時間"
     )
+    # 営業終了時間
+    business_closing_hours = models.DateTimeField(
+        help_text="営業終了時間"
+    )
+
+
+    # アクセス情報
     access_info = models.TextField(
-        null=True,
-        blank=True,
         help_text="アクセス情報"
     )
+
+    # 見どころ画像
     highlights_img = models.ImageField(
         upload_to="highlights/",
-        null=True,
         blank=True,
         help_text="見どころ画像"
     )
+
+   # 見どころ説明
     highlights = models.TextField(
-        null=True,
         blank=True,
         help_text="見どころ説明"
     )
+
+  # 御城印画像
     gojoin_stamp = models.ImageField(
         upload_to="gojoin_stamp/",
         null=True,
         blank=True,
         help_text="御城印画像"
     )
+
+  # 御城印説明
     gojoin = models.TextField(
         null=True,
         blank=True,
@@ -56,9 +66,7 @@ class BasicInfo(models.Model):
 
     # MapField 相当。JSON でピン情報などを保存する想定。
     stamp_map = models.JSONField(
-        null=True,
-        blank=True,
-        help_text="周辺MAP情報（JSON形式）"
+        help_text="周辺MAP情報"
     )
 
     class Meta:

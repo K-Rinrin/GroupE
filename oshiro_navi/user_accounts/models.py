@@ -75,6 +75,7 @@ class UserReview(models.Model):
     )
 
     post_date_time = models.DateTimeField(
+        auto_now_add=True, #日時を自動追加
         help_text="口コミを投稿した日時"
     )
 
