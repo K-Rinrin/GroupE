@@ -1,0 +1,69 @@
+{% extends "operator_base.html" %}
+{% load static %}
+{% block content %}
+<body>
+<div class="home_content" id="no name">
+
+    <h1 class="page-title">イベント更新</h1>    
+
+<div class="form-container">
+
+<div class="form-container">
+
+        <form action="{% url 'event_info_management:event_info_update_success' %}" method="GET" enctype="multipart/form-data">
+
+            <!-- イベント名 -->
+            <div class="form-group">
+                <label for="title">イベント名</label>
+                <input type="text" id="title" name="title" required>
+            </div>
+
+            <!-- お城の選択 -->
+            <div class="form-group">
+                <label for="castle">開催場所</label>
+                <input type="text" id="title" name="title" required>
+            </div>
+
+            <!-- 開催日 -->
+            <div class="form-group">
+                <label for="start_date">開始日</label>
+                <input type="date" id="start_date" name="start_date" required>
+            </div>
+
+            <div class="form-group">
+                <label for="end_date">終了日</label>
+                <input type="date" id="end_date" name="end_date" required>
+            </div>
+            <div class="form-group">
+            <label>開催時間（任意）</label>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <input type="time" id="start_time" name="start_time">
+                    <span>〜</span>
+                    <input type="time" id="end_time" name="end_time">
+                </div>
+            </div>
+
+            <!-- 説明 -->
+            <div class="form-group">
+                <label for="description">イベント説明</label>
+                <textarea id="description" name="description" rows="5"></textarea>
+            </div>
+
+            <!-- 画像アップロード -->
+            <div class="form-group">
+                <label for="image">イベント画像（任意）</label>
+                <input type="file" id="image" name="image">
+            </div>
+
+            <!-- ボタン -->
+            <div class="form-buttons">
+                <button type="submit" class="btn-update">更新する</button>
+                <a href="{% url 'event_info_management:event_info_list' %}" class="btn-cancel">戻る</a>
+            </div>
+
+        </form>
+
+
+</div>
+</body>
+{% endblock %}

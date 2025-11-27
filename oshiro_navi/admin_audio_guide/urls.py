@@ -34,5 +34,9 @@ urlpatterns = [
     # 周辺MAP削除完了ページ
     path('audio_guide_delete_success/', 
          AudioGuideUpdateSuccessView.as_view(), name='audio_guide_delete_success'),
+
+     # QRコード生成ページ
+    path('qr_generetor/',
+         QRcodeGeneretorView.as_view(), name='qr_generetor'),
     
 ]

@@ -33,3 +33,8 @@ class AudioGuideDeleteView(TemplateView):
 # 削除完了画面
 class AudioGuideDeleteSuccessView(TemplateView):
     template_name = "audio_guide_delete_success.html"
+
+
+# QRコード画面
+class QRcodeGeneretorView(TemplateView):
+    template_name = "qr_generetor.html"
