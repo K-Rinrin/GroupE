@@ -22,7 +22,10 @@ class "イベント情報"{
     - イベント名:Char
     - イベント概要:Char
     - 開催場所:Char
-    - 開催日時:DateTime
+    - 開始日:DateTime
+    - 終了日:DateTime
+    - 開始時間:Time
+    - 終了時間:Time
     - 公開設定:boolean
     + 登録する()
     + 更新する()
@@ -54,7 +57,8 @@ class "周辺MAP情報"{
 class "基本情報"{
     - お城情報:One to One
     - 入場料:int
-    - 営業時間:Time
+    - 営業開始時間:Time
+    - 営業終了時間:Time
     - アクセス情報:text
     - 見どころ画像:img
     - 見どころ説明:text
