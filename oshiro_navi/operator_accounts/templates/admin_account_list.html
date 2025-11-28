@@ -2,18 +2,68 @@
 {% load static %}
 {% block title %}管理者アカウント一覧{% endblock %}
 {% block content %}
-<body>  
-    <div class="content">
-        <h1 style="color:white; text-shadow:0 0 8px black;">管理者アカウント画面</h1>
-            <div class="menu-grid">
-                <div class="menu-card" onclick="location.href='{% url 'operator_accounts:account_create' %}'">
-                    <i class="material-symbols-outlined">home</i> 新規登録
-                </div>
-                <div class="menu-card" onclick="location.href='{% url 'operator_accounts:account_delete' %}'">
-                    <i class="material-symbols-outlined">home</i> 削除
-                </div>
-            </div>
+<main class="content">
+        <div class="profile-info">
+            <h2>管理者アカウントの一覧と操作（作成・編集・削除）を行います。</h2>
+        </div>
+
+    <div class="top-bar">
+        <div class="search-area">
+            <input type="text" placeholder="検索（名前・メール）" aria-label="検索">
+            <button class="btn-search">検索</button>
+        </div>
+
+        <a href="{% url 'operator_accounts:account_create' %}" class="btn-create">
+            新規作成
+        </a>
     </div>
 
-</body>
+    <section class="table-area">
+        <div class="table-wrapper">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>名前</th>
+                        <th>メールアドレス</th>
+                        <th>ロール</th>
+                        <th>最終ログイン</th>
+                        <th class="txt-center">操作</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>田中 太郎</td>
+                        <td>t.tanaka@example.jp</td>
+                        <td>スーパ管理者</td>
+                        <td>2025-11-20 14:32</td>
+                        <td class="txt-center">
+                            <a href="{% url 'operator_accounts:account_delete' %}" class="btn-create">
+                                削除
+                            </a>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>2</td>
+                        <td>鈴木 花子</td>
+                        <td>h.suzuki@example.jp</td>
+                        <td>管理者</td>
+                        <td>2025-11-21 09:10</td>
+                        <td class="txt-center">
+                        <a href="{% url 'operator_accounts:account_delete' %}" class="btn-create">
+                            削除
+                        </a>
+                        </td>
+                    </tr>
+
+                    <!-- ここにテンプレートループ -->
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+</main>
 {% endblock %}
