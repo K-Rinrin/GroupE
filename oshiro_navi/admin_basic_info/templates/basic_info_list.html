@@ -6,12 +6,6 @@
 
 <h1>基本情報一覧</h1>
 
-<div class="basic-info-header">
-    <form method="get" class="basic-info-search">
-        <input type="text" name="q" placeholder="お城名で検索">
-        <button type="submit">検索</button>
-    </form>
-</div>
 
 <hr>
 
@@ -38,13 +32,12 @@
             </p>
         </div>
 
-        <!-- 右側ボタン -->
         <div class="basic-info-actions">
-            <!-- namespace / url名は君のアプリに合わせて変更してOK -->
-            <a href="#" class="btn-detail">詳細</a>
-            <a href="{% url 'admin_basic_info:basic_info_update' %}" class="btn-update" class="btn-update">更新</a>
-
+            <a href="{% url 'admin_basic_info:basic_info_update' %}" class="btn-update">
+                更新
+            </a>
         </div>
+
     </div>
 
     <hr>
@@ -71,8 +64,7 @@
         </div>
 
         <div class="basic-info-actions">
-            <a href="#" class="btn-detail">詳細</a>
-            <a href="{% url 'admin_basic_info:basic_info_update' %}" class="btn-update" class="btn-update">更新</a>
+            <a href="{% url 'admin_basic_info:basic_info_update' %}" class="btn-update">更新</a>
         </div>
     </div>
 
@@ -100,8 +92,7 @@
         </div>
 
         <div class="basic-info-actions">
-            <a href="#" class="btn-detail">詳細</a>
-            <a href="{% url 'admin_basic_info:basic_info_update' %}" class="btn-update" class="btn-update">更新</a>
+            <a href="{% url 'admin_basic_info:basic_info_update' %}" class="btn-update">更新</a>
         </div>
     </div>
 

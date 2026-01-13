@@ -72,9 +72,6 @@
     transform: translate(-50%);
 }
 
-.sidebar.active #btn {
-    left: 85%;
-}
 
 .sidebar .src {
     position: relative;
@@ -232,6 +229,10 @@ nav ul li a:hover {
     padding: 40px;
 }
 
+
+
+
+
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap');
 
 body {
@@ -337,23 +338,31 @@ nav a {
 
 /* ボタン */
 .btn {
-    width: 250px;
-    padding: 12px 20px;
-    border: none;
-    border-radius: 12px;
-    font-size: 1.1em;
-    color: #4a3b2a;
-    background-color: #e4c19c;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    transition: transform 0.2s ease, background-color 0.3s ease;
+    padding: 6px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 14px;
+    margin-right: 6px;
 }
 
 .btn:hover {
     transform: scale(1.05);
+}
+
+a.btn-update {
+    display: inline-block;
+    padding: 6px 14px;
+    background-color: #2f6f5f;
+    color: #ffffff !important;
+    text-decoration: none !important;
+    font-size: 14px;
+    border-radius: 4px;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+a.btn-update:hover {
+    background-color: #255a4d;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
 /* プロフィール */
