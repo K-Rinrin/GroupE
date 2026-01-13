@@ -1,18 +1,56 @@
 {% extends "user_base.html" %}
 {% load static %}
-{% block title %}{% endblock %}
+
+{% block title %}プロフィール{% endblock %}
+
 {% block content %}
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <title>プロフィール</title>
-</head>
-<body>
-    <h1>プロフィールページ</h1>
-    <a href="{% url 'usermy_page:profileupdate' %}" class="nav-button">
-            プロフィール更新</a>  
-    <a href="{% url 'usermy_page:mypage' %}">マイページに戻る</a>
-</body>
-</html>
+   
+    <div class="profile-container">
+        <h1 class="page-title">プロフィール</h1>
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <!-- 1. プロフィール画像エリア -->
+            <div class="form-group">
+                <label class="form-label">プロフィール画像</label>
+                
+                <div class="image-upload-area">
+                    <div class="image-preview">
+                        {% if user.icon %}
+                            <img src="{{ user.icon.url }}" alt="現在の画像">
+                        {% else %}
+                            <span class="no-image-text">No Image</span>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="file-input-wrapper">
+                        <p class="help-text">画像を選択してください</p>
+                        <input type="file" name="icon" class="file-input">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. アカウント名 -->
+            <div class="form-group">
+                <label class="form-label">アカウント名</label>
+                <div class="account-name-text">
+                    {{ user.username }}
+                </div>
+            </div>
+
+            <!-- 3. 自己紹介 -->
+            <div class="form-group">
+                <label for="bio" class="form-label">自己紹介</label>
+                <textarea name="bio" id="bio" rows="5" class="form-textarea" placeholder="ここに自己紹介を入力してください">{% if user.bio %}{{ user.bio }}{% endif %}</textarea>
+            </div>
+
+            <!-- 4. ボタンエリア -->
+            <div class="button-group">
+                <button type="submit" class="btn-submit">プロフィールを更新</button>
+                <a href="{% url 'usermy_page:mypage' %}" class="btn-cancel">マイページに戻る</a>
+            </div>
+
+        </form>
+    </div>
 {% endblock %}
