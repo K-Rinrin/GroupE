@@ -1,29 +1,31 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;1,400&display=swap');
+
 
 * {
-    font-family: 'Noto Sans JP', sans-serif;
+    font-family: "Poppins", serif;
     margin: 0;
     padding: 0;
-    color: #4a3b2a;
 }
 
-body {
-    background-color: #f9f4eb;
+.material-symbols-outlined {
+    font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24
 }
 
-/* =============================
-サイドバー
-============================= */
+
 .sidebar {
     position: fixed;
     top: 0;
     left: 0;
     width: 50px;
-    height: 100%;
-    padding: 6px 16px;
     background: #ffffff;
+    padding: 6px 16px;
+    height: 100%;
     box-shadow: 5px 0 30px rgba(0, 0, 0, .1);
-    transition: .5s;
+    transition: all .5s ease;
 }
 
 .sidebar.active {
@@ -32,53 +34,216 @@ body {
 
 .sidebar .logo_content .logo {
     display: flex;
-    height: 50px;
-    font-size: 30px;
     color: #4a3b2a;
+    height: 50px;
+    width: 100%;
+    font-size: 30px;
+    margin-left: 5px;
+    align-items: center;
+    pointer-events: none;
     opacity: 0;
-    transition: .3s;
 }
 
-/* 展開時ロゴ表示 */
 .sidebar.active .logo_content .logo {
     opacity: 1;
 }
 
+.sidebar .logo_content .logo .logo_name {
+    font-size: 23px;
+    font-weight: 600;
+    margin: 0 10px;
+    cursor: pointer;
+    color: inherit;
+    text-decoration: none;
+
+    
+}
+
 .sidebar #btn {
     position: absolute;
+    color: #b3b3b3;
     left: 50%;
     top: 6px;
     font-size: 20px;
-    transform: translateX(-50%);
-    color: #b3b3b3;
+    height: 50px;
+    width: 50px;
+    text-align: center;
+    line-height: 50px;
+    transform: translate(-50%);
 }
 
 .sidebar.active #btn {
     left: 85%;
 }
 
+.sidebar .src {
+    position: relative;
+    height: 50px;
+    width: 100%;
+    margin-top: 20px;
+}
+
+
+.sidebar i {
+    height: 50px;
+    min-width: 50px;
+    border-radius: 12px;
+    line-height: 50px;
+    text-align: center;
+    font-size: 25px;
+}
+
 .sidebar ul {
     margin-top: 20px;
 }
 
+.sidebar ul li {
+    position: relative;
+    height: 50px;
+    width: 100%;
+    margin: 0;
+    list-style: none;
+    line-height: 50px;
+}
+
 .sidebar ul li a {
-    display: flex;
-    align-items: center;
-    padding: 0 10px;
-    border-radius: 12px;
     color: #b3b3b3;
+    display: flex;
     text-decoration: none;
-    transition: .3s;
+    align-items: center;
+    border-radius: 20px;
+    font-size: 13px;
+    white-space: nowrap;
 }
 
 .sidebar ul li a:hover {
+    color: #4a3b2a;
     background: #e7e9f5;
+}
+
+.sidebar ul li .tooltip {
+    position: absolute;
+    left: 130px;
+    top: 0;
+    transform: translate(-45%, -50%);
+    border-radius: 10px;
+    height: 35px;
+    width: 130px;
+    background: #ffffff;
+    line-height: 35px;
+    text-align: center;
+    font-size: 13px;
+    display: block;
+    color: #242424;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
+    pointer-events: none;
+    opacity: 0;
+    transition: all 0.5s ease;
+}
+
+.sidebar.active ul li .tooltip {
+    display: none;
+}
+
+.sidebar .link_name {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.sidebar.active .link_name {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.sidebar ul li:hover .tooltip {
+    opacity: 1;
+    top: 50%;
+}
+
+.home_content {
+    position: absolute;
+    height: 100%;
+    width: calc(100% - 300px);
+    left: 80px;
+    transition: all .5s ease;
+}
+
+.home_content .text {
+    font-size: 25px;
+    font-weight: 500;
+    color: #242424;
+    padding: 12px 24px;
+}
+
+
+header {
+    background-color: #4a3b2a;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 30px;
+    color: whi5c4026te;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* ロゴ部分 */
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.logo i {
+    font-size: 24px;
+}
+
+/* ナビメニュー */
+nav ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 20px;
+}
+
+nav ul li {
+    display: flex;
+    align-items: center;
+}
+
+nav ul li a {
+    color: 5c4026;
+    text-decoration: none;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: 0.3s;
+}
+
+nav ul li a:hover {
+    color: #ffe0e0;
+}
+
+/* メインコンテンツ */
+.home_content {
+    padding: 40px;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap');
+
+body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background-color: #f9f4eb;
+    margin: 0;
+    padding: 0;
+    text-align: center;
     color: #4a3b2a;
 }
 
-/* =============================
-ヘッダー
-============================= */
+/* ヘッダー */
 header {
     display: flex;
     justify-content: space-between;
@@ -91,106 +256,107 @@ header {
 header h1 {
     font-size: 1.5em;
     color: #5c4026;
+    align-items: center;
 }
 
-/* =============================
-メインコンテンツ
-============================= */
-.content {
+nav a {
+    margin-left: 15px;
+    text-decoration: none;
+    color: #5c4026;
+    font-weight: bold;
+}
+
+/* メイン */
+.content {  
     padding: 20px;
+    text-align: center;
 }
 
-/* =============================
-ボタン（共通）
-============================= */
-.btn {
-    padding: 12px 20px;
-    background-color: #e4c19c;
-    border-radius: 12px;
-    border: none;
-    color: #4a3b2a;
+/* ボタンカード */
+.menu-grid {
+    display: grid;
+    justify-content: center;
+    grid-template-columns: repeat(4, 160px);
+    gap: 20px;
+}
+
+.menu-card {
+    background: rgba(255, 255, 255, 0.737);
+    padding: 30px 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    font-size: 20px;
+    font-weight: bold;
     cursor: pointer;
-    transition: .2s;
+    backdrop-filter: blur(3px);
+    transition: transform .2s;
+}
+
+.menu-card:hover {
+    transform: scale(1.05);
+}
+
+.menu-card i {
+    font-size: 40px;
+    display: block;
+    margin-bottom: 10px;
+}
+
+/* お問い合わせ */
+.contact-box {
+    margin-top: 40px;
+    transition: transform .2s
+}
+
+.contact-btn {
+    background: #5a768f;
+    padding: 12px 30px;
+    color: #fff;
+    font-size: 18px;
+    border-radius: 8px;
+    text-decoration: none;
+}
+
+.contact-box:hover {
+    transform: scale(1.05);
+}
+
+/* メイン */
+.castle-image img {
+    width: 200px;
+    margin-top: 20px;
+}
+
+.button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+/* ボタン */
+.btn {
+    width: 250px;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.1em;
+    color: #4a3b2a;
+    background-color: #e4c19c;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: transform 0.2s ease, background-color 0.3s ease;
 }
 
 .btn:hover {
     transform: scale(1.05);
 }
 
-/* 新規作成 */
-.btn-create {
-    display: inline-block;
-    background-color: #caf7b1;
-    padding: 8px 18px;
-    border-radius: 8px;
-    border: 1px solid #b7e89c;
-    font-size: 14px;
-    font-weight: 600;
-    text-decoration: none;
-    transition: .2s;
-}
-
-.btn-create:hover {
-    background-color: #b3e89c;
-    transform: scale(1.04);
-}
-
-/* 検索 */
-.btn-search {
-    background-color: #e4c19c;
-    padding: 8px 16px;
-    border-radius: 8px;
-    border: none;
-    font-weight: 600;
-}
-
-.btn-search:hover {
-    background-color: #d6af85;
-    transform: scale(1.04);
-}
-
-/* 削除 */
-.btn-delete {
-    background-color: #f5a5a5;
-    border: 1px solid #e28c8c;
-    padding: 6px 12px;
-    border-radius: 6px;
-}
-
-.btn-delete:hover {
-    background-color: #e48c8c;
-    transform: scale(1.05);
-}
-
-/* =============================
-管理画面テーブル
-============================= */
-.admin-table {
-    width: 100%;
-    border-collapse: collapse;
-    background: rgba(255, 255, 255, 0.75);
-    border-radius: 12px;
-    overflow: hidden;
-}
-
-.admin-table th {
-    background-color: #eadcc4;
-    padding: 12px 16px;
-    font-weight: 700;
-}
-
-.admin-table td {
-    padding: 12px 16px;
-    border-bottom: 1px solid #e6d9c5;
-}
-
-.admin-table tr:nth-child(even) {
-    background-color: rgba(255,255,255,0.6);
-}
-
-/* =============================
-プロフィール
-============================= */
+/* プロフィール */
 .profile {
     display: flex;
     align-items: center;
@@ -208,6 +374,13 @@ header h1 {
     margin-left: 10px;
 }
 
+.profile-info h2 {
+    margin: 0;
+    font-size: 1.2em;
+}
+
 .profile-info p {
+    margin: 5px 0 0;
+    font-size: 0.9em;
     color: #6e5a43;
 }
