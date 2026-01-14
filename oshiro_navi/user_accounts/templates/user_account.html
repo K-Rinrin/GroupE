@@ -3,49 +3,67 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Conpatible" content="IE=edge">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>お城ナビ | 利用者TOP</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel="stylesheet">
 </head>
 <body>
+    <!-- エラーメッセージ -->
+    {% if messages %}
+        <ul class="messages" style="position:fixed; top:0; left:0; width:100%; z-index:9999; list-style:none; padding:0;">
+            {% for message in messages %}
+            <li style="background: #ffaaaa; padding: 10px; text-align: center;">{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
     <div class="container" id="container">
 
+        <!-- ▼ 新規登録フォーム (Signup) ▼ -->
         <div class="form-container signup-container">
-            <form action="#">
-                <!-- 新しくアカウントを作る -->
+            <form method="post" action="{% url 'user_accounts:account' %}">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="signup">
+
                 <div class="title"><h1>Signup here</h1></div>
-                <input type="text" placeholder="アカウント名" id="name">
-                <input type="email" placeholder="Email" id="email" required>
-                <input type="pass" placeholder="Pass" id="pass" required>
-                <button onclick="location.href='./アカウント.html'">Signup</button>
-                <div class="social-container">
-                </div>
+                
+                <input type="text" name="username" placeholder="アカウント名" id="name" required>
+                <input type="email" name="email" placeholder="Email" id="email" required>
+                <input type="password" name="password" placeholder="Pass" id="pass" required>
+                <button type="submit">Signup</button>
+               
             </form>
         </div>
+        
+        <!-- ▼ ログインフォーム (Login) ▼ -->
         <div class="form-container login-container">
-            <form action="#">
-                <!-- アカウントにログインする -->
+            <form method="post" action="{% url 'user_accounts:account' %}">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="login">
+
                 <div class="title"><h1>Login here</h1></div>
-                <input type="email" placeholder="Email" id="email" required>
-                <input type="pass" placeholder="Pass" id="pass" required>
+                
+                <input type="email" name="email" placeholder="Email" id="email" required>
+                <input type="password" name="password" placeholder="Pass" id="pass" required>
 
                 <div class="content">
-                    <!-- ログインしたままにする -->
                     <div class="checkbox">
-                        <input type="checkbox" name="checkbox" id="checkbox">
-                        <label>パスワードを覚えておく</label>
+                        <input type="checkbox" name="remember" id="checkbox">
+                        <label for="checkbox">パスワードを覚えておく</label>
                     </div>
                 </div>
-                {% url 'user_accounts:top' as top_url %}
-                <button onclick="location.href='{{ top_url }}'">Login</button>
+                
+                <button type="submit">Login</button>
 
                 <div class="social-container">
-
                 </div>
             </form>
         </div>
+
+
+        
         <div class="overlay-container">
             <div class="overlay">
                 <div class="overlay-panel overlay-left">
@@ -61,7 +79,9 @@
             </div>
         </div>
     </div>
-    <script src="../../login_form/JS/main.js"></script>
+
+    
+    <script src="{% static 'js/main.js' %}"></script>
 
 </body>
 </html>

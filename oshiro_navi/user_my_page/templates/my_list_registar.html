@@ -4,30 +4,87 @@
 {% block title %}お城マイリスト{% endblock %}
 
 {% block content %}
-   
-    <div class="mypage-container">
+
+    <div class="mypage-container mylist-container">
         <h1 class="page-title">お城マイリスト</h1>
 
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-
-            <!-- 1. プロフィール画像エリア  -->
-            <div class="form-group">
-                <label class="form-label">お気に入り</label>
-            </div>
+        <!-- お気に入り追加エリア -->
+        <section class="mylist-section">
+            <h2 class="section-title">お気に入りに追加するお城</h2>
             
+            <!-- 検索フォーム -->
+            <form method="get" class="search-box-wrapper">
+                <label class="sub-label">お城名で検索</label>
+                <div class="search-row">
+                    <input type="text" name="keyword" class="form-input" 
+                           placeholder="お城名を入力してください" value="{{ keyword }}">
+                    <button type="submit" class="btn-search">検索</button>
+                </div>
+            </form>
+
+            <!-- 登録フォーム -->
+            <form method="post">
+                {% csrf_token %}
+
+                <!-- 検索結果／選択リスト -->
+                <div class="scroll-selection-box">
+                    
+                    {% for castle in available_castles %}
+                    <!-- ▼ ループ処理：アプリに登録されているお城（未登録のみ） ▼ -->
+                    <label class="checkbox-item">
+                        <!-- valueに お城のID を設定 -->
+                        <input type="checkbox" name="castle_ids" value="{{ castle.id }}">
+                        <span class="castle-label-text">{{ castle.name }} ({{ castle.prefecture }})</span>
+                    </label>
+                    {% empty %}
+                    <!-- 候補がない場合のメッセージ -->
+                    <div style="padding:10px; color:#666; font-size:14px;">
+                        {% if keyword %}
+                            該当するお城が見つかりませんでした。
+                        {% else %}
+                            追加できるお城はすべて登録済みです。
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+
+                </div>
+
+                <div class="button-group">
+                    <button type="submit" name="add" class="btn-submit">選択したお城をお気に入りに追加</button>
+                </div>
+            </form>
+        </section>
 
 
-            <a href="{% url 'usermy_page:mylistdeletecheck' %}" class="nav-button">
-                        マイリスト削除確認</a>   
-                <a href="{% url 'usermy_page:mypage' %}">マイページに戻る</a>
+        <!-- 現在のお気に入りリスト -->
+        <section class="mylist-section">
+            <h2 class="section-title">現在のお気に入り</h2>
 
+            <div class="current-list-box">
+                
+                {% for item in current_mylist %}
+                <!-- ユーザーが登録したマイリスト -->
+                <div class="list-item">
+                    <!-- item.castle.name でお城モデルの名前を参照 -->
+                    <span class="item-name">{{ item.castle.name }} ({{ item.castle.prefecture }})</span>
+                    
+                    <!-- 削除ボタン -->
+                    <a href="{% url 'usermy_page:mylistdeletecheck' pk=item.id %}" class="btn-small-delete">削除</a>
+                </div>
+                {% empty %}
+                <div style="padding:15px; color:#666; font-size:14px;">
+                    まだお気に入りが登録されていません。
+                </div>
+                {% endfor %}
 
-        </form>
+            </div>
+        </section>
+
+        <!-- 戻るボタン -->
+        <div class="button-group">
+            <a href="{% url 'usermy_page:mypage' %}" class="btn-cancel">マイページに戻る</a>
+        </div>
 
     </div>
-
-
-
 
 {% endblock %}

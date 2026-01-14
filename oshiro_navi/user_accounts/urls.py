@@ -5,8 +5,14 @@ from .views import *
 app_name = "user_accounts"
 
 urlpatterns = [
+
+    # ユーザーTop画面
     path('top/', UserTopView.as_view(), name='top'),
+
+    # ログアウト画面
     path('logout/', UserlogoutView.as_view(), name='logout'),
+
+    # サインアップ・ログイン画面
     path('account/', UserAccountView.as_view(), name='account'),
     
 ]

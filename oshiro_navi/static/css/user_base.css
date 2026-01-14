@@ -494,6 +494,185 @@ PC / Web 表示
     background-color: #dc2626; /* ホバー時は少し暗く */
 }
 
+/* ====================================
+   お城マイリスト画面用スタイル
+==================================== */
+
+/* コンテナ幅を少し広く */
+.mypage-container.mylist-container {
+    max-width: 700px;
+}
+
+/* セクション区切り */
+.mylist-section {
+    margin-bottom: 50px;
+}
+
+/* セクションタイトル (下線付き) */
+.section-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #334155;
+    border-bottom: 1px solid #e2e8f0; /* 薄い線 */
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+/* --- 検索エリア --- */
+.search-box-wrapper {
+    margin-bottom: 15px;
+}
+
+.sub-label {
+    display: block;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #475569;
+}
+
+.search-row {
+    display: flex;
+    gap: 10px;
+}
+
+/* テキスト入力フォーム */
+.form-input {
+    flex: 1; /* 横幅いっぱい */
+    padding: 10px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #334155;
+}
+.form-input:focus {
+    outline: none;
+    border-color: #334155;
+    background: #f8fafc;
+}
+
+/* 黄色の検索ボタン */
+.btn-search {
+    background-color: #eab308; /* マスタードイエロー */
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    padding: 0 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.btn-search:hover {
+    background-color: #ca8a04;
+}
+
+/* --- スクロール選択ボックス --- */
+.scroll-selection-box {
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    height: 150px;       /* 高さを固定 */
+    overflow-y: scroll;  /* 縦スクロール */
+    padding: 10px;
+    background-color: #ffffff;
+    margin-bottom: 20px;
+}
+
+/* チェックボックスの行 */
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    padding: 8px 5px;
+    border-bottom: 1px solid #f1f5f9;
+    cursor: pointer;
+}
+.checkbox-item:last-child {
+    border-bottom: none;
+}
+.checkbox-item input {
+    margin-right: 10px;
+    transform: scale(1.2); /* チェックボックスを少し大きく */
+}
+.castle-label-text {
+    font-size: 14px;
+    color: #334155;
+}
+
+/* --- 紫色の追加ボタン --- */
+.add-btn-area {
+    text-align: center;
+}
+
+.btn-purple-add {
+    background-color: #8b5cf6; /* 紫 */
+    color: #ffffff;
+    border: none;
+    padding: 12px 40px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.2s;
+    width: 100%;           /* 必要なら auto に変更 */
+    max-width: 350px;
+}
+.btn-purple-add:hover {
+    background-color: #7c3aed;
+}
+
+/* --- 現在のお気に入りリスト --- */
+.current-list-box {
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+}
+
+.list-item {
+    display: flex;
+    justify-content: space-between; /* 名前とボタンを左右に */
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #f1f5f9;
+    background-color: #fff;
+}
+.list-item:last-child {
+    border-bottom: none;
+}
+
+.item-name {
+    font-size: 15px;
+    color: #334155;
+    font-weight: 500;
+}
+
+/* 小さな削除ボタン */
+.btn-small-delete {
+    background-color: #ef4444; /* 赤 */
+    color: #fff;
+    font-size: 12px;
+    padding: 6px 14px;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: 0.2s;
+}
+.btn-small-delete:hover {
+    background-color: #dc2626;
+}
+
+/* --- 枠線付きの戻るボタン（画像の下部ボタン風） --- */
+.btn-cancel-border {
+    display: inline-block;
+    padding: 10px 30px;
+    border: 1px solid #94a3b8;
+    color: #334155;
+    text-decoration: none;
+    font-size: 14px;
+    border-radius: 4px; /* 四角く */
+    background: #fff;
+    transition: 0.2s;
+}
+.btn-cancel-border:hover {
+    background: #f1f5f9;
+}
+
 
 
 
@@ -645,6 +824,33 @@ PC / Web 表示
     .btn-confirm-delete {
         width: 110px;
         height: 40px;
+        font-size: 14px;
+    }
+
+    .mypage-container.mylist-container {
+        padding: 20px 15px;
+    }
+
+    /* 検索行を縦並びにする場合 */
+    /*
+    .search-row {
+        flex-direction: column;
+    }
+    .btn-search {
+        padding: 10px;
+    }
+    */
+    
+    /* ボタンの幅調整 */
+    .btn-purple-add {
+        width: 100%;
+        max-width: none;
+    }
+    
+    .list-item {
+        padding: 12px;
+    }
+    .item-name {
         font-size: 14px;
     }
 
