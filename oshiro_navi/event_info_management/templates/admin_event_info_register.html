@@ -1,17 +1,11 @@
 {% extends "admin_base.html" %}
 {% load static %}
 {% block content %}
-<body>
-<div class="home_content" id="no name">
 
-    <h1 class="page-title">イベント登録</h1>    
-
-<div class="form-container">
-
-<div class="form-container">
-
+<div class="content-container">
+<h1 class="page-title">イベント登録</h1>    
+    <div class="form-container">
         <form action="{% url 'event_info_management:admin_event_info_register_success' %}" method="GET" enctype="multipart/form-data">
-
             <!-- イベント名 -->
             <div class="form-group">
                 <label for="title">イベント名</label>
@@ -61,10 +55,8 @@
                 <button type="submit" class="btn-register">登録</button>
                 <a href="{% url 'event_info_management:admin_event_info_list' %}" class="btn-cancel">戻る</a>
             </div>
-
         </form>
-
-
+    </div>
 </div>
 </body>
 {% endblock %}

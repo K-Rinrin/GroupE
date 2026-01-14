@@ -35,39 +35,13 @@
 
     <div class="my-custom-wrapper">
         <label class="my-label">{{ form.managed_castles.label }}</label>
-        <div class="castle-selection-box">
+        <div class="castle-box">
             {{ form.managed_castles }}
         </div>
         {% if form.managed_castles.errors %}
             <div class="error-text">{{ form.managed_castles.errors }}</div>
         {% endif %}
     </div>
-        <!-- <p>ID</p>
-        <p>Email</p>
-        <p>Pass</p>
-            <select id="castle">
-                <option value="">お城を選択</option>
-                <option value="tsurugajo">鶴ヶ城</option>
-                <option value="nihonmatsu">二本松城</option>
-            </select>
-
-            <select id="castle">
-                <option value="">お城を選択</option>
-                <option value="tsurugajo">鶴ヶ城</option>
-                <option value="nihonmatsu">二本松城</option>
-            </select>
-
-            <select id="castle">
-                <option value="">お城を選択</option>
-                <option value="tsurugajo">鶴ヶ城</option>
-                <option value="nihonmatsu">二本松城</option>
-            </select>
-
-            <select id="castle">
-                <option value="">お城を選択</option>
-                <option value="tsurugajo">鶴ヶ城</option>
-                <option value="nihonmatsu">二本松城</option>
-            </select> -->
     <input class="btn btn-register" type="submit" value="登録" />
 </div>
 
