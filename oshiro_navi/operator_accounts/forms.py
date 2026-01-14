@@ -35,7 +35,7 @@ class AdminUserCreateForm(forms.ModelForm):
         if commit:
             user.save()
             # ここで別アプリの Admin を生成
-            Admin.objects.create(account=user)
+            admin_profile = Admin.objects.create(account=user)
 
             # 選択されたお城をリスト化して、1つずつフィールドに割り当てる
             castles = list(self.cleaned_data.get('managed_castles', []))
@@ -47,5 +47,5 @@ class AdminUserCreateForm(forms.ModelForm):
             if len(castles) >= 4: Admin.oshiro_management4 = castles[3]
             if len(castles) >= 5: Admin.oshiro_management5 = castles[4]
             
-            Admin.save()
+            admin_profile.save()
         return user

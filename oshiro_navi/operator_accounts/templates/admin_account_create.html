@@ -3,15 +3,48 @@
 {% block title %}管理者アカウント登録{% endblock %}
 {% block content %}
 
-s
+
     <h1>管理者アカウント登録</h1>
 
-    <form action="{% url 'operator_accounts:account_create_success' %}" method="GET" class="form-container">
+    <form method="POST" class="form-container">
         {% csrf_token %}
-        <p>ID</p>
+        <!-- 
+        {% for field in form %}
+        <div class="my-custom-wrapper">
+            <label class="my-label">{{ field.label }}</label>
+            {{ field }}  {% if field.errors %}
+                <div class="error-text">{{ field.errors }}</div>
+            {% endif %}
+        </div>
+    {% endfor %} -->
+    <div class="my-custom-wrapper">
+        <label class="my-label">{{ form.username.label }}</label>
+        {{ form.username }}
+        {% if form.username.errors %}
+            <div class="error-text">{{ form.username.errors }}</div>
+        {% endif %}
+    </div>
+
+    <div class="my-custom-wrapper">
+        <label class="my-label">{{ form.password.label }}</label>
+        {{ form.password }}
+        {% if form.password.errors %}
+            <div class="error-text">{{ form.password.errors }}</div>
+        {% endif %}
+    </div>
+
+    <div class="my-custom-wrapper">
+        <label class="my-label">{{ form.managed_castles.label }}</label>
+        <div class="castle-selection-box">
+            {{ form.managed_castles }}
+        </div>
+        {% if form.managed_castles.errors %}
+            <div class="error-text">{{ form.managed_castles.errors }}</div>
+        {% endif %}
+    </div>
+        <!-- <p>ID</p>
         <p>Email</p>
         <p>Pass</p>
-        <p>アカウント名</p>
             <select id="castle">
                 <option value="">お城を選択</option>
                 <option value="tsurugajo">鶴ヶ城</option>
@@ -34,7 +67,7 @@ s
                 <option value="">お城を選択</option>
                 <option value="tsurugajo">鶴ヶ城</option>
                 <option value="nihonmatsu">二本松城</option>
-            </select>
+            </select> -->
     <input class="btn btn-register" type="submit" value="登録" />
 </div>
 
