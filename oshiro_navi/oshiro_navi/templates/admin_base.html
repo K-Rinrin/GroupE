@@ -13,12 +13,6 @@
 <body>
 <!-- サイドバークラス -->
 <div class="sidebar">
-    <div class="logo_content">
-        <div class="logo">
-            <div class="logo_name">管理者t用画面</div>
-        </div>
-        <i class='bx bx-menu' id="btn"></i>
-    </div>
 
     <ul class="nav">
     <li>
@@ -30,7 +24,7 @@
         </li>
     
     <li>
-        <a href="{% url 'admin_oshiro_stamp:oshiro_stamp_registar' %}">
+        <a href="{% url 'admin_oshiro_stamp:oshiro_stamp_list' %}">
             <i class="material-symbols-outlined">approval</i>
             <span class="link_name">お城スタンプ機能</span>
         </a>
@@ -46,7 +40,7 @@
         </li>
 
     <li>
-        <a href= "{% url 'admin_area_map:area_map' %}" class="register-btn">
+        <a href= "{% url 'admin_area_map:area_map' %}">
             <i class="material-symbols-outlined">map_pin_review</i>
             <span class="link_name">周辺MAP機能</span>
         </a>
@@ -54,7 +48,7 @@
     </li>
 
     <li>
-        <a href= "{% url 'admin_audio_guide:audio_guide' %}" class="register-btn">
+        <a href= "{% url 'admin_audio_guide:audio_guide' %}">
             <i class="material-symbols-outlined">record_voice_over</i>
             <span class="link_name">音声ガイド機能</span>
         </a>
@@ -81,6 +75,13 @@
                 <span class="link_name">QRコード生成</span>
             </a>
             <span class="tooltip">QRコード生成</span>
+        </li>
+        <li>
+            <a href="{% url 'admin_accounts:logout' %}" class="logout">
+                <i class="material-symbols-outlined">logout</i>
+                <span class="link_name">ログアウト</span>
+            </a>
+            <span class="tooltip">ログアウト</span>
         </li>
     </ul>
 </div>

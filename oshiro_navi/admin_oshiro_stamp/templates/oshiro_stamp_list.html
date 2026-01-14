@@ -1,0 +1,34 @@
+{% extends "admin_base.html" %}
+
+{% block title %}お城スタンプ一覧{% endblock %}
+
+{% block content %}
+<div class="content-container">
+<h1>お城スタンプ一覧</h1>
+
+<!-- 新規登録ボタン -->
+<a href="{% url 'admin_oshiro_stamp:oshiro_stamp_registar' %}" class="btn btn-register">＋ 新規スタンプ登録</a>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>スタンプ名</th>
+            <th>お城名</th> 
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- ダミーデータ例：ここは実際のデータに置き換えて！ -->
+        <tr>
+            <td>1</td>
+            <td>シマエナガ</td>
+            <td>五稜郭</td>
+            <td>
+                <a href="{% url 'admin_oshiro_stamp:oshiro_stamp_registar' %}" class="btn btn-update">更新</a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+</div>
+
+{% endblock %}

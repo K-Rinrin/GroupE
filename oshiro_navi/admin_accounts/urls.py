@@ -5,6 +5,8 @@ from .views import *
 app_name = "admin_accounts"
 
 urlpatterns = [
+    path('login/', AdminLoginView.as_view(), name='login'),
+    path('logout/', AdminLogoutView.as_view(), name='logout'),
     path('top/', AdminTopView.as_view(), name='top'),
     path('contact/', ContactView.as_view(), name='contact'),
     path('contact/confirm/', ContactConfirmView.as_view(), name='contact_confirm')

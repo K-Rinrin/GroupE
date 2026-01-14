@@ -21,7 +21,7 @@
             <div class="menu-card" onclick="location.href='{% url 'admin_audio_guide:audio_guide' %}'">
                 <i class="material-symbols-outlined">record_voice_over</i> 音声ガイド<br>機能
             </div>
-            <div class="menu-card" onclick="location.href='{% url 'admin_oshiro_stamp:oshiro_stamp_registar' %}'">
+            <div class="menu-card" onclick="location.href='{% url 'admin_oshiro_stamp:oshiro_stamp_list' %}'">
                 <i class="material-symbols-outlined">approval</i> お城スタンプ機能
             </div>
             <div class="menu-card" onclick="location.href='{% url 'admin_model_course:model_couse_list' %}'">
@@ -29,6 +29,9 @@
             </div>
             <div class="menu-card" onclick="location.href='{% url 'admin_audio_guide:qr_generetor' %}'">
                 <i class="material-symbols-outlined">qr_code_2_add</i> QRコード<br>生成
+            </div>
+            <div class="logout menu-card" onclick="location.href='{% url 'admin_accounts:logout' %}'">
+                <i class="material-symbols-outlined">logout</i> ログアウト
             </div>
         </div>
 
