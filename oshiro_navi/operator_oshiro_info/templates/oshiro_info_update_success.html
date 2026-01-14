@@ -1,16 +1,9 @@
 {% extends "operator_base.html" %}
 {% load static %}
-{% block title %}お城情報更新成功{% endblock %}
+{% block title %}お城情報登録完了{% endblock %}
 {% block content %}
-<body>  
-    <div class="content">
-        <h1 style="color:white; text-shadow:0 0 8px black;">お城情報更新完了画面</h1>
-            <div class="menu-grid">
-                <div class="menu-card" onclick="location.href='{% url 'operator_oshiro_info:list' %}'">
-                    <i class="material-symbols-outlined">home</i> お城情報一覧へ戻る
-                </div>
-            </div>
-    </div>
-
-</body>
+<div class="content-container">
+        <h1 class="page-title">お城情報登録完了</h1>
+        <a href="{% url 'operator_oshiro_info:list' %}" class="btn btn-cancel">お城情報一覧へ戻る</a>
+</div>
 {% endblock %}

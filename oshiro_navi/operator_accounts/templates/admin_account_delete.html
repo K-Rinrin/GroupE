@@ -2,18 +2,16 @@
 {% load static %}
 {% block title %}管理者アカウント削除{% endblock %}
 {% block content %}
-<body>  
-    <div class="content">
-        <h1 style="color:white; text-shadow:0 0 8px black;">管理者アカウント削除確認画面</h1>
-            <div class="menu-grid">
-                <div class="menu-card" onclick="location.href='{% url 'operator_accounts:account_delete_success' %}'">
-                    <i class="material-symbols-outlined">home</i> 削除
-                </div>
-                <div class="menu-card" onclick="location.href='{% url 'operator_accounts:account_list' %}'">
-                    <i class="material-symbols-outlined">home</i> キャンセル
-                </div>
-            </div>
-    </div>
+<div class="content-container">
+    <h1>管理者アカウント削除</h1>
+    <p>本当にこの管理者アカウントを削除してもよろしいですか？</p>
 
-</body>
+    <form action="{% url 'operator_accounts:account_delete_success' %}" method="GET" class="form-container">
+        {% csrf_token %}
+        <input class="btn btn-delete" type="submit" value="削除" />
+        <a href="{% url 'operator_accounts:account_list' %}" class="btn btn-cancel">
+            キャンセル
+        </a>
+    </form>
+</div>
 {% endblock %}

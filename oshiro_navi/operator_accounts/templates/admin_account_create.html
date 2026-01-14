@@ -2,18 +2,40 @@
 {% load static %}
 {% block title %}管理者アカウント登録{% endblock %}
 {% block content %}
-<body>  
-    <div class="content">
-        <h1 style="color:white; text-shadow:0 0 8px black;">管理者アカウント登録画面</h1>
-            <div class="menu-grid">
-                <div class="menu-card" onclick="location.href='{% url 'operator_accounts:account_create_success' %}'">
-                    <i class="material-symbols-outlined">home</i> 登録
-                </div>
-                <div class="menu-card" onclick="location.href='{% url 'operator_accounts:account_list' %}'">
-                    <i class="material-symbols-outlined">home</i> キャンセル
-                </div>
-            </div>
-    </div>
 
-</body>
+s
+    <h1>管理者アカウント登録</h1>
+
+    <form action="{% url 'operator_accounts:account_create_success' %}" method="GET" class="form-container">
+        {% csrf_token %}
+        <p>ID</p>
+        <p>Email</p>
+        <p>Pass</p>
+        <p>アカウント名</p>
+            <select id="castle">
+                <option value="">お城を選択</option>
+                <option value="tsurugajo">鶴ヶ城</option>
+                <option value="nihonmatsu">二本松城</option>
+            </select>
+
+            <select id="castle">
+                <option value="">お城を選択</option>
+                <option value="tsurugajo">鶴ヶ城</option>
+                <option value="nihonmatsu">二本松城</option>
+            </select>
+
+            <select id="castle">
+                <option value="">お城を選択</option>
+                <option value="tsurugajo">鶴ヶ城</option>
+                <option value="nihonmatsu">二本松城</option>
+            </select>
+
+            <select id="castle">
+                <option value="">お城を選択</option>
+                <option value="tsurugajo">鶴ヶ城</option>
+                <option value="nihonmatsu">二本松城</option>
+            </select>
+    <input class="btn btn-register" type="submit" value="登録" />
+</div>
+
 {% endblock %}

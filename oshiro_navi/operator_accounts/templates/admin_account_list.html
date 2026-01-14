@@ -2,9 +2,9 @@
 {% load static %}
 {% block title %}管理者アカウント一覧{% endblock %}
 {% block content %}
-<main class="content">
+<div class="content-container">
         <div class="profile-info">
-            <h2>管理者アカウントの一覧と操作（作成・編集・削除）を行います。</h2>
+            <h1>管理者アカウント一覧</h1>
         </div>
 
     <div class="top-bar">
@@ -13,13 +13,11 @@
             <button class="btn-search">検索</button>
         </div>
 
-        <a href="{% url 'operator_accounts:account_create' %}" class="btn-create">
-            新規作成
-        </a>
+        <a href="{% url 'operator_accounts:account_create' %}" class="btn btn-register">新規作成</a>
     </div>
 
     <section class="table-area">
-        <div class="table-wrapper">
+        <div class="admin-account-list">
             <table class="admin-table">
                 <thead>
                     <tr>
@@ -35,12 +33,12 @@
                 <tbody>
                     <tr>
                         <td>1</td>
-                        <td>田中 太郎</td>
-                        <td>t.tanaka@example.jp</td>
+                        <td>田中株式会社</td>
+                        <td>tanaka@example.co</td>
                         <td>スーパ管理者</td>
                         <td>2025-11-20 14:32</td>
                         <td class="txt-center">
-                            <a href="{% url 'operator_accounts:account_delete' %}" class="btn-create">
+                            <a href="{% url 'operator_accounts:account_delete' %}" class="btn btn-delete">
                                 削除
                             </a>
                         </td>
@@ -53,7 +51,7 @@
                         <td>管理者</td>
                         <td>2025-11-21 09:10</td>
                         <td class="txt-center">
-                        <a href="{% url 'operator_accounts:account_delete' %}" class="btn-create">
+                        <a href="{% url 'operator_accounts:account_delete' %}" class="btn btn-delete">
                             削除
                         </a>
                         </td>

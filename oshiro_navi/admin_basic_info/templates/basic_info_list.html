@@ -1,103 +1,53 @@
 {% extends "admin_base.html" %}
-
 {% block title %}基本情報一覧{% endblock %}
 
 {% block content %}
+<div class="content-container basic-info-list">
+    <h1>基本情報一覧</h1>
+    <hr style="width: 100%;">
 
-<h1>基本情報一覧</h1>
+    <table class="basic-info-table">
+        <thead>
+            <tr>
+                <th>城名</th>
+                <th>営業時間</th>
+                <th>入場料</th>
+                <th>アクセス</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="basic-info-card">
+                <td class="castle-name"><strong>鶴ヶ城</strong></td>
+                <td class="castle-row">9:00-18:00（最終入場17:00）</td>
+                <td class="castle-row">大人1,000円 / 小人500円</td>
+                <td class="castle-row">車で10分、バス停から徒歩5分</td>
+                <td class="basic-info-actions">
+                    <a href="{% url 'admin_basic_info:basic_info_update' %}" class="btn-update">更新</a>
+                </td>
+            </tr>
 
+            <tr class="basic-info-card">
+                <td class="castle-name"><strong>二本松城</strong></td>
+                <td class="castle-row">9:00-17:00（最終入場16:00）</td>
+                <td class="castle-row">大人1,000円 / 小人300円</td>
+                <td class="castle-row">JR駅から徒歩15分</td>
+                <td class="basic-info-actions">
+                    <a href="{% url 'admin_basic_info:basic_info_update' %}" class="btn-update">更新</a>
+                </td>
+            </tr>
 
-<hr>
-
-<!-- 一覧エリア -->
-<div class="basic-info-list">
-
-    <div class="basic-info-card">
-        <div class="basic-info-main">
-            <h2 class="castle-name">鶴ヶ城</h2>
-
-            <p class="castle-row">
-                <span class="label">営業時間：</span>
-                9:00-18:00（最終入場17:00）
-            </p>
-
-            <p class="castle-row">
-                <span class="label">入場料：</span>
-                大人1,000円 / 小人500円
-            </p>
-
-            <p class="castle-row">
-                <span class="label">アクセス：</span>
-                車で10分、バス停から徒歩5分
-            </p>
-        </div>
-
-        <div class="basic-info-actions">
-            <a href="{% url 'admin_basic_info:basic_info_update' %}" class="btn-update">
-                更新
-            </a>
-        </div>
-
-    </div>
-
-    <hr>
-
-    <!-- 2件目カード -->
-    <div class="basic-info-card">
-        <div class="basic-info-main">
-            <h2 class="castle-name">二本松城</h2>
-
-            <p class="castle-row">
-                <span class="label">営業時間：</span>
-                9:00-17:00（最終入場16:00）
-            </p>
-
-            <p class="castle-row">
-                <span class="label">入場料：</span>
-                大人1,000円 / 小人300円
-            </p>
-
-            <p class="castle-row">
-                <span class="label">アクセス：</span>
-                JR駅から徒歩15分
-            </p>
-        </div>
-
-        <div class="basic-info-actions">
-            <a href="{% url 'admin_basic_info:basic_info_update' %}" class="btn-update">更新</a>
-        </div>
-    </div>
-
-    <hr>
-
-    <!-- 3件目（必要なら増やす） -->
-    <div class="basic-info-card">
-        <div class="basic-info-main">
-            <h2 class="castle-name">歴史じっくり散策城</h2>
-
-            <p class="castle-row">
-                <span class="label">営業時間：</span>
-                9:00-16:30（最終入場16:00）
-            </p>
-
-            <p class="castle-row">
-                <span class="label">入場料：</span>
-                大人800円 / 小人400円
-            </p>
-
-            <p class="castle-row">
-                <span class="label">アクセス：</span>
-                バス停から徒歩8分
-            </p>
-        </div>
-
-        <div class="basic-info-actions">
-            <a href="{% url 'admin_basic_info:basic_info_update' %}" class="btn-update">更新</a>
-        </div>
-    </div>
-
-    {# {% endfor %} #}
-
+            <tr class="basic-info-card">
+                <td class="castle-name"><strong>歴史じっくり散策城</strong></td>
+                <td class="castle-row">9:00-16:30（最終入場16:00）</td>
+                <td class="castle-row">大人800円 / 小人400円</td>
+                <td class="castle-row">バス停から徒歩8分</td>
+                <td class="basic-info-actions">
+                    <a href="{% url 'admin_basic_info:basic_info_update' %}" class="btn-update">更新</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </div>
 
 {% endblock %}

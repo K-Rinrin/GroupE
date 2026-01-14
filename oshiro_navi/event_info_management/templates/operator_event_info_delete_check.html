@@ -1,31 +1,24 @@
 {% extends "operator_base.html" %}
 {% load static %}
 {% block content %}
-<body>
-<div class="home_content" id="no name">
 
+<div class="content-container">
     <h1 class="page-title">イベント削除</h1>    
+    <div class="form-container">
+            <form action="{% url 'event_info_management:operator_event_info_delete_success' %}" method="GET" enctype="multipart/form-data">
 
-<div class="form-container">
-
-<div class="form-container">
-
-        <form action="{% url 'event_info_management:operator_event_info_delete_success' %}" method="GET" enctype="multipart/form-data">
-
-            <p>以下のイベントを削除しますか？</p>
-            <h3>イベント名</h3>
-            <p>この操作は元に戻せません</p>
-            
-            
-            <!-- ボタン -->
-            <div class="form-buttons">
-                <button type="submit" class="btn-delete">削除する</button>
-                <a href="{% url 'event_info_management:operator_event_info_list' %}" class="btn-cancel">キャンセル</a>
-            </div>
-
-        </form>
-
-
+                <p>以下のイベントを削除しますか？</p>
+                <h3>イベント名</h3>
+                <p>この操作は元に戻せません</p>
+                
+                
+                <!-- ボタン -->
+                <div class="form-buttons">
+                    <button type="submit" class="btn btn-delete">削除</button>
+                    <a href="{% url 'event_info_management:operator_event_info_list' %}" class="btn btn-cancel">戻る</a>
+                </div>
+            </form>
+    </div>
 </div>
-</body>
+
 {% endblock %}

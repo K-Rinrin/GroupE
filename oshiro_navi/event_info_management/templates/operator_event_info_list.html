@@ -1,83 +1,52 @@
 {% extends "operator_base.html" %}
 {% load static %}
 {% block content %}
-<style>
-        table {
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        th, td {
-            border: 1px solid #ccc;
-            padding: 10px;
-        }
-        th { background: #f2f2f2; }
-        .btn {
-            padding: 6px 12px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-size: 14px;
-            margin-right: 6px;
-        }
-        .btn-update {
-            background-color: #4CAF50;
-            color: white;
-        }
-        .btn-delete {
-            background-color: #E53935;
-            color: white;
-        }
-        .btn-new {
-            background-color: #1E88E5;
-            color: white;
-            padding: 10px 16px;
-            display: inline-block;
-            margin-bottom: 15px;
-        }
-    </style>
-<body>
 
+
+<div class="content-container">
     <h1>イベント一覧</h1>
 
     <!-- 新規登録ボタン -->
-    <a href="{% url 'event_info_management:operator_event_info_register' %}" class="btn btn-new">＋ 新規イベント登録</a>
+    <a href="{% url 'event_info_management:operator_event_info_register' %}" class="btn btn-register">新規イベント登録</a>
     <!-- イベント一覧テーブル -->
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>イベント名</th>
-                <th>開催日</th>
-                <th>場所</th>
-                <th>操作</th>
-            </tr>
-        </thead>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>イベント名</th>
+                    <th>開催日</th> 
+                    <th>場所</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
 
-        <tbody>
-            <!-- ダミーデータ例：ここは実際のデータに置き換えて！ -->
-            <tr>
-                <td>1</td>
-                <td>サンプルイベント</td>
-                <td>2024-12-01</td>
-                <td>東京城</td>
-                <td>
-                    <a href="{% url 'event_info_management:operator_event_info_update' %}" class="btn btn-update">更新</a>
-                    <a href="{% url 'event_info_management:operator_event_info_delete' %}" class="btn btn-delete">削除</a>
-                </td>
-            </tr>
+            <tbody>
+                <!-- ダミーデータ例：ここは実際のデータに置き換えて！ -->
+                <tr>
+                    <td>1</td>
+                    <td>サンプルイベント</td>
+                    <td>2024-12-01</td>
+                    <td>東京城</td>
+                    <td>
+                        <a href="{% url 'event_info_management:operator_event_info_update' %}" class="btn btn-update">更新</a>
+                        <a href="{% url 'event_info_management:operator_event_info_delete' %}" class="btn btn-delete">削除</a>
+                    </td>
+                </tr>
 
-            <tr>
-                <td>2</td>
-                <td>冬の城祭り</td>
-                <td>2024-12-15</td>
-                <td>大阪城</td>
-                <td>
-                    <a href="event_update.html" class="btn btn-update">更新</a>
-                    <a href="event_delete.html" class="btn btn-delete">削除</a>
-                </td>
-            </tr>
+                <tr>
+                    <td>2</td>
+                    <td>冬の城祭り</td>
+                    <td>2024-12-15</td>
+                    <td>大阪城</td>
+                    <td>
+                        <a href="event_update.html" class="btn btn-update">更新</a>
+                        <a href="event_delete.html" class="btn btn-delete">削除</a>
+                    </td>
+                </tr>
 
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+</div>
 
-</body>
+
 {% endblock %}
