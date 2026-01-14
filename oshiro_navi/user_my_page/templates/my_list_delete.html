@@ -1,19 +1,17 @@
 {% extends "user_base.html" %}
 {% load static %}
-{% block title %}{% endblock %}
+
+{% block title %}削除完了{% endblock %}
+
 {% block content %}
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <title>リスト削除確認</title>
-</head>
-<body>
-    <h1>リスト削除確認ページ</h1>
-    <p>このページに遷移しました。</p>
-    <a href="{% url 'usermy_page:mylistdelete' %}" class="nav-button">
-            マイリスト削除実行 </a>   
-    <a href="{% url 'usermy_page:mypage' %}">マイページに戻る</a>
-</body>
-</html>
+
+    <div class="mypage-container delete-confirm-container">
+
+        削除が完了しました。
+        
+
+
+    <div class="form-group"></div>
+        <a href="{% url 'usermy_page:mypage' %}">マイページに戻る</a>
+
 {% endblock %}

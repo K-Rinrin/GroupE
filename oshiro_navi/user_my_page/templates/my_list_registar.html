@@ -1,19 +1,33 @@
 {% extends "user_base.html" %}
 {% load static %}
-{% block title %}{% endblock %}
+
+{% block title %}お城マイリスト{% endblock %}
+
 {% block content %}
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <title>リスト登録</title>
-</head>
-<body>
-    <h1>リスト登録ページ</h1>
-    <p>このページに遷移しました。</p>
-   <a href="{% url 'usermy_page:mylistdeletecheck' %}" class="nav-button">
-            マイリスト削除確認</a>   
-    <a href="{% url 'usermy_page:mypage' %}">マイページに戻る</a>
-</body>
-</html>
+   
+    <div class="mypage-container">
+        <h1 class="page-title">お城マイリスト</h1>
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <!-- 1. プロフィール画像エリア  -->
+            <div class="form-group">
+                <label class="form-label">お気に入り</label>
+            </div>
+            
+
+
+            <a href="{% url 'usermy_page:mylistdeletecheck' %}" class="nav-button">
+                        マイリスト削除確認</a>   
+                <a href="{% url 'usermy_page:mypage' %}">マイページに戻る</a>
+
+
+        </form>
+
+    </div>
+
+
+
+
 {% endblock %}

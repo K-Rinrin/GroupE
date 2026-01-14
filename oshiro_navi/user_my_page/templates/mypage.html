@@ -1,72 +1,33 @@
 {% extends "user_base.html" %}
 {% load static %}
-{% block title %}{% endblock %}
+
+{% block title %}マイページ{% endblock %}
+
 {% block content %}
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>マイページ</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 40px;
-            background-color: #f4f4f4;
-        }
-        .link-container {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            max-width: 300px;
-            margin: auto;
-            padding: 20px;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        .nav-button {
-            display: inline-block;
-            padding: 10px 15px;
-            background-color: #007bff;
-            color: white;
-            text-align: center;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-            font-weight: bold;
-        }
-        .nav-button:hover {
-            background-color: #0056b3;
-        }
-        h1 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 30px;
-        }
-    </style>
-</head>
-<body>
-    <h1>マイページ</h1>
-    <div class="link-container">
-        <a href="{% url 'usermy_page:profile' %}" class="nav-button">
-            プロフィール
-        </a>
-        
-        <a href="{% url 'usermy_page:oshirostampregistar' %}" class="nav-button">
-            お城スタンプ
-        </a>
-        
-        <a href="{% url 'usermy_page:mylistregistar' %}" class="nav-button">
-            お城マイリスト
-        </a>
 
-        <a href="{% url 'user_accounts:logout' %}" class="nav-button">
-            ログアウト
-        </a>
+    <div class="mypage-container">
+        <h1 class="page-title">マイページ</h1>
 
         
+        <div class="simple-menu-list">
+            
+            <a href="{% url 'usermy_page:profile' %}" class="simple-menu-btn">
+                プロフィール
+            </a>
+            
+            <a href="{% url 'usermy_page:oshirostampregistar' %}" class="simple-menu-btn">
+                お城スタンプ
+            </a>
+            
+            <a href="{% url 'usermy_page:mylistregistar' %}" class="simple-menu-btn">
+                お城マイリスト
+            </a>
+
+            <a href="{% url 'user_accounts:logout' %}" class="simple-menu-btn">
+                ログアウト
+            </a>
+
+        </div>
     </div>
-</body>
-</html>
+
 {% endblock %}

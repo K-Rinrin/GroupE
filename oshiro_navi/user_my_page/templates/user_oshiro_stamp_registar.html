@@ -1,17 +1,72 @@
 {% extends "user_base.html" %}
 {% load static %}
-{% block title %}{% endblock %}
+
+{% block title %}お城スタンプ帳{% endblock %}
+
 {% block content %}
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <title>スタンプ登録</title>
-</head>
-<body>
-    <h1>スタンプ登録ページ</h1>
-    <p>このページに遷移しました。</p>
-    <a href="{% url 'usermy_page:mypage' %}">マイページに戻る</a>
-</body>
-</html>
+
+    <div class="mypage-container stamp-book-container">
+        
+        <!-- ヘッダーエリア -->
+        <div class="stamp-header">
+            <h1 class="page-title">お城スタンプ</h1>
+            <div class="stamp-counter">
+                <span class="label">お城スタンプ数</span>
+                <span class="count">{{ stamp_count|default:"0" }}個</span>
+            </div>
+        </div>
+
+        <!-- スタンプ一覧 (3x3 = 9個のグリッド) -->
+        <div class="stamp-grid">
+            
+            <!-- ▼ データがある分だけループで表示 ▼ -->
+            {% for stamp in object_list %}
+            <div class="stamp-box filled">
+                <div class="stamp-content">
+                    <div class="castle-name">{{ stamp.castle_name }}</div> <!-- 城名 -->
+                    <div class="stamp-date">{{ stamp.created_at|date:"Y.n.j" }}</div> <!-- 日付 -->
+                </div>
+            </div>
+            {% endfor %}
+
+            <!-- ▼ データがない残りの枠を「空枠」として表示する ▼ -->
+            <!-- ※Backend(View)で空のオブジェクトを渡すか、JS等で9個になるまで埋める想定 -->
+           
+
+            <div class="stamp-box empty"></div>
+            <div class="stamp-box empty"></div>
+            <div class="stamp-box empty"></div>
+            <div class="stamp-box empty"></div>
+            
+            <!-- 合計が9個になるように調整 -->
+
+        </div>
+
+        <!-- ページネーション (9個を超えたら次ページへ) -->
+        <div class="pagination">
+            {% if is_paginated %}
+            <span class="step-links">
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}">&lt; 前へ</a>
+                {% endif %}
+
+                <span class="current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                </span>
+
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}">次へ &gt;</a>
+                {% endif %}
+            </span>
+            {% endif %}
+        </div>
+
+        <!-- ボタンエリア -->
+        <div class="button-group mt-large">
+            <button type="button" class="btn-submit" onclick="location.href='#'">スタンプを登録する</button>
+            <a href="{% url 'usermy_page:mypage' %}" class="btn-cancel">マイページに戻る</a>
+        </div>
+
+    </div>
+
 {% endblock %}

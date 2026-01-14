@@ -1,17 +1,36 @@
 {% extends "user_base.html" %}
 {% load static %}
-{% block title %}{% endblock %}
+
+{% block title %}削除確認{% endblock %}
+
 {% block content %}
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <title>リスト削除完了</title>
-</head>
-<body>
-    <h1>リスト削除完了ページ</h1>
-    <p>このページに遷移しました。</p>
-    <a href="{% url 'usermy_page:mypage' %}">マイページに戻る</a>
-</body>
-</html>
+
+    <div class="mypage-container delete-confirm-container">
+        <h1 class="page-title">削除確認</h1>
+
+        <!-- 削除確認のメッセージエリア -->
+        <div class="confirm-message-box">
+            <p class="confirm-text">
+                お気に入りから<br>
+                <!-- ↓ここに削除するお城の名前が格納される -->
+                <span class="highlight-text">{{ object.castle_name|default:"このお城" }}</span><br>
+                を削除しますか？
+            </p>
+        </div>
+
+        <!-- ボタンエリア -->
+        <form method="post" class="delete-form">
+            {% csrf_token %}
+            
+            <div class="confirm-button-group">
+                <!-- 戻るボタン (リンク) -->
+                <a href="{% url 'usermy_page:mylistregistar' %}" class="btn-confirm-back">戻る</a>
+                
+                <!-- 削除ボタン (POST送信) -->
+                <button type="submit" class="btn-confirm-delete">削除</button>
+            </div>
+        </form>
+
+    </div>
+
 {% endblock %}
