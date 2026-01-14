@@ -1,16 +1,27 @@
-{% extends "operator_base.html" %}
 {% load static %}
-{% block title %}ログイン{% endblock %}
-{% block content %}
-<body>  
-    <div class="content">
-        <h1 style="color:white; text-shadow:0 0 8px black;">ログイン画面</h1>
-            <div class="menu-grid">
-                <div class="menu-card" onclick="location.href='{% url 'operator_accounts:top' %}'">
-                    <i class="material-symbols-outlined">home</i> トップ画面へゴー(ログイン)
-                </div>
-            </div>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ログイン画面</title>
+    <link rel="stylesheet" href="{% static 'css/admin_op_base.css' %}">
+</head>
+
+<body> 
+    <div class="login_container">
+        <h1>運営アカウントに<br>ログインしてください</h1>
+        <form class="login_form" action="{% url 'operator_accounts:top' %}" method="GET" enctype="multipart/form-data">
+            <span class="login-span">
+                <label for="id" class="label">ID</label>
+                <input type="text" name="id" id="id"/></span>
+            <span class="login-span">
+                <label for="pass" class="label">Pass</label>
+                <input type="pass" name="pass" id="pass"/></span>
+            <span class="span"><a href="#">パスワードを忘れましたか?</a></span>
+            <input class="btn btn-register" type="submit" value="Login" />
+        </form>
     </div>
 
 </body>
-{% endblock %}
+</html>

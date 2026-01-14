@@ -14,15 +14,7 @@
 
 <!-- ▼ サイドバー（共通） ▼ -->
 <div class="sidebar">
-    <div class="logo_content">
-        <div class="logo">
-            <a href="" class="logo_name">運営用t画面</a>
-        </div>
-        <i class='bx bx-menu' id="btn"></i>
-    </div>
-
     <ul class="nav">
-
         <li>
             <a href="{% url 'operator_accounts:top' %}">
                 <i class="material-symbols-outlined">home</i>
@@ -55,6 +47,13 @@
             <span class="tooltip">アカウント機能</span>
         </li>
 
+        <li>
+            <a href="{% url 'operator_accounts:operator_logout' %}" class="logout">
+                <i class="material-symbols-outlined">logout</i>
+                <span class="link_name">ログアウト</span>
+            </a>
+            <span class="tooltip">ログアウト</span>
+        </li>
     </ul>
 </div>
 <!-- ▲ サイドバー（共通） ▲ -->

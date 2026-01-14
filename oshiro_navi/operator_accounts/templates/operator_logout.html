@@ -1,0 +1,20 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ログアウト画面</title>
+    <link rel="stylesheet" href="{% static 'css/admin_op_base.css' %}">
+
+
+
+</head>
+
+<body> 
+    <div class="logout_container">
+        <h1 class="page-title">ログアウトしました。</h1>
+        <a href="{% url 'operator_accounts:operator_login' %}" class="btn btn-cancel">ログイン画面へ戻る</a>
+    </div> 
+</body>
+</html>
