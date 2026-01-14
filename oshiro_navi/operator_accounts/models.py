@@ -1,6 +1,8 @@
 # operator_accounts/models.py
 from django.db import models
-from django.conf import settings
+from django.conf import settings 
+from django.urls import reverse
+
 
 
 class Operator(models.Model):
@@ -24,3 +26,4 @@ class Operator(models.Model):
 
     def __str__(self):
         return f"Operator({self.account.username})"
+    
