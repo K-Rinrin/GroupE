@@ -1,9 +1,8 @@
-<!doctype html>
-<html lang="ja">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>QRコード生成サンプル</title>
+{% extends 'admin_base.html' %}
+{% load static %}
+{% block title %}QRコード生成サンプル{% endblock %}
+{% block content %}
+
 <style>
     body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif; padding: 24px; max-width: 720px; margin: auto; }
     label { display:block; margin-top:12px; font-weight:600; }
@@ -15,98 +14,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
-<body>
 
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>管理者TOP</title>
-
-        <link rel="stylesheet" href="../../login_form/css/home.css">
-        <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
-    <!-- アイコン -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
-
-
-</head>
-
-<body>  
-
-    <!-- サイドバークラス -->
-    <div class="sidebar">
-        <div class="logo_content">
-            <div class="logo">
-                <div class="logo_name">管理者用画面</div>
-            </div>
-            <i class='bx bx-menu' id="btn"></i>
-        </div>
-
-        <ul class="nav">
-                <li>
-            <a href="../TOP画面/admin_top.html">
-                <i class="material-symbols-outlined">home</i>
-                <span class="link_name">管理者TOP画面</span>
-            </a>
-            <span class="tooltip">管理者TOP画面</span>
-            
-        </li>
-        <li>
-            <a href="../お城スタンプ機能/oshiro_stamp_registar.html">
-                <i class="material-symbols-outlined">approval</i>
-                <span class="link_name">お城スタンプ機能</span>
-            </a>
-            <span class="tooltip">お城スタンプ機能</span>
-        </li>
-
-            <li>
-                <a href="../イベント情報機能/event_info_list.html">
-                    <i class="material-symbols-outlined">calendar_month</i>
-                    <span class="link_name">イベント情報機能</span>
-                </a>
-                <span class="tooltip">イベント情報機能</span>
-            </li>
-            <li>
-                <a href="../周辺MAP機能/area_map_info_list.html">
-                    <i class="material-symbols-outlined">map_pin_review</i>
-                    <span class="link_name">周辺MAP機能</span>
-                </a>
-                <span class="tooltip">周辺MAP機能</span>
-            </li>
-            <li>
-                <a href="../音声ガイド機能/audio_guide_list.html">
-                    <i class="material-symbols-outlined">record_voice_over</i>
-                    <span class="link_name">音声ガイド機能</span>
-                </a>
-                <span class="tooltip">音声ガイド機能</span>
-            </li>
-            <li>
-                <a href="../基本情報機能/basic_info_list.html">
-                    <i class="material-symbols-outlined">edit_document</i>
-                    <span class="link_name">基本情報機能</span>
-                </a>
-                <span class="tooltip">基本情報機能</span>
-            </li>
-            <li>
-                <a href="../モデルコース機能/model_couse_list.html">
-                    <i class="material-symbols-outlined">alt_route</i> 
-                    <span class="link_name">モデルコース機能</span>
-                </a>
-                <span class="tooltip">モデルコース機能</span>
-            </li>
-            <li>
-                <a href="../音声ガイド機能/qr_generetor.html">
-                    <i class="material-symbols-outlined">qr_code_2_add</i>
-                    <span class="link_name">QRコード生成</span>
-                </a>
-                <span class="tooltip">QRコード生成</span>
-            </li>
-        </ul>
-    </div>
-
-    </div>
     <div class="home_content" id="qr_generetor">
         <h1>QRコードを生成する</h1>
 
@@ -135,9 +43,6 @@
 </div>
 
 <div id="qrcode" aria-live="polite"></div>
-
-<!-- ▼ ロゴ画像（非表示でOK） ▼ -->
-<img id="logo" src="../../../../お城写真/お城ナビアイコン-removebg-preview.png" style="display:none;">
 
 <script>
 let qr = null;
@@ -235,9 +140,7 @@ window.addEventListener('load', () => {
 });
 </script>
 
-<script src="../../login_form/JS/home.js"></script>
     </div>
-</body>
-</html>
+{% endblock %}
 
 
