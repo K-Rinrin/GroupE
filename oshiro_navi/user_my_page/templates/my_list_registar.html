@@ -8,11 +8,9 @@
     <div class="mypage-container mylist-container">
         <h1 class="page-title">お城マイリスト</h1>
 
-        <!-- お気に入り追加エリア -->
         <section class="mylist-section">
             <h2 class="section-title">お気に入りに追加するお城</h2>
             
-            <!-- 検索フォーム -->
             <form method="get" class="search-box-wrapper">
                 <label class="sub-label">お城名で検索</label>
                 <div class="search-row">
@@ -22,27 +20,34 @@
                 </div>
             </form>
 
-            <!-- 登録フォーム -->
             <form method="post">
                 {% csrf_token %}
 
-                <!-- 検索結果／選択リスト -->
-                <div class="scroll-selection-box">
+                {% if messages %}
+                    <div class="error-messages" style="margin-bottom: 15px;">
+                        {% for message in messages %}
+                            <p style="color: #ff0000; font-weight: bold; font-size: 14px; margin: 0;">
+                                ⚠️ {{ message }}
+                            </p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <div class="scroll-selection-box" style="border: 1px solid #ccc; height: 200px; overflow-y: scroll; padding: 10px; margin-bottom: 20px; background: #fff;">
                     
                     {% for castle in available_castles %}
-                    <!-- ▼ ループ処理：アプリに登録されているお城（未登録のみ） ▼ -->
-                    <label class="checkbox-item">
-                        <!-- valueに お城のID を設定 -->
+                    <label class="checkbox-item" style="display: block; margin-bottom: 8px; cursor: pointer;">
                         <input type="checkbox" name="castle_ids" value="{{ castle.id }}">
-                        <span class="castle-label-text">{{ castle.name }} ({{ castle.prefecture }})</span>
+                        <span class="castle-label-text">
+                            {{ castle.oshiro_name }} ({{ castle.address }})
+                        </span>
                     </label>
                     {% empty %}
-                    <!-- 候補がない場合のメッセージ -->
                     <div style="padding:10px; color:#666; font-size:14px;">
                         {% if keyword %}
-                            該当するお城が見つかりませんでした。
+                            「{{ keyword }}」に該当するお城が見つかりませんでした。
                         {% else %}
-                            追加できるお城はすべて登録済みです。
+                            お城名を入力して検索してください。
                         {% endif %}
                     </div>
                     {% endfor %}
@@ -56,20 +61,32 @@
         </section>
 
 
-        <!-- 現在のお気に入りリスト -->
         <section class="mylist-section">
             <h2 class="section-title">現在のお気に入り</h2>
 
-            <div class="current-list-box">
+            <div class="current-list-box" style="border: 1px solid #eee; padding: 10px; border-radius: 5px; background: #f9f9f9;">
                 
                 {% for item in current_mylist %}
-                <!-- ユーザーが登録したマイリスト -->
-                <div class="list-item">
-                    <!-- item.castle.name でお城モデルの名前を参照 -->
-                    <span class="item-name">{{ item.castle.name }} ({{ item.castle.prefecture }})</span>
+                <div class="list-item" style="display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #ddd;">
+                    <span class="item-name" style="font-size: 15px;">{{ item.oshiro_info.oshiro_name }} ({{ item.oshiro_info.address }})</span>
                     
-                    <!-- 削除ボタン -->
-                    <a href="{% url 'usermy_page:mylistdeletecheck' pk=item.id %}" class="btn-small-delete">削除</a>
+                    <a href="{% url 'usermy_page:mylistdeletecheck' pk=item.id %}" 
+                       class="btn-small-delete" 
+                       style="
+                            background-color: #d9534f; 
+                            color: #ffffff !important; 
+                            text-decoration: none !important; 
+                            font-weight: bold; 
+                            font-size: 15px; 
+                            padding: 8px 18px; 
+                            border-radius: 4px; 
+                            display: inline-block;
+                            text-align: center;
+                            line-height: 1;
+                            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                       ">
+                       削除
+                    </a>
                 </div>
                 {% empty %}
                 <div style="padding:15px; color:#666; font-size:14px;">
@@ -80,8 +97,7 @@
             </div>
         </section>
 
-        <!-- 戻るボタン -->
-        <div class="button-group">
+        <div class="button-group" style="margin-top: 30px;">
             <a href="{% url 'usermy_page:mypage' %}" class="btn-cancel">マイページに戻る</a>
         </div>
 
