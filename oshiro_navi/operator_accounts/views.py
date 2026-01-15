@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.views.generic import CreateView, DeleteView
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from operator_oshiro_info.models import OshiroInfo
 from django.views.generic.base import TemplateView
 from django.urls import reverse_lazy
 from .forms import AdminUserCreateForm
@@ -33,6 +34,12 @@ class AdminAccountCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView
     form_class = AdminUserCreateForm
     template_name = "admin_account_create.html"
     success_url = reverse_lazy('operator_accounts:account_create_success') 
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # HTMLで「castle_list」という名前でお城の全データを使えるようにする
+        context['castle_list'] = OshiroInfo.objects.all()
+        return context
 
     def test_func(self):
         # 運営（スーパーユーザー）のみ実行可能

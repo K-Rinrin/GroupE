@@ -1,40 +1,47 @@
 {% extends "operator_base.html" %}
-{% load static %}
-{% block title %}管理者アカウント登録{% endblock %}
 {% block content %}
+<h1>管理者アカウント登録</h1>
 
+<form method="POST"  class="form-container">
+    {% csrf_token %}
+    {% if form.errors %}
+    <div style="background: #ffdada; padding: 10px; border: 1px solid red; margin-bottom: 20px;">
+        <p>エラーが発生しています：</p>
+        <ul>
+        {% for field, errors in form.errors.items %}
+            <li>{{ field }}: {{ errors|striptags }}</li>
+        {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+    {% if form.managed_castles.errors %}
+        <div class="alert alert-danger" style="color: red; border: 1px solid red; padding: 10px; margin-bottom: 10px;">
+            {{ form.managed_castles.errors }}
+        </div>
+    {% endif %}
 
-    <h1>管理者アカウント登録</h1>
+    <input type="text" name="username" placeholder="アカウント名" required>
+    <input type="email" name="email" placeholder="Email" required>
+    <input type="password" name="password" placeholder="Pass" required>
+    
 
-    <form method="POST" class="form-container">
-        {% csrf_token %}
-        <input type="text" name="ID" placeholder="ID" id="ID" required>
-        <input type="text" name="name" placeholder="アカウント名" id="name" required>
-        <input type="password" name="password" placeholder="Pass" id="pass" required>
-            <select id="castle">
-                <option value="">お城を選択</option>
-                <option value="tsurugajo">鶴ヶ城</option>
-                <option value="nihonmatsu">二本松城</option>
-            </select>
+    <hr>
+    <h3>担当お城の選択（最大5つ）</h3>
+    
+    {% for i in "12345" %}
+    <div class="my-custom-wrapper">
+        <label>担当お城 {{ forloop.counter }}</label>
+        <select name="managed_castles" class="form-control">
+            <option value="none">お城を選択しない</option>
+            {% for oshiro in castle_list %}
+                <option value="{{ oshiro.id }}">
+                    {{ oshiro.oshiro_name }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+    {% endfor %}
 
-            <select id="castle">
-                <option value="">お城を選択</option>
-                <option value="tsurugajo">鶴ヶ城</option>
-                <option value="nihonmatsu">二本松城</option>
-            </select>
-
-            <select id="castle">
-                <option value="">お城を選択</option>
-                <option value="tsurugajo">鶴ヶ城</option>
-                <option value="nihonmatsu">二本松城</option>
-            </select>
-
-            <select id="castle">
-                <option value="">お城を選択</option>
-                <option value="tsurugajo">鶴ヶ城</option>
-                <option value="nihonmatsu">二本松城</option>
-            </select>
     <input class="btn btn-register" type="submit" value="登録" />
-</div>
-
+</form>
 {% endblock %}
