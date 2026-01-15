@@ -1,17 +1,18 @@
 {% extends "operator_base.html" %}
 {% load static %}
 {% block title %}管理者アカウント一覧{% endblock %}
+
 {% block content %}
 <div class="content-container">
-        <div class="profile-info">
-            <h1>管理者アカウント一覧</h1>
-        </div>
+    <div class="profile-info">
+        <h1>管理者アカウント一覧</h1>
+    </div>
 
     <div class="top-bar">
-        <div class="search-area">
-            <input type="text" placeholder="検索（名前・メール）" aria-label="検索">
-            <button class="btn-search">検索</button>
-        </div>
+        <form method="GET" action="." class="search-area">
+            <input type="text" name="q" value="{{ request.GET.q }}" placeholder="検索（名前・メール・ID）" aria-label="検索">
+            <button type="submit" class="btn-search">検索</button>
+        </form>
 
         <a href="{% url 'operator_accounts:account_create' %}" class="btn btn-register">新規作成</a>
     </div>
@@ -31,37 +32,24 @@
                 </thead>
 
                 <tbody>
+                    {% for account in object_list %}
                     <tr>
-                        <td>1</td>
-                        <td>田中株式会社</td>
-                        <td>tanaka@example.co</td>
-                        <td>スーパ管理者</td>
-                        <td>2025-11-20 14:32</td>
+                        <td>{{ account.id }}</td>
+                        <td>{{ account.name }}</td>
+                        <td>{{ account.email }}</td>
+                        <td>{{ account.get_role_display }}</td> <td>{{ account.last_login|date:"Y-m-d H:i" }}</td>
                         <td class="txt-center">
-                            <a href="{% url 'operator_accounts:account_delete' %}" class="btn btn-delete">
-                                削除
-                            </a>
+                            <a href="{% url 'operator_accounts:account_delete' account.pk %}" class="btn btn-delete">削除</a>
                         </td>
                     </tr>
-
+                    {% empty %}
                     <tr>
-                        <td>2</td>
-                        <td>鈴木 花子</td>
-                        <td>h.suzuki@example.jp</td>
-                        <td>管理者</td>
-                        <td>2025-11-21 09:10</td>
-                        <td class="txt-center">
-                        <a href="{% url 'operator_accounts:account_delete' %}" class="btn btn-delete">
-                            削除
-                        </a>
-                        </td>
+                        <td colspan="6" class="txt-center">データが見つかりませんでした。</td>
                     </tr>
-
-                    <!-- ここにテンプレートループ -->
+                    {% endfor %}
                 </tbody>
             </table>
         </div>
     </section>
-
-</main>
+</div>
 {% endblock %}
