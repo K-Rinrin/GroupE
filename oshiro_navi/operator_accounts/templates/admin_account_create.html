@@ -8,40 +8,32 @@
 
     <form method="POST" class="form-container">
         {% csrf_token %}
-        <!-- 
-        {% for field in form %}
-        <div class="my-custom-wrapper">
-            <label class="my-label">{{ field.label }}</label>
-            {{ field }}  {% if field.errors %}
-                <div class="error-text">{{ field.errors }}</div>
-            {% endif %}
-        </div>
-    {% endfor %} -->
-    <div class="my-custom-wrapper">
-        <label class="my-label">{{ form.username.label }}</label>
-        {{ form.username }}
-        {% if form.username.errors %}
-            <div class="error-text">{{ form.username.errors }}</div>
-        {% endif %}
-    </div>
+        <input type="text" name="username" placeholder="アカウント名" id="name" required>
+        <input type="email" name="email" placeholder="Email" id="email" required>
+        <input type="password" name="password" placeholder="Pass" id="pass" required>
+            <select id="castle">
+                <option value="">お城を選択</option>
+                <option value="tsurugajo">鶴ヶ城</option>
+                <option value="nihonmatsu">二本松城</option>
+            </select>
 
-    <div class="my-custom-wrapper">
-        <label class="my-label">{{ form.password.label }}</label>
-        {{ form.password }}
-        {% if form.password.errors %}
-            <div class="error-text">{{ form.password.errors }}</div>
-        {% endif %}
-    </div>
+            <select id="castle">
+                <option value="">お城を選択</option>
+                <option value="tsurugajo">鶴ヶ城</option>
+                <option value="nihonmatsu">二本松城</option>
+            </select>
 
-    <div class="my-custom-wrapper">
-        <label class="my-label">{{ form.managed_castles.label }}</label>
-        <div class="castle-box">
-            {{ form.managed_castles }}
-        </div>
-        {% if form.managed_castles.errors %}
-            <div class="error-text">{{ form.managed_castles.errors }}</div>
-        {% endif %}
-    </div>
+            <select id="castle">
+                <option value="">お城を選択</option>
+                <option value="tsurugajo">鶴ヶ城</option>
+                <option value="nihonmatsu">二本松城</option>
+            </select>
+
+            <select id="castle">
+                <option value="">お城を選択</option>
+                <option value="tsurugajo">鶴ヶ城</option>
+                <option value="nihonmatsu">二本松城</option>
+            </select>
     <input class="btn btn-register" type="submit" value="登録" />
 </div>
 

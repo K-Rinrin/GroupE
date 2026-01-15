@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import CreateView, DeleteView
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic.base import TemplateView
 from django.urls import reverse_lazy
@@ -43,5 +43,5 @@ class AdminAccountDeleteSuccessView(TemplateView):
 class OperatorLoginView(LoginView):
     template_name = "operator_login.html"
 
-class OperatorLogoutView(TemplateView):
+class OperatorLogoutView(LogoutView):
     template_name = "operator_logout.html"
