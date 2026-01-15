@@ -140,6 +140,7 @@
     pointer-events: none;
     opacity: 0;
     transition: all 0.5s ease;
+    z-index: 9999
 }
 
 .sidebar.active ul li .tooltip {

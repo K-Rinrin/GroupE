@@ -1,5 +1,46 @@
-aaaaaaaaaa
-iiiiiiiiii
-uuuuuuuuuu
-eeeeeeeeee
-oooooooooo
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>VOICEVOX 読み上げテスト</title>
+</head>
+<body>
+    <h1>VOICEVOX AI読み上げ</h1>
+    <input type="text" id="text" value="こんにちは！自然な日本語で読み上げますわよ。" style="width: 300px;">
+    <button onclick="playVoicevox()">読み上げる</button>
+
+    <script>
+        async function playVoicevox() {
+            const text = document.getElementById('text').value;
+            // speaker=2 は「四国めたん（あまあま）」などの女性声です
+            const speakerId = 2; 
+            const baseUrl = "http://localhost:50021";
+
+            try {
+                // 1. 音声合成用のクエリを作成
+                const queryRes = await fetch(`${baseUrl}/audio_query?text=${encodeURIComponent(text)}&speaker=${speakerId}`, {
+                    method: 'POST'
+                });
+                const queryData = await queryRes.json();
+
+                // 2. クエリを元に音声波形を生成
+                const synthRes = await fetch(`${baseUrl}/synthesis?speaker=${speakerId}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(queryData)
+                });
+
+                // 3. 音声データを取得して再生
+                const blob = await synthRes.blob();
+                const audioUrl = URL.createObjectURL(blob);
+                const audio = new Audio(audioUrl);
+                audio.play();
+
+            } catch (error) {
+                alert("VOICEVOXアプリが起動しているか確認してください。");
+                console.error(error);
+            }
+        }
+    </script>
+</body>
+</html>
