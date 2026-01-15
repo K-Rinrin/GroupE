@@ -5,6 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from operator_oshiro_info.models import OshiroInfo
 from django.views.generic.base import TemplateView
 from django.urls import reverse_lazy
+from django.db.models import Q
 from .forms import AdminUserCreateForm
 from django.contrib.auth import get_user_model
 from django.shortcuts import render, redirect
@@ -30,17 +31,27 @@ class OperatorContactConfirm(TemplateView):
 class AdminAccountListView(ListView):
     model = User # get_user_model()したもの
     template_name = 'admin_account_list.html'
+    context_object_name = 'account_list'
 
     def get_queryset(self):
-        # accountに関連するadmin_profile、さらにお城の名前を一気に取得
-        return super().get_queryset().select_related(
+        queryset = super().get_queryset().select_related(
             'admin_profile',
             'admin_profile__oshiro_management1',
             'admin_profile__oshiro_management2',
             'admin_profile__oshiro_management3',
             'admin_profile__oshiro_management4',
             'admin_profile__oshiro_management5',
-        ).filter(is_staff=True) # 管理者のみ表示
+        ).filter(is_staff=True)
+
+        # 
+        q_word = self.request.GET.get('search')
+        if q_word:
+            queryset = queryset.filter(
+                Q(username__icontains=q_word) | 
+                Q(email__icontains=q_word)
+            )
+        
+        return queryset
 
 class AdminAccountCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     form_class = AdminUserCreateForm

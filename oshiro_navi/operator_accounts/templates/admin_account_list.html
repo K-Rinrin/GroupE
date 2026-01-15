@@ -9,10 +9,11 @@
     </div>
 
     <div class="top-bar">
-        <form method="GET" action="." class="search-area">
-            <input type="text" name="q" value="{{ request.GET.q }}" placeholder="検索（名前・メール・ID）" aria-label="検索">
-            <button type="submit" class="btn-search">検索</button>
-        </form>
+        <form method="get" action="">
+        <input type="text" name="search" value="{{ request.GET.search }}" placeholder="名前やメールで検索">
+        <button type="submit" class="btn btn-search">検索</button>
+        <a href="{% url 'operator_accounts:account_list' %}" class="btn btn-clear">一覧に戻る</a>
+    </form>
 
         <a href="{% url 'operator_accounts:account_create' %}" class="btn btn-register">新規作成</a>
     </div>
