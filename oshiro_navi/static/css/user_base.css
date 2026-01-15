@@ -673,6 +673,189 @@ PC / Web 表示
     background: #f1f5f9;
 }
 
+/* ====================================
+   和風デザインテーマ (お城ナビ用)
+   ==================================== */
+
+:root {
+    /* 日本の伝統色パレット */
+    --japan-bg: #f7f6f2;        /* 生成色（きなりいろ）：背景 */
+    --japan-card: #ffffff;      /* 真っ白：カード背景 */
+    --japan-navy: #1e2a4a;      /* 褐色（かちいろ）：メインカラー */
+    --japan-gold: #c5a059;      /* 金茶（きんちゃ）：アクセント */
+    --japan-red:  #bf3943;      /* 茜色（あかねいろ）：強調・ボタン */
+    --japan-text: #2b2b2b;      /* 墨色（すみいろ）：文字 */
+    --japan-border: #dcd6ce;    /* 鈍色：薄い枠線 */
+}
+
+/* 全体のフォント設定（見出しは明朝、本文はゴシック） */
+body {
+    background-color: var(--japan-bg); /* 背景を和紙っぽい色に */
+    color: var(--japan-text);
+}
+
+h1, h2, h3, .page-title, .section-title {
+    font-family: "Yu Mincho", "YuMincho", "Hiragino Mincho ProN", "HGSMinchoE", serif;
+    font-weight: bold;
+}
+
+/* --- コンテナ：和紙の便箋風 --- */
+.mypage-container {
+    background-color: var(--japan-card);
+    border: 1px solid var(--japan-border);
+    /* 影を柔らかくして浮きすぎないように */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    border-radius: 4px; /* 角丸は小さめに（和風は四角い美学） */
+}
+
+/* --- ページタイトル装飾 --- */
+.page-title {
+    color: var(--japan-navy);
+    position: relative;
+    padding-bottom: 15px;
+    margin-bottom: 30px;
+    text-align: center;
+    border-bottom: none; /* 既存の線を消す */
+}
+
+/* タイトルの下に「和風の飾り線」を入れる */
+.page-title::after {
+    content: "";
+    display: block;
+    width: 60px;
+    height: 3px;
+    background-color: var(--japan-gold);
+    margin: 10px auto 0;
+    border-radius: 2px;
+}
+
+/* ====================================
+   モデルコース検索（和風Ver）
+   ==================================== */
+
+/* 検索エリアのボックス */
+.search-area-box {
+    background-color: #faf9f7; /* 薄い和紙色 */
+    border: 1px solid var(--japan-border);
+    border-radius: 0; /* 角を四角く */
+    padding: 30px 20px;
+    
+    /* 和柄っぽいアクセント（四隅に二重線） */
+    outline: 1px solid transparent;
+    position: relative;
+}
+/* 内側に線を引いて「畳」や「障子」のような枠感を出す */
+.search-area-box::before {
+    content: "";
+    position: absolute;
+    top: 5px; left: 5px; right: 5px; bottom: 5px;
+    border: 1px solid rgba(0,0,0,0.05);
+    pointer-events: none;
+}
+
+/* ラベル */
+.select-group label {
+    font-family: "Yu Mincho", serif;
+    color: var(--japan-navy);
+    font-size: 15px;
+}
+
+/* プルダウン */
+.form-select {
+    border: 1px solid #aaa;
+    border-radius: 2px; /* 少し角ばらせる */
+    background-color: #fff;
+    padding: 10px;
+    font-size: 15px;
+}
+
+/* --- 検索ボタン（和モダン） --- */
+.btn-search-main {
+    background-color: var(--japan-navy); /* 藍色 */
+    color: #fff;
+    border: none;
+    border-radius: 2px;
+    font-family: "Yu Mincho", serif; /* ボタン文字も明朝に */
+    letter-spacing: 0.1em; /* 文字間隔を空けて上品に */
+    box-shadow: 0 3px 0 #121a2e; /* 立体感 */
+    transition: 0.2s;
+}
+
+.btn-search-main:hover {
+    background-color: #2a3b66;
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 #121a2e;
+}
+
+/* --- 検索結果ヘッダー --- */
+.result-header {
+    border-bottom: 1px solid var(--japan-navy); /* 線を濃く細く */
+    font-family: "Yu Mincho", serif;
+    color: var(--japan-navy);
+}
+
+.count-number {
+    color: var(--japan-red); /* 数字を赤（朱色）に */
+    font-size: 22px;
+    font-family: sans-serif; /* 数字は読みやすく */
+}
+
+/* --- 結果リストアイテム --- */
+.result-item {
+    border: none;
+    border-bottom: 1px solid #eee; /* 下線のみにする（リスト風） */
+    border-radius: 0;
+    box-shadow: none;
+    padding: 20px 10px;
+    position: relative;
+    background-color: transparent;
+}
+
+/* ホバー時に背景を少し変える */
+.result-item:hover {
+    background-color: #fcfcfc;
+    border-bottom: 1px solid var(--japan-gold); /* ホバーで線が金色に */
+    box-shadow: none;
+}
+
+/* お城の名前 */
+.result-name {
+    font-family: "Yu Mincho", serif;
+    font-size: 18px;
+    color: #000;
+}
+
+/* タグ（家紋や印鑑のようなイメージ） */
+.result-tag {
+    background-color: #fff;
+    border: 1px solid var(--japan-red);
+    color: var(--japan-red);
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 2px;
+}
+
+/* 詳細ボタン（枠線ボタン） */
+.btn-detail-small {
+    border: 1px solid var(--japan-navy);
+    color: var(--japan-navy);
+    background: transparent;
+    border-radius: 2px;
+    font-family: "Yu Mincho", serif;
+    transition: 0.3s;
+}
+
+.btn-detail-small:hover {
+    background-color: var(--japan-navy);
+    color: #fff;
+}
+
+/* 矢印アイコン追加（CSSで描画） */
+.btn-detail-small::after {
+    content: " \00bb"; /* » マーク */
+    font-family: sans-serif;
+}
+
 
 
 
@@ -855,3 +1038,4 @@ PC / Web 表示
     }
 
 }
+

@@ -1,16 +1,15 @@
 {% extends "user_base.html" %}
 {% load static %}
-{% block title %}{% endblock %}
+
+{% block title %}モデルコース{% endblock %}
+
 {% block content %}
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <title>モデルコース検索</title>
-</head>
-<body>
-    <h1>モデルコース検索後画面</h1>
-    <a href="{% url 'user_model_course:modelcoursechoose' %}">詳細</a>   
-</body>
-</html>
+    <div class="mypage-container">
+        <h1 class="page-title">モデルコース検索画面</h1>
+
+
+        <a href="{% url 'user_model_course:modelcoursechoose' %}">詳細</a>
+
+    </div>
+
 {% endblock %}
