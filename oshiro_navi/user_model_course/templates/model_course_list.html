@@ -1,108 +1,122 @@
 {% extends "user_base.html" %}
 {% load static %}
-{% block title %}{% endblock %}
+
+{% block title %}モデルコース{% endblock %}
+
 {% block content %}
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <title>モデルコース検索</title>
-</head>
-<body>
+    <div class="mypage-container model-course-container">
+        
+        <h1 class="page-title">
+            モデルコース検索
+        </h1>
 
-<h1>モデルコース</h1>
+        <!-- 検索エリア -->
+        <div class="search-area-box">
+            <div class="search-inputs">
+                <div class="select-group">
+                    <label>都道府県</label>
+                    <select id="prefecture" class="form-select">
+                        <option value="">選択してください</option>
+                        <option value="fukushima">福島県</option>
+                        <option value="aomori">青森県</option>
+                    </select>
+                </div>
 
-<!-- 検索エリア -->
-<div class="search-area">
-    <select id="prefecture">
-        <option value="">都道府県を選択</option>
-        <option value="fukushima">福島県</option>
-        <option value="aomori">青森県</option>
-    </select>
+                <div class="select-group">
+                    <label>お城</label>
+                    <select id="castle" class="form-select">
+                        <option value="">先に都道府県を選択</option>
+                    </select>
+                </div>
+            </div>
 
-    <select id="castle">
-        <option value="">お城を選択</option>
-    </select>
+            <div class="search-btn-wrapper">
+                <button onclick="search()" class="btn-search-main">
+                    <i class='bx bx-search-alt'></i> 検索する
+                </button>
+            </div>
+        </div>
 
-    <button onclick="search()">検索</button>
-</div>
+        <!-- 検索結果エリア -->
+        <div class="result-area">
+            <div class="result-header">
+                該当：<span id="count" class="count-number">0</span> 件
+            </div>
 
-<!-- 検索結果 -->
-<div class="result-area">
-    <div class="result-header">
-        該当：<span id="count">0</span>件
+            <ul class="castle-result-list" id="result">
+                <!-- 初期状態のメッセージ -->
+                <li class="no-result-msg" style="font-family:'Yu Mincho', serif;">
+                    条件を指定して検索してください
+                </li>
+            </ul>
+        </div>
     </div>
 
-    <ul class="castle-list" id="result">
-        <!-- JSで生成 -->
-    </ul>
-</div>
+    <script>
+        
+        const castlesByPrefecture = {
+            fukushima: [
+                { id: 1, name: "鶴ヶ城 (会津若松城)" },
+                { id: 2, name: "二本松城 (霞ヶ城)" },
+                { id: 3, name: "白河小峰城" }
+            ],
+            aomori: [
+                { id: 4, name: "弘前城" },
+                { id: 5, name: "根城" }
+            ]
+        };
 
-<script>
-    // 仮データ（あとでDBから取得する想定）
-    const castlesByPrefecture = {
-        fukushima: [
-            { id: 1, name: "鶴ヶ城" },
-            { id: 2, name: "二本松城" },
-            { id: 3, name: "白河小峰城" }
-        ],
-        aomori: [
-            { id: 4, name: "弘前城" }
-        ]
-    };
+        const prefectureSelect = document.getElementById("prefecture");
+        const castleSelect = document.getElementById("castle");
+        const resultArea = document.getElementById("result");
+        const countSpan = document.getElementById("count");
 
-    const prefectureSelect = document.getElementById("prefecture");
-    const castleSelect = document.getElementById("castle");
-    const resultArea = document.getElementById("result");
-    const countSpan = document.getElementById("count");
-
-    // 都道府県選択 → お城プルダウン更新
-    prefectureSelect.addEventListener("change", () => {
-        castleSelect.innerHTML = '<option value="">お城を選択</option>';
-
-        const pref = prefectureSelect.value;
-        if (!pref) return;
-
-        castlesByPrefecture[pref].forEach(castle => {
-            const option = document.createElement("option");
-            option.value = castle.id;
-            option.textContent = castle.name;
-            castleSelect.appendChild(option);
+        prefectureSelect.addEventListener("change", () => {
+            castleSelect.innerHTML = '<option value="">お城を選択 (任意)</option>';
+            const pref = prefectureSelect.value;
+            if (!pref) return;
+            castlesByPrefecture[pref].forEach(castle => {
+                const option = document.createElement("option");
+                option.value = castle.id;
+                option.textContent = castle.name;
+                castleSelect.appendChild(option);
+            });
         });
-    });
 
-    // 検索処理（画面表示のみ）
-    function search() {
-        resultArea.innerHTML = "";
+        function search() {
+            resultArea.innerHTML = "";
+            const pref = prefectureSelect.value;
+            const castleId = castleSelect.value;
+            let results = [];
 
-        const pref = prefectureSelect.value;
-        const castleId = castleSelect.value;
+            if (!pref) {
+                resultArea.innerHTML = '<li class="no-result-msg">都道府県を選択してください</li>';
+                countSpan.textContent = 0;
+                return;
+            }
 
-        let results = [];
-
-        if (pref) {
             results = castlesByPrefecture[pref];
+            if (castleId) {
+                results = results.filter(c => c.id == castleId);
+            }
+
+            if (results.length === 0) {
+                resultArea.innerHTML = '<li class="no-result-msg">該当するコースはありません</li>';
+            } else {
+                results.forEach(castle => {
+                    const li = document.createElement("li");
+                    li.className = "result-item"; 
+                    li.innerHTML = `
+                        <div class="result-info">
+                            <span class="result-name">${castle.name}</span>
+                            <span class="result-tag">モデルコースあり</span>
+                        </div>
+                        <a href="#" class="btn-detail-small">詳細</a>
+                    `;
+                    resultArea.appendChild(li);
+                });
+            }
+            countSpan.textContent = results.length;
         }
-
-        if (castleId) {
-            results = results.filter(c => c.id == castleId);
-        }
-
-        results.forEach(castle => {
-            const li = document.createElement("li");
-            li.className = "castle-item";
-            li.innerHTML = `
-                <span>${castle.name}</span>
-                <a href="#" class="detail-btn">詳細</a>
-            `;
-            resultArea.appendChild(li);
-        });
-
-        countSpan.textContent = results.length;
-    }
-</script>
-
-</body>
-</html>
-
+    </script>
 {% endblock %}

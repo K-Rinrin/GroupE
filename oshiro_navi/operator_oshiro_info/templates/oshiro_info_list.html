@@ -4,7 +4,11 @@
 {% block content %}
 <div class="content-container">
     <h1>お城情報一覧</h1>
-    <a href="{% url 'operator_oshiro_info:register' %}" class="btn btn-register">新規お城登録</a>
+
+    <a href="{% url 'operator_oshiro_info:register' %}" class="btn btn-register">
+        新規お城登録
+    </a>
+
     <hr style="width: 100%;">
 
     <table class="basic-info-table">
@@ -13,44 +17,34 @@
                 <th>城名</th>
                 <th>築城年</th>
                 <th>住所</th>
-                <th>遺構</th>
                 <th>構造</th>
+                <th>遺構</th>
                 <th>操作</th>
             </tr>
         </thead>
+
         <tbody>
+            {% for o in oshiros %}
             <tr class="basic-info-card">
-                <td class="castle-name"><strong>鶴ヶ城</strong></td>
-                <td class="castle-row">1384年</td>
-                <td class="castle-row">福島県会津若松市追手町1-1</td>
-                <td class="castle-row">石垣、土塁、堀</td>
-                <td class="castle-row">梯郭式平山城</td>
+                <td class="castle-name"><strong>{{ o.oshiro_name }}</strong></td>
+                <td class="castle-row">{{ o.built_year }}年</td>
+                <td class="castle-row">{{ o.address }}</td>
+                <td class="castle-row">{{ o.structure }}</td>
+                <td class="castle-row">{{ o.ruins }}</td>
                 <td class="basic-info-actions">
-                    <a href="{% url 'operator_oshiro_info:update' %}" class="btn-update">更新</a>
+                    <!-- ✅ update は ?id= が必要 -->
+                    <a href="{% url 'operator_oshiro_info:update' %}?id={{ o.id }}" class="btn-update">
+                        更新
+                    </a>
                 </td>
             </tr>
-
-            <tr class="basic-info-card">
-                <td class="castle-name"><strong>二本松城</strong></td>
-                <td class="castle-row">1414年</td>
-                <td class="castle-row">福島県二本松市郭内3丁目</td>
-                <td class="castle-row">石垣、復元箕輪門</td>
-                <td class="castle-row">梯郭式平山城</td>
-                <td class="basic-info-actions">
-                    <a href="{% url 'operator_oshiro_info:update' %}" class="btn-update">更新</a>
+            {% empty %}
+            <tr>
+                <td colspan="6" style="text-align:center; padding:16px;">
+                    登録されているお城情報はありません。
                 </td>
             </tr>
-
-            <tr class="basic-info-card">
-                <td class="castle-name"><strong>白河小峰城</strong></td>
-                <td class="castle-row">1340年頃</td>
-                <td class="castle-row">福島県白河市郭内</td>
-                <td class="castle-row">石垣、復元三重櫓</td>
-                <td class="castle-row">梯郭式平山城</td>
-                <td class="basic-info-actions">
-                    <a href="{% url 'operator_oshiro_info:update' %}" class="btn-update">更新</a>
-                </td>
-            </tr>
+            {% endfor %}
         </tbody>
     </table>
 </div>
