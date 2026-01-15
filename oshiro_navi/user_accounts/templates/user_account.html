@@ -8,16 +8,27 @@
     <title>お城ナビ | 利用者TOP</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel="stylesheet">
+    
+
+    <!-- エラーメッセージ用 -->
+    <style>
+        .error-text {
+            color: #ff4b4b;
+            font-size: 12px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            text-align: left;
+            width: 100%;
+            font-weight: bold;
+        }
+        
+        form input {
+            margin-bottom: 5px; 
+        }
+    </style>
 </head>
+
 <body>
-    <!-- エラーメッセージ -->
-    {% if messages %}
-        <ul class="messages" style="position:fixed; top:0; left:0; width:100%; z-index:9999; list-style:none; padding:0;">
-            {% for message in messages %}
-            <li style="background: #ffaaaa; padding: 10px; text-align: center;">{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
 
     <div class="container" id="container">
 
@@ -29,10 +40,29 @@
 
                 <div class="title"><h1>Signup here</h1></div>
                 
-                <input type="text" name="username" placeholder="アカウント名" id="name" required>
-                <input type="email" name="email" placeholder="Email" id="email" required>
-                <input type="password" name="password" placeholder="Pass" id="pass" required>
-                <button type="submit">Signup</button>
+                <!-- アカウント名 -->
+                <input type="text" name="username" placeholder="アカウント名" id="name" value="{{ values.username|default:'' }}">
+                {% if errors.signup_username %}
+                    <div class="error-text">{{ errors.signup_username }}</div>
+                {% endif %}
+
+                <!-- Email -->
+                <input type="email" name="email" placeholder="Email" id="email_signup" value="{{ values.email|default:'' }}">
+                {% if errors.signup_email %}
+                    <div class="error-text">{{ errors.signup_email }}</div>
+                {% endif %}
+
+                <!-- Password -->
+                <input type="password" name="password" placeholder="Pass" id="pass_signup">
+                {% if errors.signup_password %}
+                    <div class="error-text">{{ errors.signup_password }}</div>
+                {% endif %}
+                
+                {% if errors.signup_common %}
+                    <div class="error-text">{{ errors.signup_common }}</div>
+                {% endif %}
+
+                <button type="submit" style="margin-top: 10px;">Signup</button>
                
             </form>
         </div>
@@ -45,8 +75,22 @@
 
                 <div class="title"><h1>Login here</h1></div>
                 
-                <input type="email" name="email" placeholder="Email" id="email" required>
-                <input type="password" name="password" placeholder="Pass" id="pass" required>
+                <!-- Email -->
+                <input type="email" name="email" placeholder="Email" id="email_login" value="{{ values.email|default:'' }}">
+                {% if errors.login_email %}
+                    <div class="error-text">{{ errors.login_email }}</div>
+                {% endif %}
+
+                <!-- Password -->
+                <input type="password" name="password" placeholder="Pass" id="pass_login">
+                {% if errors.login_password %}
+                    <div class="error-text">{{ errors.login_password }}</div>
+                {% endif %}
+
+                <!-- エラーメッセージ -->
+                {% if errors.login_common %}
+                    <div class="error-text" style="text-align: center;">{{ errors.login_common }}</div>
+                {% endif %}
 
                 <div class="content">
                     <div class="checkbox">
@@ -62,8 +106,6 @@
             </form>
         </div>
 
-
-        
         <div class="overlay-container">
             <div class="overlay">
                 <div class="overlay-panel overlay-left">
@@ -80,8 +122,23 @@
         </div>
     </div>
 
-    
     <script src="{% static 'js/main.js' %}"></script>
+
+
+    
+    <!-- エラー発生時に正しいパネルを表示するためのスクリプト -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.getElementById('container');
+            const activeForm = "{{ active_form }}"; // views.pyから渡された値
+
+            if (activeForm === 'signup') {
+                container.classList.add('right-panel-active');
+            } else {
+                container.classList.remove('right-panel-active');
+            }
+        });
+    </script>
 
 </body>
 </html>

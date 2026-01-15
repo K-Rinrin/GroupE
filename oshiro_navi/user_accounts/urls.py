@@ -11,6 +11,7 @@ urlpatterns = [
 
     # ログアウト画面
     path('logout/', UserlogoutView.as_view(), name='logout'),
+    path('logout_check/', UserlogoutCheckView.as_view(), name='logout_check'),
 
     # サインアップ・ログイン画面
     path('account/', UserAccountView.as_view(), name='account'),

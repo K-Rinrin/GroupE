@@ -1,0 +1,19 @@
+{% extends "user_base.html" %}
+{% load static %}
+
+{% block title %}ログアウト{% endblock %}
+
+{% block content %}
+
+    <div class="mypage-container">
+        <h1 class="page-title">ログアウトしますか？</h1>
+
+        <div class="button-group">
+            <a href="{% url 'user_accounts:logout' %}" class="btn-submit">ログアウト</a>
+            <a href="{% url 'user_accounts:top' %}" class="btn-cancel">戻る</a>
+        </div>
+
+    </div>
+
+
+{% endblock %}
