@@ -25,7 +25,7 @@
                         <th>ID</th>
                         <th>名前</th>
                         <th>メールアドレス</th>
-                        <th>ロール</th>
+                        <th>担当お城</th>
                         <th>最終ログイン</th>
                         <th class="txt-center">操作</th>
                     </tr>
@@ -35,18 +35,41 @@
                     {% for account in object_list %}
                     <tr>
                         <td>{{ account.id }}</td>
-                        <td>{{ account.name }}</td>
+                        <td>{{ account.username }}</td>
                         <td>{{ account.email }}</td>
-                        <td>{{ account.get_role_display }}</td> <td>{{ account.last_login|date:"Y-m-d H:i" }}</td>
+                        
+                        <td>
+                            {% with admin=account.admin_profile %}
+                                {% if admin %}
+                                    {% if admin.oshiro_management1 %}{{ admin.oshiro_management1.oshiro_name }}<br>{% endif %}
+                                    {% if admin.oshiro_management2 %}{{ admin.oshiro_management2.oshiro_name }}<br>{% endif %}
+                                    {% if admin.oshiro_management3 %}{{ admin.oshiro_management3.oshiro_name }}<br>{% endif %}
+                                    {% if admin.oshiro_management4 %}{{ admin.oshiro_management4.oshiro_name }}<br>{% endif %}
+                                    {% if admin.oshiro_management5 %}{{ admin.oshiro_management5.oshiro_name }}<br>{% endif %}
+                                    
+                                    {% if not admin.oshiro_management1 %}
+                                        <span style="color: #ccc;">未設定</span>
+                                    {% endif %}
+                                {% else %}
+                                    <span style="color: #ccc;">担当無し</span>
+                                {% endif %}
+                            {% endwith %}
+                        </td>
+
+                        <td>{{ account.last_login|date:"Y-m-d H:i" }}</td>
                         <td class="txt-center">
-                            <a href="{% url 'operator_accounts:account_delete' account.pk %}" class="btn btn-delete">削除</a>
+                            <a href="{% url 'operator_accounts:account_delete' account.pk %}" 
+                                class="btn btn-delete" 
+                                onclick="return confirm('本当にこのアカウント（{{ account.username }}）を削除してもよろしいですか？');">
+                                削除
+                            </a>
                         </td>
                     </tr>
                     {% empty %}
                     <tr>
-                        <td colspan="6" class="txt-center">データが見つかりませんでした。</td>
+                        <td colspan="7" class="txt-center">データが見つかりませんでした。</td>
                     </tr>
-                    {% endfor %}
+                    {% endfor %} 
                 </tbody>
             </table>
         </div>

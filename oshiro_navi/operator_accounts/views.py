@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import CreateView, DeleteView
+from django.views.generic import CreateView, DeleteView,ListView
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from operator_oshiro_info.models import OshiroInfo
@@ -27,8 +27,20 @@ class OperatorContactForm(TemplateView):
 class OperatorContactConfirm(TemplateView):
     template_name = "operator_contact_confirm.html"
 
-class AdminAccountListView(TemplateView):
-    template_name = "admin_account_list.html"
+class AdminAccountListView(ListView):
+    model = User # get_user_model()したもの
+    template_name = 'admin_account_list.html'
+
+    def get_queryset(self):
+        # accountに関連するadmin_profile、さらにお城の名前を一気に取得
+        return super().get_queryset().select_related(
+            'admin_profile',
+            'admin_profile__oshiro_management1',
+            'admin_profile__oshiro_management2',
+            'admin_profile__oshiro_management3',
+            'admin_profile__oshiro_management4',
+            'admin_profile__oshiro_management5',
+        ).filter(is_staff=True) # 管理者のみ表示
 
 class AdminAccountCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     form_class = AdminUserCreateForm
@@ -48,14 +60,17 @@ class AdminAccountCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView
 class AdminAccountCreateSuccessView(TemplateView):
     template_name = "admin_account_create_success.html"
 
-class AdminAccountDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+class AdminAccountDeleteView(DeleteView):
     model = User
-    template_name = "admin_account_delete.html"
     success_url = reverse_lazy('operator_accounts:account_delete_success')
 
-    def test_func(self):
-        # 運営（スーパーユーザー）のみ実行可能
-        return self.request.user.is_superuser
+    template_name = 'admin_account_list.html' 
+
+    def get(self, request, *args, **kwargs):
+        return self.post(request, *args, **kwargs)
+    
+    def post(self, request, *args, **kwargs):
+        return self.delete(request, *args, **kwargs)
 
 class AdminAccountDeleteSuccessView(TemplateView):
     template_name = "admin_account_delete_success.html"
