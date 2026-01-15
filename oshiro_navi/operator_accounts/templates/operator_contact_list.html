@@ -1,0 +1,56 @@
+{% extends "operator_base.html" %}
+{% block title %}お問い合わせ一覧{% endblock %}
+
+{% block content %}
+<div class="content-container">
+    <h1>お問い合わせ一覧</h1>
+    <hr style="width: 100%;">
+
+    <table class="basic-info-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>E-mail</th>
+                <th>名前</th>
+                <th>件名</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="basic-info-card">
+                <td class="castle-name"><strong>鶴ヶ城</strong></td>
+                <td class="castle-row">1384年</td>
+                <td class="castle-row">福島県会津若松市追手町1-1</td>
+                <td class="castle-row">石垣、土塁、堀</td>
+                <td class="castle-row">梯郭式平山城</td>
+                <td class="basic-info-actions">
+                    <a href="{% url 'operator_oshiro_info:update' %}" class="btn-update">更新</a>
+                </td>
+            </tr>
+
+            <tr class="basic-info-card">
+                <td class="castle-name"><strong>二本松城</strong></td>
+                <td class="castle-row">1414年</td>
+                <td class="castle-row">福島県二本松市郭内3丁目</td>
+                <td class="castle-row">石垣、復元箕輪門</td>
+                <td class="castle-row">梯郭式平山城</td>
+                <td class="basic-info-actions">
+                    <a href="{% url 'operator_oshiro_info:update' %}" class="btn-update">更新</a>
+                </td>
+            </tr>
+
+            <tr class="basic-info-card">
+                <td class="castle-name"><strong>白河小峰城</strong></td>
+                <td class="castle-row">1340年頃</td>
+                <td class="castle-row">福島県白河市郭内</td>
+                <td class="castle-row">石垣、復元三重櫓</td>
+                <td class="castle-row">梯郭式平山城</td>
+                <td class="basic-info-actions">
+                    <a href="{% url 'operator_oshiro_info:update' %}" class="btn-update">更新</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends 'operator_base.html' %}
+{% load static %}
+{% block title %}お問い合わせ{% endblock %}
+{% block content %}
+
+<div class="content-container">
+        <h1 class="page-title">返信がっ完了しました</h1>
+        <a href="{% url 'operator_accounts:top' %}" class="btn btn-cancel">戻る</a>
+</div>
+
+{% endblock %}

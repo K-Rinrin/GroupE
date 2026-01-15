@@ -3,17 +3,9 @@
 {% block title %}お問い合わせ{% endblock %}
 {% block content %}
 
-
-<form action="{% url 'admin_accounts:contact_confirm' %}" method="GET" enctype="multipart/form-data">
+<div class="content-container">
+	<form action="{% url 'admin_accounts:contact_confirm' %}" method="GET" enctype="multipart/form-data">
 		<h1 class="title text-center mb-4">お困りでしょうか</h1>
-
-			<!-- Name -->
-			<div class="form-group position-relative">
-				<label for="formName" class="d-block">
-					<i class="icon" data-feather="user"></i>
-				</label>
-				<input type="text" id="formName" class="form-control form-control-lg thick" placeholder="Name">
-			</div>
 
 			<!-- E-mail -->
 			<div class="form-group position-relative">
@@ -22,10 +14,18 @@
 				</label>
 				<input type="email" id="formEmail" class="form-control form-control-lg thick" placeholder="E-mail">
 			</div>
+            
+			<!-- 件名 -->
+			<div class="form-group position-relative">
+				<label for="formSubject" class="d-block">
+					<i class="icon" data-feather="mail"></i>
+				</label>
+				<input type="text" id="formSubject" class="form-control form-control-lg thick" placeholder="件名">
+			</div>
 
-			<!-- Message -->
+			<!-- お問い合わせ内容 -->
 			<div class="form-group message">
-				<textarea id="formMessage" class="form-control form-control-lg" rows="7" placeholder="Mensagem"></textarea>
+				<textarea id="formMessage" class="form-control form-control-lg" rows="7" placeholder="お問い合わせ内容"></textarea>
 			</div>
 		
 			<!-- Submit btn -->
@@ -33,5 +33,5 @@
 				<button type="submit" class="btn btn-register" tabIndex="-1">送る</button>
 			</div>
 	</form>
-
+</div>
 {% endblock %}
