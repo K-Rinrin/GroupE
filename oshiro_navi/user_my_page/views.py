@@ -15,7 +15,10 @@ class MyPageTopView(LoginRequiredMixin, View):
 class ProfileEditView(LoginRequiredMixin, View):
     def get(self, request):
         profile, _ = UserProfile.objects.get_or_create(account=request.user)
-        return render(request, 'user_profile.html', {'user': profile})
+        # 変数名を 'user' から 'profile' に変更
+        return render(request, 'user_profile.html', {
+            'profile': profile 
+        })
 
     def post(self, request):
         profile, _ = UserProfile.objects.get_or_create(account=request.user)
@@ -27,7 +30,9 @@ class ProfileEditView(LoginRequiredMixin, View):
         if not bio_data or bio_data.strip() == "":
             messages.error(request, "自己紹介を入力してください")
             profile.user_about = ""  # 画面上の表示を空にする
-            return render(request, 'user_profile.html', {'user': profile})
+            return render(request, 'user_profile.html', {
+            'profile': profile
+        })
 
         # DB更新
         profile.user_about = bio_data

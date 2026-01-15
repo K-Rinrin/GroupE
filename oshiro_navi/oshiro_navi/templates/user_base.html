@@ -8,10 +8,21 @@
     <link rel="stylesheet" href="{% static 'css/user_base.css' %}">
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+    
+    <style>
+        /* アイコン画像を丸く、サイズを揃えるためのスタイル */
+        .user-icon-img {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%; /* 正円にする */
+            object-fit: cover;  /* 縦横比を維持して切り抜き */
+            vertical-align: middle;
+            margin-right: 5px; /* テキストとの間隔 */
+        }
+    </style>
 </head>
 
 <body> 
-<!-- コンテナ! -->
 <div class="user-container">
     <div class="logo_content">
         <a href="{% url 'user_accounts:top' %}" class="logo">
@@ -26,7 +37,6 @@
                 <span class="link_name">お城リスト</span>
             </a>
         </li>
-
         <li>
             <a href="{% url 'user_event_info:event_info' %}">
                 <i class="material-symbols-outlined">calendar_month</i>
@@ -46,15 +56,19 @@
             </a>
         </li>
     </ul>
+
     <div class="dropdown">
-        <a href="" class="dropdown-btn">
-            <i class="material-symbols-outlined">account_circle</i>
+        <a href="#" class="dropdown-btn">
+            {% if user.is_authenticated and user.user_profile.profile_image %}
+                <img src="{{ user.user_profile.profile_image.url }}" alt="ユーザーアイコン" class="user-icon-img">
+            {% else %}
+                <i class="material-symbols-outlined">account_circle</i>
+            {% endif %}
             <span class="link_name">マイページ</span>
         </a>
 
-        <!-- ▼ ドロップダウンメニュー ▼ -->
         <ul class="dropdown-menu">
-            <li> <a href="{% url 'usermy_page:profile' %}" >プロフィール</a></li>
+            <li><a href="{% url 'usermy_page:profile' %}">プロフィール</a></li>
             <li><a href="{% url 'usermy_page:oshirostampregistar' %}">お城スタンプ</a></li>
             <li><a href="{% url 'usermy_page:mylistregistar' %}">お城マイリスト</a></li>
             <li><a href="{% url 'user_accounts:logout_check' %}">ログアウト</a></li>
@@ -62,22 +76,11 @@
     </div>
 </div>
 
-<!-- ▲ サイドバー（共通） ▲ -->
-
-
-<!-- ▼ ページごとの中身を入れる部分 ▼ -->
 <div class="home_content" id="no name">
     {% block content %}
     {% endblock %}
-
 </div>
-<!-- ▲ ページごとの中身 ▲ -->
-
-
 
 <script src="{% static 'JS/user.js' %}"></script>
-
 </body>
 </html>
-
-
