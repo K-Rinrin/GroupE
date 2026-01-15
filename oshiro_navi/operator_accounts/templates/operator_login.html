@@ -9,19 +9,30 @@
 </head>
 
 <body> 
-    <div class="login_container">
-        <h1>運営アカウントに<br>ログインしてください</h1>
-        <form class="login_form" action="{% url 'operator_accounts:top' %}" method="GET" enctype="multipart/form-data">
-            <span class="login-span">
-                <label for="id" class="label">ID</label>
-                <input type="text" name="id" id="id"/></span>
-            <span class="login-span">
-                <label for="pass" class="label">Pass</label>
-                <input type="pass" name="pass" id="pass"/></span>
-            <span class="span"><a href="#">パスワードを忘れましたか?</a></span>
-            <input class="btn btn-register" type="submit" value="Login" />
-        </form>
-    </div>
+<div class="login_container">
+    <h1>運営アカウントに<br>ログインしてください</h1>
+
+    {% if error %}
+        <p style="color: red; text-align: center;">{{ error }}</p>
+    {% endif %}
+
+    <form class="login_form" action="{% url 'operator_accounts:operator_login' %}" method="POST">
+        {% csrf_token %}
+        
+        <span class="login-span">
+            <label for="id" class="label">ID</label>
+            <input type="text" name="id" id="id" value="{{ prev_id|default:'' }}" required/>
+        </span>
+        
+        <span class="login-span">
+            <label for="pass" class="label">Pass</label>
+            <input type="password" name="pass" id="pass" required/>
+        </span>
+
+        <span class="span"><a href="#">パスワードを忘れましたか?</a></span>
+        <input class="btn btn-register" type="submit" value="Login" />
+    </form>
+</div>
 
 </body>
 </html>

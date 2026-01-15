@@ -6,6 +6,10 @@ from django.views.generic.base import TemplateView
 from django.urls import reverse_lazy
 from .forms import AdminUserCreateForm
 from django.contrib.auth import get_user_model
+from django.shortcuts import render, redirect
+from django.views import View
+from django.contrib.auth import authenticate, login
+from django.urls import reverse
 
 # Create your views here.
 User = get_user_model()
@@ -49,8 +53,34 @@ class AdminAccountDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView
 class AdminAccountDeleteSuccessView(TemplateView):
     template_name = "admin_account_delete_success.html"
 
-class OperatorLoginView(LoginView):
-    template_name = "operator_login.html"
+# ログイン画面
+class OperatorLoginView(View):
+    def get(self, request):
+        # すでにログイン済みならトップへ飛ばす
+        if request.user.is_authenticated:
+            return redirect('operator_accounts:top')
+        return render(request, 'operator_login.html')
 
+    def post(self, request):
+        admin_id = request.POST.get('id')
+        admin_pass = request.POST.get('pass')
+
+        # 1. ユーザーを認証する（DjangoのUserモデルと照合）
+        user = authenticate(request, username=admin_id, password=admin_pass)
+
+        if user is not None:
+            # 認証成功した場合
+            login(request, user)
+            return redirect('operator_accounts:top')
+        else:
+            # 認証失敗した場合
+            context = {
+                'error': 'IDまたはパスワードが正しくありません。',
+                'prev_id': admin_id,
+            }
+            return render(request, 'operator_login.html', context)
+        
+
+# ログアウト画面
 class OperatorLogoutView(LogoutView):
     template_name = "operator_logout.html"

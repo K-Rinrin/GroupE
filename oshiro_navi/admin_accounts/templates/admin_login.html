@@ -9,19 +9,29 @@
 </head>
 
 <body> 
-    <div class="login_container">
-        <h1>管理者アカウントに<br>ログインしてください</h1>
-        <form class="login_form" action="{% url 'admin_accounts:top' %}" method="GET" enctype="multipart/form-data">
-            <span class="login-span">
-                <label for="id" class="label">ID</label>
-                <input type="text" name="id" id="id"/></span>
-            <span class="login-span">
-                <label for="pass" class="label">Pass</label>
-                <input type="pass" name="pass" id="pass"/></span>
-            <span class="span"><a href="#">パスワードを忘れましたか?</a></span>
-            <input class="btn btn-register" type="submit" value="Login" />
-        </form>
-    </div>
+<div class="login_container">
+    <h1>管理者アカウントに<br>ログインしてください</h1>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <p style="color: red;">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
 
+    <form class="login_form" method="POST" action="{% url 'admin_accounts:login' %}">
+        {% csrf_token %} <span class="login-span">
+            <label for="id" class="label">ID</label>
+            <input type="text" name="id" id="id" required/>
+        </span>
+        
+        <span class="login-span">
+            <label for="pass" class="label">Pass</label>
+            <input type="password" name="pass" id="pass" required/>
+        </span>
+        
+        <span class="span"><a href="#">パスワードを忘れましたか?</a></span>
+        <input class="btn btn-register" type="submit" value="Login" />
+    </form>
+</div>
 </body>
 </html>
