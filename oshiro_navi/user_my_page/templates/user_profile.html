@@ -11,16 +11,15 @@
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
 
-            <!-- 1. プロフィール画像エリア  -->
             <div class="form-group">
                 <label class="form-label">プロフィール画像</label>
                 
                 <div class="image-upload-area">
                     <div class="image-preview">
-                        {% if user.icon %}
-                            <img src="{{ user.icon.url }}" alt="現在の画像">
+                        {% if user.profile_image %}
+                         <img src="{{ user.profile_image.url }}" alt="現在の画像">
                         {% else %}
-                            <span class="no-image-text">No Image</span>
+                         <span class="no-image-text">No Image</span>
                         {% endif %}
                     </div>
                     
@@ -31,21 +30,29 @@
                 </div>
             </div>
 
-            <!-- 2. アカウント名 -->
             <div class="form-group">
                 <label class="form-label">アカウント名</label>
                 <div class="account-name-text">
-                    {{ user.username }}
-                </div>
+                    {{ user.account.username }} </div>
             </div>
 
-            <!-- 3. 自己紹介 -->
             <div class="form-group">
                 <label for="bio" class="form-label">自己紹介</label>
-                <textarea name="bio" id="bio" rows="5" class="form-textarea" placeholder="ここに自己紹介を入力してください">{% if user.bio %}{{ user.bio }}{% endif %}</textarea>
+
+                {% if messages %}
+                    <ul class="messages" style="list-style: none; padding: 0;">
+                        {% for message in messages %}
+                            {% if message.tags == "error" %}
+                                <li style="color: #ff0000; font-weight: bold; margin-bottom: 10px;">
+                                    ⚠️ {{ message }}
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                <textarea name="bio" id="bio" rows="5" class="form-textarea" placeholder="ここに自己紹介を入力してください">{% if user.user_about %}{{ user.user_about }}{% endif %}</textarea>
             </div>
 
-            <!-- 4. ボタンエリア -->
             <div class="button-group">
                 <button type="submit" class="btn-submit">プロフィールを更新</button>
                 <a href="{% url 'usermy_page:mypage' %}" class="btn-cancel">マイページに戻る</a>
