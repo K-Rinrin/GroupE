@@ -1,46 +1,95 @@
 <!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <title>VOICEVOX 読み上げテスト</title>
-</head>
-<body>
-    <h1>VOICEVOX AI読み上げ</h1>
-    <input type="text" id="text" value="こんにちは！自然な日本語で読み上げますわよ。" style="width: 300px;">
-    <button onclick="playVoicevox()">読み上げる</button>
+<meta charset="utf-8" />
+<h1>VOICEVOX API をブラウザで使って TTS</h1>
+<label
+>テキスト
+<input id="text" size="60" value="こんにちは、VOICEVOXのテストです。"
+/></label>
+<br />
+<label
+>スピーカー
+<select id="speaker"></select
+></label>
+<button id="speak">再生</button>
+<br /><audio id="player" controls></audio>
 
-    <script>
-        async function playVoicevox() {
-            const text = document.getElementById('text').value;
-            // speaker=2 は「四国めたん（あまあま）」などの女性声です
-            const speakerId = 2; 
-            const baseUrl = "http://localhost:50021";
+<script>
+const BASE = "http://127.0.0.1:50021";
+const ALLOWED_STYLE_IDS = new Set([1, 3, 7, 22, 38, 76]);
+const DEFAULT_STYLE_ID = 3;
 
-            try {
-                // 1. 音声合成用のクエリを作成
-                const queryRes = await fetch(`${baseUrl}/audio_query?text=${encodeURIComponent(text)}&speaker=${speakerId}`, {
-                    method: 'POST'
-                });
-                const queryData = await queryRes.json();
+async function loadSpeakers() {
+    try {
+    const res = await fetch(`${BASE}/speakers`);
+    if (!res.ok) throw new Error("speakers API failed");
+    const data = await res.json();
 
-                // 2. クエリを元に音声波形を生成
-                const synthRes = await fetch(`${baseUrl}/synthesis?speaker=${speakerId}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(queryData)
-                });
+    const zunda = data.find((sp) => sp.name === "ずんだもん");
+    if (!zunda) {
+        alert(
+        "ずんだもんが見つかりませんでした。VOICEVOXエンジンのスピーカー一覧を確認してください。"
+        );
+        return;
+    }
 
-                // 3. 音声データを取得して再生
-                const blob = await synthRes.blob();
-                const audioUrl = URL.createObjectURL(blob);
-                const audio = new Audio(audioUrl);
-                audio.play();
+    const sel = document.getElementById("speaker");
+    sel.innerHTML = "";
+    const styles = zunda.styles.filter((st) => ALLOWED_STYLE_IDS.has(st.id));
+    if (styles.length === 0) {
+        alert("利用するスタイルID(1,3,7,22,38,76)が見つかりませんでした。");
+        return;
+    }
 
-            } catch (error) {
-                alert("VOICEVOXアプリが起動しているか確認してください。");
-                console.error(error);
-            }
-        }
-    </script>
-</body>
-</html>
+    styles.forEach((st) => {
+        const opt = document.createElement("option");
+        opt.value = st.id;
+        opt.textContent = `ずんだもん - ${st.name} (id:${st.id})`;
+        sel.appendChild(opt);
+    });
+
+    sel.value = styles.some((s) => s.id === DEFAULT_STYLE_ID)
+        ? String(DEFAULT_STYLE_ID)
+        : String(styles[0].id);
+    } catch (e) {
+    console.error(e);
+    alert(
+        "スピーカー情報の取得に失敗しました。VOICEVOXエンジンが起動しているか確認してください。"
+    );
+    }
+}
+
+async function synthesize(text, speaker) {
+    const qRes = await fetch(
+    `${BASE}/audio_query?text=${encodeURIComponent(text)}&speaker=${speaker}`,
+    { method: "POST" }
+    );
+    if (!qRes.ok) throw new Error("audio_query failed");
+    const query = await qRes.json();
+
+    const sRes = await fetch(`${BASE}/synthesis?speaker=${speaker}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(query),
+    });
+    if (!sRes.ok) throw new Error("synthesis failed");
+    const blob = await sRes.blob(); // audio/wav
+    const url = URL.createObjectURL(blob);
+    const audio = document.getElementById("player");
+    audio.src = url;
+    try {
+    await audio.play();
+    } catch {
+    // 省略
+    }
+}
+
+document.getElementById("speak").addEventListener("click", () => {
+    const text = document.getElementById("text").value || "テキスト未入力";
+    let speaker =
+    Number(document.getElementById("speaker").value) || DEFAULT_STYLE_ID;
+    if (!ALLOWED_STYLE_IDS.has(speaker)) speaker = DEFAULT_STYLE_ID;
+    synthesize(text, speaker).catch((err) => alert(err.message));
+});
+
+loadSpeakers();
+</script>
