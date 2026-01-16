@@ -2,7 +2,7 @@ import calendar
 from datetime import date, timedelta
 from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from event_info_management.models import EventInfo
+from event_info_management.models import OperatorEvent,AdminEvent
 from django.views.generic import DetailView 
 
 
@@ -26,7 +26,7 @@ class EventCalendarView(LoginRequiredMixin, TemplateView):
         next_month_date = (first_day_of_month + timedelta(days=32)).replace(day=1)
 
         # 4. イベントの取得
-        events = EventInfo.objects.filter(
+        events = AdminEvent.objects.filter(
             public_settings=True,
             start_date__year=year,
             start_date__month=month
@@ -57,7 +57,7 @@ class EventDetailView(LoginRequiredMixin, DetailView):
     イベント詳細画面用のView。
     カレンダーから渡された pk (プライマリキー) を元に 1件のイベント情報を取得する。
     """
-    model = EventInfo
+    model = AdminEvent
     template_name = "event_detail.html" # 詳細画面のHTMLファイル名
     context_object_name = "event"       # HTML内で使う変数名 {{ event.xxx }}
 
@@ -66,4 +66,4 @@ class EventDetailView(LoginRequiredMixin, DetailView):
         セキュリティ設定：
         公開設定(public_settings)がTrueのイベントのみ取得可能にする。
         """
-        return EventInfo.objects.filter(public_settings=True)
+        return AdminEvent.objects.filter(public_settings=True)

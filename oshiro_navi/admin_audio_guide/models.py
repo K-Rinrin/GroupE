@@ -32,10 +32,6 @@ class AudioGuide(models.Model):
         help_text="ガイド内容の説明"
     )
 
-    qr_code = models.ImageField(
-        upload_to="audio_guide_qr/",
-        help_text="再生用QRコード画像（必須）"
-    )
 
     class Meta:
         db_table = "audio_guide"

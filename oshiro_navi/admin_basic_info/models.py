@@ -22,11 +22,11 @@ class BasicInfo(models.Model):
     )
 
    # 営業開始時間
-    business_opening_hours = models.DateTimeField(
+    business_opening_hours = models.TimeField(
         help_text="営業開始時間"
     )
     # 営業終了時間
-    business_closing_hours = models.DateTimeField(
+    business_closing_hours = models.TimeField(
         help_text="営業終了時間"
     )
 
@@ -64,10 +64,10 @@ class BasicInfo(models.Model):
         help_text="御城印説明"
     )
 
-    # MapField 相当。JSON でピン情報などを保存する想定。
-    stamp_map = models.JSONField(
-        help_text="周辺MAP情報"
-    )
+    # # MapField 相当。JSON でピン情報などを保存する想定。
+    # stamp_map = models.JSONField(
+    #     help_text="周辺MAP情報"
+    # )
 
     class Meta:
         db_table = "basic_info"
