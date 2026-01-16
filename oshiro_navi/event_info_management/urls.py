@@ -17,9 +17,9 @@ urlpatterns = [
     path('operator/list/', OperatorEventInfoListView.as_view(), name='operator_event_info_list'),
     path('operator/register/',OperatorEventInfoRegisterView.as_view(), name='operator_event_info_register'),
     path('operator/register_success/',OperatorEventInfoRegisterSuccessView.as_view(), name='operator_event_info_register_success'),
-    path('operator/update/',OperatorEventInfoUpdateView.as_view(), name='operator_event_info_update'),
+    path('operator/update/<int:pk>/',OperatorEventInfoUpdateView.as_view(), name='operator_event_info_update'),
     path('operator/update_success/',OperatorEventInfoUpdateSuccessView.as_view(), name='operator_event_info_update_success'),
-    path('operator/delete/',OperatorEventInfoDeleteView.as_view(), name='operator_event_info_delete'),
+    path('operator/delete/<int:pk>/',OperatorEventInfoDeleteView.as_view(), name='operator_event_info_delete'),
     path('operator/delete_check/',OperatorEventInfoDeleteCheckView.as_view(), name='operator_event_info_delete_check'),
     path('operator/delete_success/',OperatorEventInfoDeleteSuccessView.as_view(), name='operator_event_info_delete_success'),
 ]

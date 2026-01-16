@@ -2,46 +2,71 @@
 {% block title %}基本情報一覧{% endblock %}
 
 {% block content %}
-<h2>基本情報一覧</h2>
+<div class="content-container basic-info-list">
+    <h1>基本情報一覧</h1>
+    <hr style="width: 100%;">
 
-<table border="1" cellpadding="8" cellspacing="0">
-  <thead>
-    <tr>
-      <th>お城名</th>
-      <th>入場料</th>
-      <th>営業時間</th>
-      <th>操作</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for row in rows %}
-      <tr>
-        <td>{{ row.oshiro.oshiro_name }}</td>
+    <table class="basic-info-table">
+        <thead>
+            <tr>
+                <th>城名</th>
+                <th>営業時間</th>
+                <th>入場料</th>
+                <th>アクセス</th>
+                <th>操作</th>
+            </tr>
+        </thead>
 
-        <td>
-          {% if row.basic %}
-            {{ row.basic.admission }} 円
-          {% else %}
-            -
-          {% endif %}
-        </td>
+        <tbody>
+            {% for row in rows %}
+            <tr class="basic-info-card">
+                <!-- 城名（OshiroInfo側） -->
+                <td class="castle-name"><strong>{{ row.oshiro.oshiro_name }}</strong></td>
 
-        <td>
-          {% if row.basic %}
-            {{ row.basic.business_opening_hours|date:"H:i" }} ～ {{ row.basic.business_closing_hours|date:"H:i" }}
-          {% else %}
-            -
-          {% endif %}
-        </td>
+                <!-- 営業時間（BasicInfo側：HH:MM表示） -->
+                <td class="castle-row">
+                    {% if row.basic %}
+                        {{ row.basic.business_opening_hours|date:"H:i" }}-{{ row.basic.business_closing_hours|date:"H:i" }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
 
-        <td>
-          <a href="{% url 'admin_basic_info:basic_info_update' %}?oshiro_id={{ row.oshiro.id }}">
-            更新
-          </a>
-        </td>
-      </tr>
-    {% endfor %}
-  </tbody>
-</table>
+                <!-- 入場料 -->
+                <td class="castle-row">
+                    {% if row.basic %}
+                        {{ row.basic.admission }}円
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+
+                <!-- アクセス -->
+                <td class="castle-row">
+                    {% if row.basic %}
+                        {{ row.basic.access_info }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+
+                <!-- 操作 -->
+                <td class="basic-info-actions">
+                    <a href="{% url 'admin_basic_info:basic_info_update' %}?oshiro_id={{ row.oshiro.id }}"
+                       class="btn-update">
+                        更新
+                    </a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" style="text-align:center; padding:16px;">
+                    基本情報がありません。
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 
 {% endblock %}
