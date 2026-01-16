@@ -1,16 +1,64 @@
 {% extends "user_base.html" %}
 {% load static %}
-{% block title %}{% endblock %}
+{% block title %}イベントカレンダー{% endblock %}
+
 {% block content %}
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <title>イベント一覧</title>
-</head>
-<body>
-    <h1>イベント一覧</h1>
-    <a href="{% url 'user_accounts:top' %}">戻る</a>   
-</body>
-</html>
+<div class="mypage-container">
+    
+    <div class="calendar-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <a href="?year={{ prev_year }}&month={{ prev_month }}" 
+           style="text-decoration: none; background: #eee; padding: 10px 20px; border-radius: 5px; color: #333; font-weight: bold;">
+           &lt; 前の月
+        </a>
+        
+        <h1 class="page-title" style="margin: 0;">{{ year }}年 {{ month }}月</h1>
+        
+        <a href="?year={{ next_year }}&month={{ next_month }}" 
+           style="text-decoration: none; background: #eee; padding: 10px 20px; border-radius: 5px; color: #333; font-weight: bold;">
+           次の月 &gt;
+        </a>
+    </div>
+
+    <table class="calendar-table" style="width: 100%; border-collapse: collapse; background: #fff; table-layout: fixed;">
+        <thead>
+            <tr style="background: #fdf2f2;">
+                <th style="border: 1px solid #ddd; padding: 10px; color: red;">日</th>
+                <th style="border: 1px solid #ddd; padding: 10px;">月</th>
+                <th style="border: 1px solid #ddd; padding: 10px;">火</th>
+                <th style="border: 1px solid #ddd; padding: 10px;">水</th>
+                <th style="border: 1px solid #ddd; padding: 10px;">木</th>
+                <th style="border: 1px solid #ddd; padding: 10px;">金</th>
+                <th style="border: 1px solid #ddd; padding: 10px; color: blue;">土</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for week in month_days %}
+            <tr>
+                {% for day in week %}
+                <td style="border: 1px solid #ddd; height: 100px; vertical-align: top; padding: 5px;">
+                    {% if day != 0 %}
+                        <div style="font-weight: bold; margin-bottom: 5px;">{{ day }}</div>
+                        
+                        {% for d, items in event_dict.items %}
+                            {% if d == day %}
+                                {% for item in items %}
+                                <a href="{% url 'usermy_page:event_detail' item.id %}" 
+                                   style="display: block; background: #d9534f; color: #fff; text-decoration: none; font-size: 11px; padding: 2px 4px; margin-bottom: 2px; border-radius: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                    {{ item.event_info }}
+                                </a>
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="button-group" style="margin-top: 25px;">
+        <a href="{% url 'usermy_page:mypage' %}" class="btn-cancel">マイページに戻る</a>
+    </div>
+</div>
 {% endblock %}
