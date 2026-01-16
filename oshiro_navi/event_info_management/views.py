@@ -1,4 +1,7 @@
 from django.shortcuts import render
+from django.views.generic import CreateView, DeleteView, ListView
+from django.urls import reverse_lazy
+from .models import EventInfo
 from django.views.generic import TemplateView
 
 # Create your views here.
@@ -32,11 +35,23 @@ class AdminEventInfoDeleteSuccessView(TemplateView):
 
 # ここからoperator
 
-class OperatorEventInfoListView(TemplateView):
+class OperatorEventInfoListView(ListView):
+    model = EventInfo
     template_name = "operator_event_info_list.html"
+    context_object_name = 'event_list'
 
-class OperatorEventInfoRegisterView(TemplateView):
+    ordering = ['-start_date']
+
+class OperatorEventInfoRegisterView(CreateView):
+    model = EventInfo
     template_name = "operator_event_info_register.html"
+    fields = ['event_info', 'event_overview', 'venue', 'start_date', 'end_date', 'start_time', 'end_time', 'public_settings']
+    success_url = reverse_lazy('event_info_management:operator_event_info_register_success')
+
+    def form_valid(self, form):
+        # ログインしているオペレーターを自動で保存する場合
+        # form.instance.operoter = self.request.user.operator_profile
+        return super().form_valid(form)
 
 class OperatorEventInfoRegisterSuccessView(TemplateView):
     template_name = "operator_event_info_register_success.html"

@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import CreateView, DeleteView,ListView
-from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.views import LogoutView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from operator_oshiro_info.models import OshiroInfo
 from django.views.generic.base import TemplateView
