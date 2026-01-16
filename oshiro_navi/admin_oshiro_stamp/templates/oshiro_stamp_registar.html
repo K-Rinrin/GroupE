@@ -5,15 +5,15 @@
 {% block content %}
 <div class="content-container">
 <h1>お城スタンプ登録</h1>
-
-    <form action="{% url 'admin_oshiro_stamp:oshiro_stamp_registar_success' %}" method="GET" enctype="multipart/form-data">
-
-        <!-- お城名 -->
+    {% if error %}
+        <p style="color:red; font-weight:bold;">{{ error }}</p>
+    {% endif %}
+    <form action="{% url 'admin_oshiro_stamp:oshiro_stamp_registar_success' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <!-- スタンプ名 -->
         <div class="form-group">
             <label>スタンプ名</label><br>
-            <input type="text"
-                name="castle_name"
-                placeholder="お城ナビアイコンスタンプ">
+            <input type="text" name="castle_name" placeholder="お城ナビアイコンスタンプ">
         </div>
 
         <!-- 画像アップロード -->
@@ -26,9 +26,7 @@
             </div>
 
             <!-- ファイル選択 -->
-            <input type="file"
-                accept="image/*"
-                onchange="previewImage(this)">
+            <input type="file" accept="image/*" onchange="previewImage(this)">
         </div>
 
         <!-- 登録ボタン -->

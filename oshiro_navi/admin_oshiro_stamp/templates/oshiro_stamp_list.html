@@ -4,31 +4,33 @@
 
 {% block content %}
 <div class="content-container">
-<h1>お城スタンプ一覧</h1>
+    <h1>お城スタンプ一覧</h1>
 
-<!-- 新規登録ボタン -->
-<a href="{% url 'admin_oshiro_stamp:oshiro_stamp_registar' %}" class="btn btn-register">＋ 新規スタンプ登録</a>
-<table>
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>スタンプ名</th>
-            <th>お城名</th> 
-            <th>操作</th>
-        </tr>
-    </thead>
-    <tbody>
-        <!-- ダミーデータ例：ここは実際のデータに置き換えて！ -->
-        <tr>
-            <td>1</td>
-            <td>シマエナガ</td>
-            <td>五稜郭</td>
-            <td>
-                <a href="{% url 'admin_oshiro_stamp:oshiro_stamp_registar' %}" class="btn btn-update">更新</a>
-            </td>
-        </tr>
-    </tbody>
-</table>
+    <a href="{% url 'admin_oshiro_stamp:oshiro_stamp_registar' %}" class="btn btn-register">＋ 新規スタンプ登録</a>
+    
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>スタンプ名</th>
+                <th>対象のお城</th> 
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for stamp in stamps %}
+            <tr>
+                <td>{{ stamp.stamp_name }}</td>
+                <td>{{ stamp.oshiro.oshiro_name }}</td>
+                <td>
+                    <a href="#" class="btn btn-delete" style="background-color: #e74c3c; color: white; padding: 5px 10px; border-radius: 4px; text-decoration: none;">削除</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" style="text-align: center;">登録されたスタンプはまだないぞい。</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
-
 {% endblock %}
