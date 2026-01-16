@@ -5,7 +5,11 @@ app_name = "admin_model_course"
 
 urlpatterns = [
     
-    path("list/", views.ModelCouseListView.as_view(), name="model_couse_list"),
+    # お城選択
+    path("search/", views.ModelCouseSearchView.as_view(), name="model_couse_search"),
+    
+    # 一覧表示（お城ID）
+    path('list/<int:oshiro_id>/', views.ModelCouseListView.as_view(), name='model_couse_list'),
 
     # 新規登録
     path("registar/", views.ModelCouseRegistarView.as_view(), name="model_couse_registar"),
