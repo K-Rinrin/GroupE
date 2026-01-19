@@ -1,126 +1,138 @@
 {% extends "admin_base.html" %}
-
-{% block title %}モデルコース更新{% endblock %}
+{% block title %}モデルコース編集 - {{ course.model_course_name }}{% endblock %}
 
 {% block content %}
 
-<h1>モデルコース更新</h1>
+<div class="content-container basic-info-list">
+    <h1>モデルコース編集</h1>
+    <p>対象のお城：{{ oshiro.oshiro_name }}</p>
+    <hr>
 
-<h2>コース基本情報</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
 
-<div>
-    <label>モデルコース名 *</label><br>
-    <input type="text" name="course_name"
-           placeholder="例: 会津若松城とその周辺を巡る1日コース">
+        <h2>コース基本情報</h2>
+
+        <div class="form-group">
+            <label>モデルコース名 *</label><br>
+            <input type="text" name="course_name" required value="{{ course.model_course_name }}"
+                   style="width: 100%; max-width: 500px;">
+        </div>
+
+        <div class="form-group">
+            <label>コース概要 *</label><br>
+            <textarea name="course_overview" rows="4" required style="width: 100%; max-width: 500px;">{{ course.course_overview }}</textarea>
+        </div>
+
+        <div class="form-group">
+            <label>所要時間 * (HH:MM)</label><br>
+            <input type="time" name="required_time" required value="{{ course.required_time|time:'H:i' }}">
+        </div>
+
+        <div class="form-group">
+            <label>距離 (km) *</label><br>
+            <input type="number" step="0.1" name="distance" required value="{{ course.distance }}">
+        </div>
+
+        <div class="form-group">
+            <label>難易度 *</label><br>
+            <select name="difficulty" required>
+                <option value="初心者向け" {% if course.difficulty == "初心者向け" %}selected{% endif %}>初心者向け</option>
+                <option value="短時間滞在者向け" {% if course.difficulty == "短時間滞在者向け" %}selected{% endif %}>短時間滞在者向け</option>
+                <option value="長時間滞在者向け" {% if course.difficulty == "長時間滞在者向け" %}selected{% endif %}>長時間滞在者向け</option>
+            </select>
+        </div>
+
+        <hr>
+
+    
+        <h2>スポット1</h2>
+        <div class="form-group">
+            <label>スポット名</label><br>
+            <input type="text" name="spot1_name" value="{{ course.spot1_name|default:'' }}" style="width: 100%; max-width: 500px;">
+        </div>
+
+        <div class="form-group">
+            <label>短い説明文</label><br>
+            <textarea name="spot1_short" rows="3" style="width: 100%; max-width: 500px;">{{ course.spot1_short|default:'' }}</textarea>
+        </div>
+
+        <div class="form-group">
+            <label>詳細説明文</label><br>
+            <textarea name="spot1_detail" rows="4" style="width: 100%; max-width: 500px;">{{ course.spot1_detail|default:'' }}</textarea>
+        </div>
+
+        <div class="form-group">
+            <label>スポット画像</label><br>
+            {% if course.spot1_image %}
+                <div style="margin-bottom: 5px;">
+                    <img src="{{ course.spot1_image.url }}" alt="現在の画像" style="max-height: 100px;">
+                    <br><small>現在の画像（変更しない場合は選択不要）</small>
+                </div>
+            {% endif %}
+            <input type="file" name="spot1_image" accept="image/*">
+        </div>
+
+        <div class="form-group">
+            <label>補足情報</label><br>
+            <textarea name="spot1_note" rows="2" style="width: 100%; max-width: 500px;">{{ course.spot1_note|default:'' }}</textarea>
+        </div>
+
+        <hr>
+
+        <!-- ▼▼▼ スポット2 (フィールド名に合わせて修正) ▼▼▼ -->
+        <h2>スポット2</h2>
+        <div class="form-group">
+            <label>スポット名</label><br>
+            <input type="text" name="spot2_name" value="{{ course.spot2_name|default:'' }}" style="width: 100%; max-width: 500px;">
+        </div>
+
+        <div class="form-group">
+            <label>短い説明文</label><br>
+            <textarea name="spot2_short" rows="3" style="width: 100%; max-width: 500px;">{{ course.spot2_short|default:'' }}</textarea>
+        </div>
+
+        <div class="form-group">
+            <label>詳細説明文</label><br>
+            <textarea name="spot2_detail" rows="4" style="width: 100%; max-width: 500px;">{{ course.spot2_detail|default:'' }}</textarea>
+        </div>
+
+        <div class="form-group">
+            <label>スポット画像</label><br>
+            {% if course.spot2_image %}
+                <div style="margin-bottom: 5px;">
+                    <img src="{{ course.spot2_image.url }}" alt="現在の画像" style="max-height: 100px;">
+                    <br><small>現在の画像</small>
+                </div>
+            {% endif %}
+            <input type="file" name="spot2_image" accept="image/*">
+        </div>
+
+        <div class="form-group">
+            <label>補足情報</label><br>
+            <textarea name="spot2_note" rows="2" style="width: 100%; max-width: 500px;">{{ course.spot2_note|default:'' }}</textarea>
+        </div>
+
+        <hr>
+
+        <div class="form-actions" style="margin-top: 20px;">
+            <a href="{% url 'admin_model_course:model_couse_list' oshiro_id=oshiro.pk %}" 
+               style="text-decoration: none; color: #666; margin-right: 20px;">
+                キャンセル
+            </a>
+            <button type="submit" class="btn btn-primary"
+                    style="padding: 10px 30px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                更新する
+            </button>
+        </div>
+
+    </form>
 </div>
 
-<div>
-    <label>コース概要 *</label><br>
-    <textarea name="course_overview" rows="4"
-              placeholder="このモデルコースの簡単な紹介文を入力してください。"></textarea>
-</div>
-
-<div>
-    <label>所要時間 *</label><br>
-    <input type="text" name="required_time" placeholder="例: 約5時間">
-</div>
-
-<div>
-    <label>距離 *</label><br>
-    <input type="text" name="distance" placeholder="例: 約4km">
-</div>
-
-<div>
-    <label>難易度 *</label><br>
-    <select name="difficulty">
-        <option value="">選択してください</option>
-        <option value="easy">やさしい</option>
-        <option value="normal">ふつう</option>
-        <option value="hard">むずかしい</option>
-    </select>
-</div>
-
-<hr>
-
-<h2>スポット1</h2>
-
-<div>
-    <label>スポット名 *</label><br>
-    <input type="text" name="spot1_name" placeholder="例: 史跡若松城『鶴ヶ城』">
-</div>
-
-<div>
-    <label>短い説明文</label><br>
-    <textarea name="spot1_short" rows="3"
-              placeholder="例: 会津若松市のシンボル『鶴ヶ城』。白虎隊も見た国内唯一の赤瓦の天守閣が聳えます！"></textarea>
-</div>
-
-<div>
-    <label>詳細説明文</label><br>
-    <textarea name="spot1_detail" rows="4"
-              placeholder="詳しい歴史や見どころなどを入力してください。"></textarea>
-</div>
-
-<div>
-    <label>スポット画像</label><br>
-    <input type="file" name="spot1_image" accept="image/*">
-</div>
-
-<div>
-    <label>補足情報</label><br>
-    <textarea name="spot1_note" rows="2"
-              placeholder="見学時間、料金、ボランティアガイドの有無など"></textarea>
-</div>
-
-<hr>
-
-<h2>スポット2</h2>
-
-<div>
-    <label>スポット名 *</label><br>
-    <input type="text" name="spot2_name" placeholder="例: 茶室麟閣（県指定重要文化財）">
-</div>
-
-<div>
-    <label>短い説明文</label><br>
-    <textarea name="spot2_short" rows="3"
-              placeholder="例: 茶室麟閣の敷地内でお抹茶をお楽しみいただけます。"></textarea>
-</div>
-
-<div>
-    <label>詳細説明文</label><br>
-    <textarea name="spot2_detail" rows="4"
-              placeholder="詳しい歴史や見どころなどを入力してください。"></textarea>
-</div>
-
-<div>
-    <label>スポット画像</label><br>
-    <input type="file" name="spot2_image" accept="image/*">
-</div>
-
-<div>
-    <label>補足情報</label><br>
-    <textarea name="spot2_note" rows="2"
-              placeholder="見学時間、料金、ボランティアガイドの有無など"></textarea>
-</div>
-
-<hr>
-
-<div>
-    <button type="button">＋ スポットを追加</button>
-</div>
-
-<hr>
-
-<div>
-    <!-- キャンセルは一覧へ -->
-    <a href="{% url 'admin_model_course:model_couse_list' %}">キャンセル</a>
-
-    <!-- 更新ボタン押下で成功画面へ遷移（GET） -->
-    <button type="button"
-            onclick="location.href='{% url 'admin_model_course:model_couse_update_success' %}'">
-        更新
-    </button>
-</div>
+<style>
+    .form-group { margin-bottom: 20px; }
+    label { font-weight: bold; display: block; margin-bottom: 5px; }
+    input, textarea, select { padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+</style>
 
 {% endblock %}

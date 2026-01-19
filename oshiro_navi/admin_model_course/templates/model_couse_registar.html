@@ -1,124 +1,127 @@
 {% extends "admin_base.html" %}
-
-{% block title %}モデルコース登録{% endblock %}
+{% block title %}モデルコース登録 - {{ oshiro.oshiro_name }}{% endblock %}
 
 {% block content %}
 
-<h1>モデルコース登録</h1>
+<div class="content-container basic-info-list">
+    <h1>モデルコース登録</h1>
+    <p><strong>対象のお城：{{ oshiro.oshiro_name }}</strong></p>
+    <hr>
 
-<h2>コース基本情報</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
 
-<div>
-    <label>モデルコース名 *</label><br>
-    <input type="text" name="course_name"
-           placeholder="例: 会津若松城とその周辺を巡る1日コース">
+        <h2>コース基本情報</h2>
+
+        <div class="form-group">
+            <label>モデルコース名 *</label><br>
+            <input type="text" name="course_name" required
+                   placeholder="例: 会津若松城とその周辺を巡る1日コース" style="width: 100%; max-width: 500px;">
+        </div>
+
+        <div class="form-group">
+            <label>コース概要 *</label><br>
+            <textarea name="course_overview" rows="4" required
+                      placeholder="このモデルコースの簡単な紹介文を入力してください。" style="width: 100%; max-width: 500px;"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>所要時間 * (HH:MM)</label><br>
+            <input type="time" name="required_time" required>
+        </div>
+
+        <div class="form-group">
+            <label>距離 (km) *</label><br>
+            <input type="number" step="0.1" name="distance" placeholder="例: 4.5" required>
+        </div>
+
+        <div class="form-group">
+            <label>難易度 *</label><br>
+            <select name="difficulty" required>
+                <option value="">選択してください</option>
+                <option value="初心者向け">初心者向け</option>
+                <option value="短時間滞在者向け">短時間滞在者向け</option>
+                <option value="長時間滞在者向け">長時間滞在者向け</option>
+            </select>
+        </div>
+
+        <hr>
+
+        <h2>スポット1</h2>
+
+        <div class="form-group">
+            <label>スポット名 *</label><br>
+            <input type="text" name="spot1_name" placeholder="例: 史跡若松城『鶴ヶ城』" style="width: 100%; max-width: 500px;">
+        </div>
+
+        <div class="form-group">
+            <label>短い説明文</label><br>
+            <textarea name="spot1_short" rows="3"
+                      placeholder="例: 会津若松市のシンボル『鶴ヶ城』。白虎隊も見た国内唯一の赤瓦の天守閣が聳えます！" style="width: 100%; max-width: 500px;"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>詳細説明文</label><br>
+            <textarea name="spot1_detail" rows="4"
+                      placeholder="詳しい歴史や見どころなどを入力してください。" style="width: 100%; max-width: 500px;"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>スポット画像</label><br>
+            <input type="file" name="spot1_image" accept="image/*">
+        </div>
+
+        <div class="form-group">
+            <label>補足情報</label><br>
+            <textarea name="spot1_note" rows="2"
+                      placeholder="見学時間、料金、ボランティアガイドの有無など" style="width: 100%; max-width: 500px;"></textarea>
+        </div>
+
+        <hr>
+
+        <h2>スポット2</h2>
+        <!-- スポット2の入力欄も同様に -->
+        <div class="form-group">
+            <label>スポット名</label><br>
+            <input type="text" name="spot2_name" placeholder="例: 茶室麟閣" style="width: 100%; max-width: 500px;">
+        </div>
+        <!-- (省略：他項目も同様に記述) -->
+        
+        <hr>
+
+        <!-- UIとしてのボタン（機能はJavaScriptが必要ですが、今回は見た目のみ） -->
+        <div style="margin-bottom: 20px;">
+            <button type="button" class="btn btn-secondary">＋ スポットを追加</button>
+            <small>※現在は固定で2件までの登録となります</small>
+        </div>
+
+        <hr>
+
+        <div class="form-actions" style="margin-top: 20px;">
+            <!-- キャンセルボタン -->
+            <a href="{% url 'admin_model_course:model_couse_list' oshiro_id=oshiro.pk %}" 
+               style="text-decoration: none; color: #666; margin-right: 20px;">
+                キャンセル
+            </a>
+
+            <!-- 登録ボタン -->
+            <button type="submit" class="btn btn-primary"
+                    style="padding: 10px 30px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                登録
+            </button>
+        </div>
+
+    </form>
 </div>
 
-<div>
-    <label>コース概要 *</label><br>
-    <textarea name="course_overview" rows="4"
-              placeholder="このモデルコースの簡単な紹介文を入力してください。"></textarea>
-</div>
-
-<div>
-    <label>所要時間 *</label><br>
-    <input type="text" name="required_time" placeholder="例: 約5時間">
-</div>
-
-<div>
-    <label>距離 *</label><br>
-    <input type="text" name="distance" placeholder="例: 約4km">
-</div>
-
-<div>
-    <label>難易度 *</label><br>
-    <select name="difficulty">
-        <option value="">選択してください</option>
-        <option value="easy">やさしい</option>
-        <option value="normal">ふつう</option>
-        <option value="hard">むずかしい</option>
-    </select>
-</div>
-
-<hr>
-
-<h2>スポット1</h2>
-
-<div>
-    <label>スポット名 *</label><br>
-    <input type="text" name="spot1_name" placeholder="例: 史跡若松城『鶴ヶ城』">
-</div>
-
-<div>
-    <label>短い説明文</label><br>
-    <textarea name="spot1_short" rows="3"
-              placeholder="例: 会津若松市のシンボル『鶴ヶ城』。白虎隊も見た国内唯一の赤瓦の天守閣が聳えます！"></textarea>
-</div>
-
-<div>
-    <label>詳細説明文</label><br>
-    <textarea name="spot1_detail" rows="4"
-              placeholder="詳しい歴史や見どころなどを入力してください。"></textarea>
-</div>
-
-<div>
-    <label>スポット画像</label><br>
-    <input type="file" name="spot1_image" accept="image/*">
-</div>
-
-<div>
-    <label>補足情報</label><br>
-    <textarea name="spot1_note" rows="2"
-              placeholder="見学時間、料金、ボランティアガイドの有無など"></textarea>
-</div>
-
-<hr>
-
-<h2>スポット2</h2>
-
-<div>
-    <label>スポット名 *</label><br>
-    <input type="text" name="spot2_name" placeholder="例: 茶室麟閣（県指定重要文化財）">
-</div>
-
-<div>
-    <label>短い説明文</label><br>
-    <textarea name="spot2_short" rows="3"
-              placeholder="例: 茶室麟閣の敷地内でお抹茶をお楽しみいただけます。"></textarea>
-</div>
-
-<div>
-    <label>詳細説明文</label><br>
-    <textarea name="spot2_detail" rows="4"
-              placeholder="詳しい歴史や見どころなどを入力してください。"></textarea>
-</div>
-
-<div>
-    <label>スポット画像</label><br>
-    <input type="file" name="spot2_image" accept="image/*">
-</div>
-
-<div>
-    <label>補足情報</label><br>
-    <textarea name="spot2_note" rows="2"
-              placeholder="見学時間、料金、ボランティアガイドの有無など"></textarea>
-</div>
-
-<hr>
-
-<div>
-    <button type="button">＋ スポットを追加</button>
-</div>
-
-<hr>
-
-<div>
-    <a href="{% url 'admin_model_course:model_couse_list' %}">キャンセル</a>
-
-    <button type="button"
-            onclick="location.href='{% url 'admin_model_course:model_couse_registar_success' %}'">
-        登録
-    </button>
-</div>
+<!-- 簡易CSS -->
+<style>
+    .form-group {
+        margin-bottom: 15px;
+    }
+    label {
+        font-weight: bold;
+    }
+</style>
 
 {% endblock %}

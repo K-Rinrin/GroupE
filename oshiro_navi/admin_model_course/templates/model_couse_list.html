@@ -1,40 +1,147 @@
 {% extends "admin_base.html" %}
-
-{% block title %}モデルコース一覧{% endblock %}
+{% block title %}{{ oshiro.oshiro_name }} - モデルコース一覧{% endblock %}
 
 {% block content %}
 
-<h1>モデルコース機能</h1>
+<div class="content-container basic-info-list">
+    
+    <h1>{{ oshiro.oshiro_name }} のモデルコース一覧</h1>
+    <hr style="width: 100%;">
 
-<div>
-    <form method="get">
-        <label for="q">モデルコース検索</label>
-        <input id="q" type="text" name="q" placeholder="モデルコース検索">
-        <button type="submit">検索</button>
-    </form>
+    <div class="action-bar" style="margin-bottom: 20px; text-align: right;">
+        <a class="btn-new" href="{% url 'admin_model_course:model_couse_registar' oshiro_id=oshiro.pk %}">
+            ＋ 新規登録
+        </a>
+    </div>
 
-    <a href="{% url 'admin_model_course:model_couse_registar' %}">新規登録</a>
+    <!-- カテゴリ選択 -->
+    <div class="category-tabs">
+        <a href="?difficulty=" 
+           class="tab-item {% if not current_difficulty %}active{% endif %}">
+           すべて
+        </a>
+        
+        <!-- 初心者向け -->
+        <a href="?difficulty=初心者向け" 
+           class="tab-item {% if current_difficulty == '初心者向け' %}active{% endif %}">
+           初心者向け
+        </a>
+
+        <!-- 短時間滞在者向け -->
+        <a href="?difficulty=短時間滞在者向け" 
+           class="tab-item {% if current_difficulty == '短時間滞在者向け' %}active{% endif %}">
+           短時間滞在者向け
+        </a>
+
+        <!-- 長時間滞在者向け -->
+        <a href="?difficulty=長時間滞在者向け" 
+           class="tab-item {% if current_difficulty == '長時間滞在者向け' %}active{% endif %}">
+           長時間滞在者向け
+        </a>
+    </div>
+
+
+    <!-- リスト表示エリア -->
+    <div class="course-list-container">
+        
+        {% for course in rows %}
+        <div class="course-row">
+            <div class="course-info">
+                <span class="course-name">{{ course.model_course_name }}</span>
+                <div class="course-meta">
+                    <small>
+                        <span class="difficulty-badge">{{ course.difficulty }}</span> |
+                        所要時間: {{ course.required_time }} | 
+                        距離: {{ course.distance }}km
+                    </small>
+                </div>
+            </div>
+
+            <div class="course-action">
+                <a class="btn btn-register" href="{% url 'admin_model_course:model_couse_update' pk=course.pk %}">
+                    編集
+                </a>
+            </div>
+        </div>
+        <hr>
+        {% empty %}
+        <div style="padding: 20px; text-align: center; color: #666;">
+            <p>該当するモデルコースはありません。</p>
+        </div>
+        <hr>
+        {% endfor %}
+
+    </div>
+
 </div>
 
-<hr>
+<style>
+    /* --- タブのデザイン --- */
+    .category-tabs {
+        display: flex;
+        margin-bottom: 20px;
+    }
+    
+    .tab-item {
+        padding: 10px 20px;
+        text-decoration: none;
+        color: #666;
+        border-bottom: 2px solid transparent; /* 下線を透明にしておく */
+        margin-bottom: -2px; /* 下線を親のボーダーに重ねる */
+        font-weight: bold;
+        transition: all 0.3s;
+    }
 
-<div>
-    <div>
-        <span>見どころ3スポット巡り</span>
-        <a class="btn btn-register" href="{% url 'admin_model_course:model_couse_update' %}" >編集</a>
-    </div>
-    <hr>
+    .tab-item:hover {
+        background-color: #f9f9f9;
+        color: #333;
+    }
 
-    <div>
-        <span>天守＆本丸コース</span>
-        <a class="btn btn-register" href="{% url 'admin_model_course:model_couse_update' %}">編集</a>
-    </div>
-    <hr>
+    /* 選択中のタブのデザイン */
+    .tab-item.active {
+        color: #007bff;        /* 青文字 */
+        border-bottom-color: #007bff; /* 青い下線 */
+    }
 
-    <div>
-        <span>歴史じっくり散策コース</span>
-        <a class="btn btn-register" href="{% url 'admin_model_course:model_couse_update' %}">編集</a>
-    </div>
-</div>
+    /* --- その他 --- */
+    .course-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 10px;
+    }
+    .course-name {
+        font-size: 1.2em;
+        font-weight: bold;
+        display: block;
+    }
+    .course-meta {
+        color: #666;
+        margin-top: 5px;
+    }
+    .difficulty-badge {
+        background-color: #eee;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 0.9em;
+    }
+    .btn-new {
+        display: inline-block;
+        padding: 8px 16px;
+        background-color: #28a745;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        font-weight: bold;
+    }
+    .btn-register {
+        display: inline-block;
+        padding: 6px 12px;
+        background-color: #007bff;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+    }
+</style>
 
 {% endblock %}

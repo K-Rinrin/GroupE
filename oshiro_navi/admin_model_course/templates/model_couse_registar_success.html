@@ -1,15 +1,46 @@
 {% extends "admin_base.html" %}
 
-{% block title %}モデルコース登録完了{% endblock %}
+{% block title %}モデルコース登録完了 - {{ oshiro.oshiro_name }}{% endblock %}
 
 {% block content %}
 
-<h1>モデルコース登録完了</h1>
+<div class="content-container basic-info-list" style="text-align: center; padding-top: 50px;">
+    
+    <h1 style="color: #28a745;">
+        <i class="material-symbols-outlined" style="vertical-align: middle; font-size: 1.2em;">check_circle</i>
+        モデルコース登録完了
+    </h1>
+    <hr>
 
-<div>
-    <p>モデルコースの登録が完了しました。</p>
+    <div style="margin: 40px 0;">
+        <p style="font-size: 1.1em;">
+            <strong>{{ oshiro.oshiro_name }}</strong> のモデルコース登録が完了しました。
+        </p>
+    </div>
+
+    <!-- 一覧画面へ戻るボタン -->
+    <div>
+        <a href="{% url 'admin_model_course:model_couse_list' oshiro_id=oshiro.pk %}" class="btn btn-primary">
+            モデルコース一覧へ戻る
+        </a>
+    </div>
+
 </div>
 
-
+<style>
+    /* 簡易的なボタンスタイル（共通CSSがあればそちらを使ってください） */
+    .btn-primary {
+        display: inline-block;
+        padding: 10px 30px;
+        background-color: #007bff;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        font-weight: bold;
+    }
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+</style>
 
 {% endblock %}

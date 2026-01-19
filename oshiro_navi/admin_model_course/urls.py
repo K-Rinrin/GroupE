@@ -12,16 +12,16 @@ urlpatterns = [
     path('list/<int:oshiro_id>/', views.ModelCouseListView.as_view(), name='model_couse_list'),
 
     # 新規登録
-    path("registar/", views.ModelCouseRegistarView.as_view(), name="model_couse_registar"),
+    path('registar/<int:oshiro_id>/', views.ModelCouseRegistarView.as_view(), name='model_couse_registar'),
 
     # 新規登録完了
-    path("registar/success/", views.ModelCouseRegistarSuccessView.as_view(),
-         name="model_couse_registar_success"),
+    path('registar/success/<int:oshiro_id>/', views.ModelCouseRegistarSuccessView.as_view(), 
+         name='model_couse_registar_success'),
 
     # 編集（更新）
-    path("update/", views.ModelCouseUpdateView.as_view(), name="model_couse_update"),
+    path('update/<int:pk>/', views.ModelCouseUpdateView.as_view(), name='model_couse_update'),
 
     # 編集完了
-    path("update/success/", views.ModelCouseUpdateSuccessView.as_view(),
+    path("update/success/<int:oshiro_id>/", views.ModelCouseUpdateSuccessView.as_view(),
          name="model_couse_update_success"),
 ]
