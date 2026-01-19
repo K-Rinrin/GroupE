@@ -5,13 +5,13 @@
 {% block content %}
 <div class="content-container">
     <h1>お城スタンプ一覧</h1>
+    <hr style="width: 80%;">
 
     <a href="{% url 'admin_oshiro_stamp:oshiro_stamp_registar' %}" class="btn btn-register">＋ 新規スタンプ登録</a>
     
     <table class="admin-table">
         <thead>
             <tr>
-                <th>スタンプ名</th>
                 <th>対象のお城</th> 
                 <th>操作</th>
             </tr>
@@ -19,10 +19,9 @@
         <tbody>
             {% for stamp in stamps %}
             <tr>
-                <td>{{ stamp.stamp_name }}</td>
                 <td>{{ stamp.oshiro_info.oshiro_name }}</td>
                 <td>
-                    <a href="#" class="btn btn-delete" style="background-color: #e74c3c; color: white; padding: 5px 10px; border-radius: 4px; text-decoration: none;">削除</a>
+                    <a href="{% url 'admin_oshiro_stamp:oshiro_stamp_update' stamp.id %}" class="btn btn-update">更新</a>
                 </td>
             </tr>
             {% empty %}

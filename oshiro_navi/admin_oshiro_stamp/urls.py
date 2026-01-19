@@ -5,4 +5,5 @@ urlpatterns = [
     path('oshiro_stamp_list/',views.OshiroStampListView.as_view(), name='oshiro_stamp_list'),
     path('oshiro_stamp_registar/',views.OshiroStampRegistarView.as_view(), name='oshiro_stamp_registar'),
     path('oshiro_stamp_registar/success/',views.OshiroStampRegistarSuccessView.as_view(),name='oshiro_stamp_registar_success'),
+    path('oshiro_stamp_update/<int:stamp_id>/',views.OshiroStampUpdateView.as_view(), name='oshiro_stamp_update'),
 ]
