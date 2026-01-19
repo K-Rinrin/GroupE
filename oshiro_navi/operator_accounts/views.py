@@ -41,7 +41,7 @@ class AdminAccountListView(ListView):
             'admin_profile__oshiro_management3',
             'admin_profile__oshiro_management4',
             'admin_profile__oshiro_management5',
-        ).filter(is_staff=True)
+        ).filter(is_staff=True, admin_profile__isnull=False)
 
         # 
         q_word = self.request.GET.get('search')
