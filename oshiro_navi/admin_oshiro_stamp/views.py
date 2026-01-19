@@ -6,7 +6,6 @@ from django.http import Http404
 from .models import OshiroStampInfo
 from operator_oshiro_info.models import OshiroInfo  # お城情報の参照用
 
-# --- ヘルパー関数（既存のコードと統一） ---
 
 def _get_or_404(model_cls, **kwargs):
     try:
@@ -19,9 +18,14 @@ def _get_or_404(model_cls, **kwargs):
 class OshiroStampListView(View):
     """お城スタンプ一覧"""
     def get(self, request):
-        # OneToOneの関係にあるお城情報もまとめて取得
-        stamps = OshiroStampInfo.objects.all().select_related('oshiro_info').order_by("id")
-        return render(request, "oshiro_stamp_list.html", {"stamps": stamps})
+        try:
+            # OneToOneの関係にあるお城情報もまとめて取得
+            stamps = OshiroStampInfo.objects.all().select_related('oshiro_info').order_by("id")
+            return render(request, "oshiro_stamp_list.html", {
+                "stamps": stamps
+            })
+        except Exception:
+            raise Http404("Unable to fetch stamp information")
 
 
 class OshiroStampRegistarView(View):

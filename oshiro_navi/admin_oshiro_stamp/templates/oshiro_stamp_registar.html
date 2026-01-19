@@ -19,16 +19,13 @@
         <!-- 画像アップロード -->
         <div class="form-group">
             <label>お城スタンプ画像</label><br>
-
             <!-- プレビュー枠 -->
             <div class="image-preview" id="preview-area">
                 <span>画像プレビュー</span>
             </div>
-
             <!-- ファイル選択 -->
             <input type="file" accept="image/*" onchange="previewImage(this)">
         </div>
-
         <!-- 登録ボタン -->
         <button type="submit" class="btn btn-register">登録</button>
         <a href="{% url 'admin_oshiro_stamp:oshiro_stamp_list' %}" class="btn btn-cancel">戻る</a>
