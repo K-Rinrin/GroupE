@@ -4,59 +4,55 @@
 <div class="content-container">
     <h1 class="page-title">イベント更新</h1>    
 
-<div class="form-container">
-        <form action="{% url 'event_info_management:operator_event_info_update_success' %}" method="GET" enctype="multipart/form-data">
+    <div class="form-container">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
 
-            <!-- イベント名 -->
             <div class="form-group">
-                <label for="title">イベント名</label>
-                <input type="text" id="title" name="title" required>
+                <label for="event_info">イベント名</label>
+                <input type="text" id="event_info" name="event_info" value="{{ object.event_info }}" required>
             </div>
 
-            <!-- お城の選択 -->
             <div class="form-group">
-                <label for="castle">開催場所</label>
-                <input type="text" id="title" name="title" required>
+                <label for="venue">開催場所</label>
+                <input type="text" id="venue" name="venue" value="{{ object.venue }}" required>
             </div>
 
-            <!-- 開催日 -->
             <div class="form-group">
                 <label for="start_date">開始日</label>
-                <input type="date" id="start_date" name="start_date" required>
+                <input type="date" id="start_date" name="start_date" value="{{ object.start_date|date:'Y-m-d' }}" required>
             </div>
 
             <div class="form-group">
                 <label for="end_date">終了日</label>
-                <input type="date" id="end_date" name="end_date" required>
+                <input type="date" id="end_date" name="end_date" value="{{ object.end_date|date:'Y-m-d' }}" required>
             </div>
+
             <div class="form-group">
-            <label>開催時間（任意）</label>
+                <label>開催時間</label>
                 <div style="display: flex; gap: 10px; align-items: center;">
-                    <input type="time" id="start_time" name="start_time">
+                    <input type="time" id="start_time" name="start_time" value="{{ object.start_time|time:'H:i' }}">
                     <span>〜</span>
-                    <input type="time" id="end_time" name="end_time">
+                    <input type="time" id="end_time" name="end_time" value="{{ object.end_time|time:'H:i' }}">
                 </div>
             </div>
 
-            <!-- 説明 -->
             <div class="form-group">
-                <label for="description">イベント説明</label>
-                <textarea id="description" name="description" rows="5"></textarea>
+                <label for="event_overview">イベント説明</label>
+                <textarea id="event_overview" name="event_overview" rows="5">{{ object.event_overview }}</textarea>
             </div>
 
-            <!-- 画像アップロード -->
             <div class="form-group">
-                <label for="image">イベント画像（任意）</label>
-                <input type="file" id="image" name="image">
+                <label>
+                    <input type="checkbox" name="public_settings" {% if object.public_settings %}checked{% endif %}> 公開する
+                </label>
             </div>
 
-            <!-- ボタン -->
             <div class="form-buttons">
-                <button type="submit" class="btn btn-update">更新</button>
-                <a href="{% url 'event_info_management:operator_event_info_list' %}" class="btn btn-cancel">イベント一覧へ戻る</a>
+                <button type="submit" class="btn btn-update">更新を保存</button>
+                <a href="{% url 'event_info_management:operator_event_info_list' %}" class="btn btn-cancel">キャンセル</a>
             </div>
         </form>
     </div>
 </div>
-
 {% endblock %}

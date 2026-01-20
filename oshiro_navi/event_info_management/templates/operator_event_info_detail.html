@@ -1,0 +1,46 @@
+{% extends "operator_base.html" %}
+{% load static %}
+{% block content %}
+<div class="container">
+    <h1 class="page-title">イベント詳細</h1>
+
+    <div class="detail-container card">
+        <div class="detail-header">
+            <h2>{{ event.event_info }}</h2>
+            <div class="status-badge">
+                {% if event.public_settings %}
+                    <span class="badge badge-public">公開中</span>
+                {% else %}
+                    <span class="badge badge-private">非公開</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="detail-body">
+            <div class="detail-item">
+                <label>開催場所</label>
+                <p>{{ event.venue }}</p>
+            </div>
+            <div class="detail-item">
+                <label>開催期間</label>
+                <p>{{ event.start_date|date:"Y/m/d" }} 〜 {{ event.end_date|date:"Y/m/d" }}</p>
+            </div>
+            <div class="detail-item">
+                <label>開催時間</label>
+                <p>{{ event.start_time|time:"H:i" }} 〜 {{ event.end_time|time:"H:i" }}</p>
+            </div>
+            <div class="detail-item">
+                <label>イベント内容</label>
+                <p style="white-space: pre-wrap;">{{ event.event_overview }}</p>
+            </div>
+        </div>
+
+        <div class="form-buttons">
+            <a href="{% url 'event_info_management:operator_event_info_update' event.pk %}" class="btn btn-update">編集する</a>
+            <a href="{% url 'event_info_management:operator_event_info_list' %}" class="btn btn-cancel">一覧に戻る</a>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

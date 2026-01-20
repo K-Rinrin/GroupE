@@ -2,60 +2,26 @@
 {% load static %}
 {% block content %}
 <div class="content-container">
-    <h1 class="page-title">イベント削除</h1>    
+    <h1 class="page-title">イベント削除の確認</h1>
 
-<div class="form-container">
+    <div class="form-container">
+        <div class="delete-warning" style="background-color: #fff5f5; border: 1px solid #feb2b2; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+            <p style="color: #c53030; font-weight: bold; font-size: 1.1em;">以下のイベントを完全に削除します。よろしいですか？</p>
+            <hr style="border: 0; border-top: 1px solid #feb2b2; margin: 15px 0;">
+            <p><strong>イベント名：</strong> {{ object.event_info }}</p>
+            <p><strong>開催場所：</strong> {{ object.venue }}</p>
+            <p><strong>期間：</strong> {{ object.start_date }} 〜 {{ object.end_date }}</p>
+        </div>
 
-        <form action="{% url 'event_info_management:admin_event_info_delete_check' %}" method="GET" enctype="multipart/form-data">
-
-            <!-- イベント名 -->
-            <div class="form-group">
-                <label for="title">イベント名</label>
-                <input type="text" id="title" name="title" required>
-            </div>
-
-            <!-- お城の選択 -->
-            <div class="form-group">
-                <label for="castle">開催場所</label>
-                <input type="text" id="title" name="title" required>
-            </div>
-
-            <!-- 開催日 -->
-            <div class="form-group">
-                <label for="start_date">開始日</label>
-                <input type="date" id="start_date" name="start_date" required>
-            </div>
-
-            <div class="form-group">
-                <label for="end_date">終了日</label>
-                <input type="date" id="end_date" name="end_date" required>
-            </div>
-            
-            <div class="form-group">
-            <label>開催時間（任意）</label>
-                <div style="display: flex; gap: 10px; align-items: center;">
-                    <input type="time" id="start_time" name="start_time">
-                    <span>〜</span>
-                    <input type="time" id="end_time" name="end_time">
-                </div>
-            </div>
-
-            <!-- 説明 -->
-            <div class="form-group">
-                <label for="description">イベント説明</label>
-                <textarea id="description" name="description" rows="5"></textarea>
-            </div>
-
-            <!-- 画像アップロード -->
-            <div class="form-group">
-                <label for="image">イベント画像（任意）</label>
-                <input type="file" id="image" name="image">
-            </div>
-
-            <!-- ボタン -->
+        <form method="POST">
+            {% csrf_token %}
             <div class="form-buttons">
-                <button type="submit" class="btn btn-delete">削除</button>
-                <a href="{% url 'event_info_management:admin_event_info_list' %}" class="btn btn-cancel">戻る</a>
+                <button type="submit" class="btn-delete" style="background-color: #e53e3e; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">
+                    はい、削除します
+                </button>
+                <a href="{% url 'event_info_management:admin_event_info_list' %}" class="btn-cancel" style="background-color: #a0aec0; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px; margin-left: 10px;">
+                    キャンセル
+                </a>
             </div>
         </form>
     </div>
