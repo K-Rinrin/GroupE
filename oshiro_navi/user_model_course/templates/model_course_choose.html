@@ -1,16 +1,61 @@
 {% extends "user_base.html" %}
 {% load static %}
-
-{% block title %}モデルコース{% endblock %}
+{% block title %}モデルコース検索{% endblock %}
 
 {% block content %}
-    <div class="mypage-container">
-        <h1 class="page-title">モデルコース（初心者）画面</h1>
 
 
-        <a href="{% url 'user_model_course:modelcoursedetail' %}">なんちゃらコース</a>
+    <div class="mypage-container model-course-container">
+        <h1 class="page-title">モデルコース検索</h1>
         
-    </div>   
+        <form action="{% url 'user_model_course:modelcourselist' %}" method="get">
+            
+            <div class="search-area-box">
+                <div class="search-inputs">
+                    <div class="select-group">
+                        <label for="castle-select" style="display:block; margin-bottom:10px; font-weight:bold;">
+                            お城を選択してください
+                        </label>
+                        
+                        <select name="oshiro_id" id="castle-select" class="form-control" style="padding: 10px; width: 100%; max-width: 400px;">
+                            <option value="">-- 選択してください --</option>
+                            {% for castle in castles %}
+                                <option value="{{ castle.pk }}">{{ castle.oshiro_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
 
+                <div class="search-btn-wrapper" style="margin-top: 20px;">
+                    <button type="submit" class="btn-search-main">
+                        <i class='bx bx-search-alt'></i> 検索する
+                    </button>
+                </div>
+            </div>
+            
+        </form>
 
+    </div>
+
+<style>
+    .search-area-box {
+        background: #f9f9f9;
+        padding: 30px;
+        border-radius: 8px;
+        text-align: center;
+    }
+    .btn-search-main {
+        background-color: #d4a024; /* お城っぽい色（金/茶系） */
+        color: white;
+        border: none;
+        padding: 10px 30px;
+        border-radius: 30px;
+        font-size: 1.1em;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+    .btn-search-main:hover {
+        background-color: #b3861b;
+    }
+</style>
 {% endblock %}

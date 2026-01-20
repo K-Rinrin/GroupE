@@ -5,11 +5,15 @@ from .views import *
 app_name = "user_model_course"
 
 urlpatterns = [ 
-    path('modelcourselist/', UserModelCourseListView.as_view(), name='modelcourselist'),
-    path('modelcourseaftersearch/', UserModelCourseAfterSearchView.as_view(), name='modelcourseaftersearch'),
-    path('modelcoursedetail/', UserModelCourseDetailView.as_view(), name='modelcoursedetail'), 
+
+    # 検索画面
     path('modelcoursechoose/', UsermodelCourseChooseView.as_view(), name='modelcoursechoose'),
-    
-    
+
+    # 検索結果一覧画面
+    path('modelcourselist/', UserModelCourseListView.as_view(), name='modelcourselist'),
+
+    # 詳細画面
+    path('modelcoursedetail/', UserModelCourseDetailView.as_view(), name='modelcoursedetail'), 
+
    
 ]

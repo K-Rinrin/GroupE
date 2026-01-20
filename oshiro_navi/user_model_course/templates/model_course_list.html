@@ -1,122 +1,130 @@
 {% extends "user_base.html" %}
 {% load static %}
 
-{% block title %}モデルコース{% endblock %}
+{% block title %}
+    {% if oshiro %}{{ oshiro.oshiro_name }}のモデルコース{% else %}モデルコース一覧{% endif %}
+{% endblock %}
 
 {% block content %}
-    <div class="mypage-container model-course-container">
+<div class="mypage-container model-course-container">
+
+    {% if oshiro %}
+        <h1 class="page-title">{{ oshiro.oshiro_name }} のモデルコース</h1>
         
-        <h1 class="page-title">
-            モデルコース検索
-        </h1>
+        <!--  カテゴリ選択 -->
+        <div class="category-tabs">
+            <a href="?oshiro_id={{ oshiro_id }}&difficulty=" 
+               class="tab-item {% if not current_difficulty %}active{% endif %}">
+               すべて
+            </a>
+            
+            <!-- 初心者向け -->
+            <a href="?oshiro_id={{ oshiro_id }}&difficulty=初心者向け" 
+               class="tab-item {% if current_difficulty == '初心者向け' %}active{% endif %}">
+               初心者向け
+            </a>
 
-        <!-- 検索エリア -->
-        <div class="search-area-box">
-            <div class="search-inputs">
-                <div class="select-group">
-                    <label>都道府県</label>
-                    <select id="prefecture" class="form-select">
-                        <option value="">選択してください</option>
-                        <option value="fukushima">福島県</option>
-                        <option value="aomori">青森県</option>
-                    </select>
-                </div>
+            <!-- 短時間滞在者向け -->
+            <a href="?oshiro_id={{ oshiro_id }}&difficulty=短時間滞在者向け" 
+               class="tab-item {% if current_difficulty == '短時間滞在者向け' %}active{% endif %}">
+               短時間滞在者向け
+            </a>
 
-                <div class="select-group">
-                    <label>お城</label>
-                    <select id="castle" class="form-select">
-                        <option value="">先に都道府県を選択</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="search-btn-wrapper">
-                <button onclick="search()" class="btn-search-main">
-                    <i class='bx bx-search-alt'></i> 検索する
-                </button>
-            </div>
+            <!-- 長時間滞在者向け -->
+            <a href="?oshiro_id={{ oshiro_id }}&difficulty=長時間滞在者向け" 
+               class="tab-item {% if current_difficulty == '長時間滞在者向け' %}active{% endif %}">
+               長時間滞在者向け
+            </a>
         </div>
 
-        <!-- 検索結果エリア -->
         <div class="result-area">
             <div class="result-header">
-                該当：<span id="count" class="count-number">0</span> 件
+                該当：<span class="count-number">{{ courses|length }}</span> 件
             </div>
 
-            <ul class="castle-result-list" id="result">
-                <!-- 初期状態のメッセージ -->
-                <li class="no-result-msg" style="font-family:'Yu Mincho', serif;">
-                    条件を指定して検索してください
-                </li>
-            </ul>
-        </div>
-    </div>
-
-    <script>
-        
-        const castlesByPrefecture = {
-            fukushima: [
-                { id: 1, name: "鶴ヶ城 (会津若松城)" },
-                { id: 2, name: "二本松城 (霞ヶ城)" },
-                { id: 3, name: "白河小峰城" }
-            ],
-            aomori: [
-                { id: 4, name: "弘前城" },
-                { id: 5, name: "根城" }
-            ]
-        };
-
-        const prefectureSelect = document.getElementById("prefecture");
-        const castleSelect = document.getElementById("castle");
-        const resultArea = document.getElementById("result");
-        const countSpan = document.getElementById("count");
-
-        prefectureSelect.addEventListener("change", () => {
-            castleSelect.innerHTML = '<option value="">お城を選択 (任意)</option>';
-            const pref = prefectureSelect.value;
-            if (!pref) return;
-            castlesByPrefecture[pref].forEach(castle => {
-                const option = document.createElement("option");
-                option.value = castle.id;
-                option.textContent = castle.name;
-                castleSelect.appendChild(option);
-            });
-        });
-
-        function search() {
-            resultArea.innerHTML = "";
-            const pref = prefectureSelect.value;
-            const castleId = castleSelect.value;
-            let results = [];
-
-            if (!pref) {
-                resultArea.innerHTML = '<li class="no-result-msg">都道府県を選択してください</li>';
-                countSpan.textContent = 0;
-                return;
-            }
-
-            results = castlesByPrefecture[pref];
-            if (castleId) {
-                results = results.filter(c => c.id == castleId);
-            }
-
-            if (results.length === 0) {
-                resultArea.innerHTML = '<li class="no-result-msg">該当するコースはありません</li>';
-            } else {
-                results.forEach(castle => {
-                    const li = document.createElement("li");
-                    li.className = "result-item"; 
-                    li.innerHTML = `
-                        <div class="result-info">
-                            <span class="result-name">${castle.name}</span>
-                            <span class="result-tag">モデルコースあり</span>
+            <ul class="castle-result-list">
+                {% for course in courses %}
+                <li class="result-item" style="border:1px solid #ddd; padding:15px; margin-bottom:15px; border-radius:8px; list-style:none;">
+                    <div class="result-info">
+                        <h3 class="result-name" style="margin:0 0 10px 0;">{{ course.model_course_name }}</h3>
+                        
+                        <div class="course-badges" style="margin-bottom:10px; font-size:0.9em; color:#666;">
+                            <span class="difficulty-label">{{ course.difficulty }}</span>
+                            <span style="margin-left:10px;">⏱ {{ course.required_time|time:"G:i" }}</span>
+                            <span style="margin-left:10px;">📏 {{ course.distance }}km</span>
                         </div>
-                        <a href="#" class="btn-detail-small">詳細</a>
-                    `;
-                    resultArea.appendChild(li);
-                });
-            }
-            countSpan.textContent = results.length;
-        }
-    </script>
+
+                        <p style="font-size:0.9em; color:#444;">{{ course.course_overview|truncatechars:50 }}</p>
+                    </div>
+                    
+                    <div style="text-align:right; margin-top:10px;">
+                        <a href="{% url 'user_model_course:modelcoursedetail' %}?pk={{ course.pk }}" class="btn-detail-small" style="text-decoration:none; background:#333; color:#fff; padding:5px 15px; border-radius:4px;">
+                            詳細を見る
+                        </a>
+                    </div>
+                </li>
+                {% empty %}
+                <li class="no-result-msg" style="padding: 20px; text-align: center; color: #666;">
+                    該当するモデルコースはありません。
+                </li>
+                {% endfor %}
+            </ul>
+            
+            <div style="margin-top:30px; text-align:center;">
+                <a href="{% url 'user_model_course:modelcoursechoose' %}">お城選択に戻る</a>
+            </div>
+        </div>
+
+    {% else %}
+        <div style="text-align: center; padding: 50px;">
+            <p>お城が選択されていません。</p>
+            <a href="{% url 'user_model_course:modelcoursechoose' %}">検索画面へ戻る</a>
+        </div>
+    {% endif %}
+
+</div>
+
+
+<style>
+    /* カテゴリタブ */
+    .category-tabs {
+        display: flex;
+        flex-wrap: wrap; /* スマホで折り返す */
+        gap: 10px;
+        border-bottom: 2px solid #ddd;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+    }
+    
+    .tab-item {
+        padding: 8px 16px;
+        text-decoration: none;
+        color: #555;
+        border-radius: 20px; /* 角丸ボタン風 */
+        background-color: #f0f0f0;
+        font-size: 0.9em;
+        transition: all 0.3s;
+    }
+
+    .tab-item:hover {
+        background-color: #e0e0e0;
+    }
+
+    /* 選択中のタブ */
+    .tab-item.active {
+        background-color: #d4a024; /* お城テーマ色（金/茶） */
+        color: white;
+        font-weight: bold;
+    }
+
+    /* 難易度ラベル */
+    .difficulty-label {
+        background-color: #eee;
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-weight: bold;
+        font-size: 0.85em;
+    }
+</style>
+
 {% endblock %}
