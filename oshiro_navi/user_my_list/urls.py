@@ -6,9 +6,9 @@ app_name = "usermy_list"
 
 urlpatterns = [ 
     path('oshirolist/', OshirolistView.as_view(), name='oshirolist'),
-    path('oshiroinfo/', OshiroInfoView.as_view(), name='oshiroinfo'),
-    path('aftersearch/', OshiroAfterSearchView.as_view(), name='oshiroaftersearch'),
-    path('oshirobasicinfo/', OshiroBasicInfoView.as_view(), name='oshirobasicinfo'),
-    path('review/', OshiroReviewView.as_view(), name='oshiroreview'),
+    path('oshiro_info/<int:pk>/', OshiroInfoView.as_view(), name='oshiroinfo'),
+    path('oshiro_basic_info/<int:pk>/', OshiroBasicInfoView.as_view(), name='oshirobasicinfo'),
+    path('review/<int:pk>/', OshiroReviewView.as_view(), name='oshiroreview'),
+    path('oshiroaftersearch/', OshiroAfterSearchView.as_view(), name='aftersearch'),
 
 ]

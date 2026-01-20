@@ -1,16 +1,27 @@
 {% extends "user_base.html" %}
 {% load static %}
-{% block title %}{% endblock %}
+
+{% block title %}お城検索{% endblock %}
+
 {% block content %}
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <title>お城リスト</title>
-</head>
-<body>
-    <h1>お城リスト画面</h1>
-    <a href="{% url 'usermy_list:oshiroaftersearch' %}">検索</a>   
-</body>
-</html>
+<div class="container" style="max-width: 800px; margin: 50px auto;">
+    <div class="search-card" style="background: #fff; padding: 40px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center;">
+        <h1 style="color: #333; margin-bottom: 30px; font-weight: bold;">🏯 お城リスト</h1>
+        
+        <form method="get" action="{% url 'usermy_list:aftersearch' %}" style="display: flex; gap: 10px; justify-content: center;">
+            <input type="text" name="keyword" placeholder="お城名や住所を入力..." 
+                style="flex: 1; padding: 12px 20px; border: 2px solid #eee; border-radius: 8px; outline: none; transition: border-color 0.3s;">
+            <button type="submit" style="background: #ffc107; color: #333; border: none; padding: 12px 30px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: background 0.3s;">
+                検索
+            </button>
+        </form>
+        
+        <p style="margin-top: 20px; color: #888; font-size: 0.9em;">見たいお城をキーワードで探してみましょう</p>
+    </div>
+</div>
+
+<style>
+    input[type="text"]:focus { border-color: #ffc107 !important; }
+    button:hover { background: #e0a800 !important; }
+</style>
 {% endblock %}
