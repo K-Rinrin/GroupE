@@ -6,8 +6,21 @@ from admin_accounts.models import Admin
 
 from .models import OshiroStampInfo
 from operator_oshiro_info.models import OshiroInfo  # お城情報の参照用
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import PermissionDenied
 
-# --- ヘルパー関数（既存のコードと統一） ---
+class AdminOshiroRequiredMixin:
+    """ログイン中の管理者が、URLのoshiro_idを担当しているかチェックする"""
+    def dispatch(self, request, *args, **kwargs):
+        admin = get_object_or_404(Admin, account=request.user)
+        oshiro_id = kwargs.get('oshiro_id')
+        
+        # 管理者の担当城IDと、URLのIDが一致するか
+        if admin.oshiro_info.id != oshiro_id:
+            raise PermissionDenied
+            
+        return super().dispatch(request, *args, **kwargs)
+
 
 def _get_or_404(model_cls, **kwargs):
     try:
@@ -17,7 +30,7 @@ def _get_or_404(model_cls, **kwargs):
 
 # --- Viewクラス ---
 
-class OshiroStampListView(View):
+class OshiroStampListView(AdminOshiroRequiredMixin,LoginRequiredMixin,View):
     """お城スタンプ一覧"""
     def get(self, request):
         # OneToOneの関係にあるお城情報もまとめて取得
@@ -26,7 +39,7 @@ class OshiroStampListView(View):
 
 
 
-class OshiroStampRegistarView(View):
+class OshiroStampRegistarView(AdminOshiroRequiredMixin,LoginRequiredMixin,View):
     """お城スタンプ登録"""
 
     def get(self, request):
@@ -64,12 +77,12 @@ class OshiroStampRegistarView(View):
 
         return redirect("admin_oshiro_stamp:oshiro_stamp_registar_success")
 
-class OshiroStampRegistarSuccessView(TemplateView):
+class OshiroStampRegistarSuccessView(AdminOshiroRequiredMixin,LoginRequiredMixin,TemplateView):
     template_name = "oshiro_stamp_registar_success.html"
 
 
 
-class OshiroStampUpdateView(View):
+class OshiroStampUpdateView(AdminOshiroRequiredMixin,LoginRequiredMixin,View):
     """お城スタンプ更新"""
 
     def get(self, request, stamp_id):

@@ -6,10 +6,23 @@ from django.urls import reverse
 from django.views.generic.edit import UpdateView, DeleteView
 from operator_oshiro_info.models import OshiroInfo  # お城情報の参照用
 from admin_accounts.models import Admin  # Admin情報の参照用
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import PermissionDenied
 
+class AdminOshiroRequiredMixin:
+    """ログイン中の管理者が、URLのoshiro_idを担当しているかチェックする"""
+    def dispatch(self, request, *args, **kwargs):
+        admin = get_object_or_404(Admin, account=request.user)
+        oshiro_id = kwargs.get('oshiro_id')
+        
+        # 管理者の担当城IDと、URLのIDが一致するか
+        if admin.oshiro_info.id != oshiro_id:
+            raise PermissionDenied
+            
+        return super().dispatch(request, *args, **kwargs)
 
 # 音声ガイドお城一覧画面
-class AudioGuideOshiroListView(View):
+class AudioGuideOshiroListView(AdminOshiroRequiredMixin,LoginRequiredMixin,View):
     def get(self, request):
         oshiro_list = OshiroInfo.objects.all().order_by("id")
         
@@ -21,7 +34,7 @@ class AudioGuideOshiroListView(View):
 
 
 # 音声ガイド一覧画面
-class AudioGuideListView(View):
+class AudioGuideListView(AdminOshiroRequiredMixin,LoginRequiredMixin,View):
     def get(self, request, oshiro_id):
         oshiro = get_object_or_404(OshiroInfo, id=oshiro_id)
         rows = (    
@@ -41,7 +54,7 @@ class AudioGuideListView(View):
 
 
 # 登録画面
-class AudioGuideRegistarView(View):
+class AudioGuideRegistarView(AdminOshiroRequiredMixin,LoginRequiredMixin,View):
     """音声ガイド新規登録"""
 
     def get(self, request, oshiro_id):
@@ -84,7 +97,7 @@ class AudioGuideRegistarView(View):
 
 
 # 登録完了画面
-class AudioGuideRegistarSuccessView(TemplateView):
+class AudioGuideRegistarSuccessView(AdminOshiroRequiredMixin,LoginRequiredMixin,TemplateView):
     template_name = "audio_guide_registar_success.html"
 
     def get_context_data(self, **kwargs):
@@ -94,7 +107,7 @@ class AudioGuideRegistarSuccessView(TemplateView):
 
 
 # 更新画面
-class AudioGuideUpdateView(View):
+class AudioGuideUpdateView(AdminOshiroRequiredMixin,LoginRequiredMixin,View):
     """音声ガイド更新"""
 
     def get(self, request, oshiro_id, audio_guide_id):
@@ -128,7 +141,7 @@ class AudioGuideUpdateView(View):
 
 
 # 更新完了画面
-class AudioGuideUpdateSuccessView(TemplateView):
+class AudioGuideUpdateSuccessView(AdminOshiroRequiredMixin,LoginRequiredMixin,TemplateView):
     template_name = "audio_guide_update_success.html"
 
     def get_context_data(self, **kwargs):
@@ -139,7 +152,7 @@ class AudioGuideUpdateSuccessView(TemplateView):
 
 
 # 削除処理
-class AudioGuideDeleteView(View):
+class AudioGuideDeleteView(AdminOshiroRequiredMixin,LoginRequiredMixin,View):
     # 削除画面の表示
     def get(self, request, oshiro_id, audio_guide_id):
         audio_guide = get_object_or_404(
@@ -174,7 +187,7 @@ class AudioGuideDeleteView(View):
         )
 
 # 削除完了画面
-class AudioGuideDeleteSuccessView(TemplateView):
+class AudioGuideDeleteSuccessView(AdminOshiroRequiredMixin,LoginRequiredMixin,TemplateView):
     template_name = "audio_guide_delete_success.html"
 
     def get_context_data(self, **kwargs):
