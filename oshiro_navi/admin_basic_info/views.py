@@ -37,7 +37,25 @@ def _get_or_404(model_cls, **kwargs):
 
 class BasicInfoListView(View):
     def get(self, request):
-        oshiros = OshiroInfo.objects.all().order_by("id")
+        # 1. ログイン中の管理者のプロフィールを取得
+        # LoginRequiredMixinなどを使っている前提ですが、念のためチェック
+        if not hasattr(request.user, 'admin_profile'):
+            return render(request, "basic_info_list.html", {"rows": []})
+        
+        admin_profile = request.user.admin_profile
+
+        # 2. 担当しているお城（1〜5）をリスト化（Noneを除外）
+        managed_castle_ids = [
+            admin_profile.oshiro_management1_id,
+            admin_profile.oshiro_management2_id,
+            admin_profile.oshiro_management3_id,
+            admin_profile.oshiro_management4_id,
+            admin_profile.oshiro_management5_id,
+        ]
+        managed_castle_ids = [cid for cid in managed_castle_ids if cid is not None]
+
+        # 3. 担当お城のIDリストに含まれるOshiroInfoのみ取得
+        oshiros = OshiroInfo.objects.filter(id__in=managed_castle_ids).order_by("id")
 
         rows = []
         for oshiro in oshiros:
@@ -45,7 +63,6 @@ class BasicInfoListView(View):
             rows.append({"oshiro": oshiro, "basic": basic})
 
         return render(request, "basic_info_list.html", {"rows": rows})
-
 
 class BasicInfoUpdateView(View):
     def get(self, request):
