@@ -553,8 +553,7 @@ th { background: #f2f2f2; }
     font-size: 0.9rem;
 }
 
-.btn-update { background-color: #ffc107; color: #000; }
-.btn-delete { background-color: #dc3545; color: #fff; }
+
 .btn-detail { background-color: #fff; border: 1px solid #ccc; color: #333; }
 
 /* 登録ボタンを右下に置くための設定 */
