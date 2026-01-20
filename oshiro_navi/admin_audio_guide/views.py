@@ -10,17 +10,29 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 
 class AdminOshiroRequiredMixin:
-    """ログイン中の管理者が、URLのoshiro_idを担当しているかチェックする"""
-    def dispatch(self, request, *args, **kwargs):
-        admin = get_object_or_404(Admin, account=request.user)
-        oshiro_id = kwargs.get('oshiro_id')
-        
-        # 管理者の担当城IDと、URLのIDが一致するか
-        if admin.oshiro_info.id != oshiro_id:
-            raise PermissionDenied
-            
-        return super().dispatch(request, *args, **kwargs)
-
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        try:
+            admin_record = Admin.objects.get(account=user)
+            potential_castles = [
+                admin_record.oshiro_management1,
+                admin_record.oshiro_management2,
+                admin_record.oshiro_management3,
+                admin_record.oshiro_management4,
+                admin_record.oshiro_management5
+            ]
+            my_castles = [c for c in potential_castles if c is not None]
+            context['rows'] = my_castles
+        except Admin.DoesNotExist:
+            context['rows'] = []
+            context['error_message'] = "管理者情報が見つかりませんでした。"
+        except Exception as e:
+            context['rows'] = []
+            context['error_message'] = f"エラー: {e}"
+        return context
+    
+    
 # 音声ガイドお城一覧画面
 class AudioGuideOshiroListView(AdminOshiroRequiredMixin,LoginRequiredMixin,View):
     def get(self, request):

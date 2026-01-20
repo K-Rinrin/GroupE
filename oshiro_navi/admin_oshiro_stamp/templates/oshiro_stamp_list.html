@@ -6,13 +6,12 @@
 <div class="content-container">
     <h1>お城スタンプ一覧</h1>
     <hr style="width: 80%;">
-
-    <a href="{% url 'admin_oshiro_stamp:oshiro_stamp_registar' %}" class="btn btn-register">＋ 新規スタンプ登録</a>
     
     <table class="admin-table">
         <thead>
             <tr>
                 <th>対象のお城</th> 
+                <th>スタンプ名</th>
                 <th>操作</th>
             </tr>
         </thead>
@@ -20,14 +19,12 @@
             {% for stamp in stamps %}
             <tr>
                 <td>{{ stamp.oshiro_info.oshiro_name }}</td>
+                <td>{{ stamp.stamp_name }}</td>
                 <td>
                     <a href="{% url 'admin_oshiro_stamp:oshiro_stamp_update' stamp.id %}" class="btn btn-update">更新</a>
                 </td>
             </tr>
             {% empty %}
-            <tr>
-                <td colspan="5" style="text-align: center;">登録されたスタンプはまだないぞい。</td>
-            </tr>
             {% endfor %}
         </tbody>
     </table>

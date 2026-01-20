@@ -5,26 +5,17 @@
 {% block content %}
 <div class="content-container">
 <h1>お城スタンプ更新</h1>
-
+    <hr style="width: 80%;">
     {% if error %}
         <p style="color:red; font-weight:bold;">{{ error }}</p>
     {% endif %}
 
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-
-        <!-- お城選択 -->
-        <div class="form-group">
-            <label>お城</label><br>
-            <select name="oshiro_id" required>
-                {% for oshiro in oshiro_list %}
-                    <option value="{{ oshiro.id }}"
-                        {% if oshiro.id == stamp.oshiro_info.id %}selected{% endif %}>
-                        {{ oshiro.oshiro_name }}
-                    </option>
-                {% endfor %}
-            </select>
-        </div>
+            <p>
+                <strong>対象のお城：</strong>
+                {{ oshiro.oshiro_name }}
+            </p>
 
         <!-- スタンプ名 -->
         <div class="form-group">
