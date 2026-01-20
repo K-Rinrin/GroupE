@@ -1,5 +1,4 @@
 {% extends "user_base.html" %}
-{% load static %}
 
 {% block title %}イベント詳細 - {{ event.event_info }}{% endblock %}
 
@@ -21,26 +20,24 @@
             <tr style="border-bottom: 1px solid #eee;">
                 <th style="text-align: left; padding: 15px; background: #f9f9f9; font-weight: bold; color: #555;">開催期間</th>
                 <td style="padding: 15px;">
-                    {{ event.start_date|date:"Y/m/d H:i" }} 〜 {{ event.end_date|date:"Y/m/d H:i" }}
+                    {{ event.start_date|date:"Y年m月d日" }} 〜 {{ event.end_date|date:"Y年m月d日" }}
+                </td>
+            </tr>
+            <tr style="border-bottom: 1px solid #eee;">
+                <th style="text-align: left; padding: 15px; background: #f9f9f9; font-weight: bold; color: #555;">開催時間</th>
+                <td style="padding: 15px;">
+                    {{ event.start_time|time:"H:i" }} 〜 {{ event.end_time|time:"H:i" }}
                 </td>
             </tr>
             <tr>
-                <th style="text-align: left; padding: 15px; background: #f9f9f9; font-weight: bold; color: #555; vertical-align: top;">イベント内容</th>
-                <td style="padding: 15px; line-height: 1.8; white-space: pre-wrap;">{{ event.event_overview }}</td>
+                <th style="text-align: left; padding: 15px; background: #f9f9f9; font-weight: bold; color: #555; vertical-align: top;">イベント概要</th>
+                <td style="padding: 15px; line-height: 1.8; white-space: pre-wrap;">{{ event.event_overview|default:"詳細情報はありません。" }}</td>
             </tr>
         </table>
-
-        <div style="text-align: right; font-size: 13px; color: #888; border-top: 1px dashed #ccc; padding-top: 10px;">
-            {% if event.operoter %}
-                主催：{{ event.operoter.operator_name }}
-            {% elif event.admin %}
-                システム管理者による登録
-            {% endif %}
-        </div>
     </div>
 
     <div class="button-group" style="margin-top: 30px; text-align: center;">
-        <a href="{% url 'usermy_page:event_calendar' %}" class="btn-cancel" style="background: #666; color: #fff; padding: 10px 25px; text-decoration: none; border-radius: 5px;">
+        <a href="{% url 'user_event_info:event_info' %}" class="btn-cancel" style="background: #666; color: #fff; padding: 10px 25px; text-decoration: none; border-radius: 5px;">
             カレンダーに戻る
         </a>
     </div>
