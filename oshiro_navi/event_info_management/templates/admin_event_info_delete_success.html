@@ -1,9 +1,14 @@
 {% extends "admin_base.html" %}
 {% load static %}
 {% block content %}
-<div class="content-container">
-        <h1 class="page-title">イベント登録完了</h1>
-        <a href="{% url 'event_info_management:admin_event_info_list' %}" class="btn btn-cancel">イベント一覧へ戻る</a>
+<div class="content-container" style="text-align: center; padding-top: 50px;">
+    <div class="success-card" style="background: white; padding: 40px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); display: inline-block;">
+        <h1 style="color: #2d3748; margin-bottom: 20px;">削除が完了しました</h1>
+        <p style="color: #4a5568; margin-bottom: 30px;">イベント情報を正常に削除しました。</p>
+        <a href="{% url 'event_info_management:admin_event_info_list' %}" class="btn-primary" style="background-color: #2c3e50; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; font-weight: bold;">
+            一覧に戻る
+        </a>
+    </div>
 </div>
 {% endblock %}
 

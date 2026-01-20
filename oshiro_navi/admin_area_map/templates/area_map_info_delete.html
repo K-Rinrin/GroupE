@@ -4,21 +4,66 @@
 {% block content %}
 
 
-    <h1>メイン部分（周辺MAP情報削除画面）</h1><br>
-        
-        
-    鶴ヶ城<br>
-    <ul>
-        <a href= "{% url 'admin_area_map:area_map_info_delete_success' %}" class="delete-btn">
-            <span class="link_name">削除</span>
-        </a>       
-    </ul>
+<style>
+  .box{max-width:900px;margin:0 auto;}
+  .card{background:#fff;border:1px solid #ddd;border-radius:12px;padding:18px;}
+  .row{display:flex;gap:16px;flex-wrap:wrap;margin-top:10px;}
+  .item{min-width:220px;}
+  .label{font-size:12px;opacity:.75;margin-bottom:4px;}
+  .val{font-size:16px;font-weight:600;}
+  .actions{margin-top:18px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+  .danger{background:#c0392b;color:#fff;border:none;padding:10px 16px;border-radius:8px;cursor:pointer;}
+  .back{display:inline-block;padding:10px 16px;border-radius:8px;border:1px solid #aaa;text-decoration:none;color:#333;background:#fff;}
+  .thumb{width:72px;height:72px;object-fit:cover;border:1px solid #aaa;border-radius:10px;}
+</style>
 
-    <ul>
-        <a href= "{% url 'admin_area_map:area_map' %}" class="register-btn">
-            <span class="link_name">戻る</span>
-        </a>       
-    </ul>
+<div class="box">
+  <h1>周辺MAP削除確認</h1>
+
+  <div class="card">
+    <p style="margin:0 0 10px 0;">
+      以下のピンを削除します。よろしいですか？
+    </p>
+
+    <div class="row">
+      <div class="item">
+        <div class="label">カテゴリ</div>
+        <div class="val">{{ object.icon_name }}</div>
+      </div>
+
+      <div class="item">
+        <div class="label">緯度</div>
+        <div class="val">{{ object.latitude|floatformat:6 }}</div>
+      </div>
+
+      <div class="item">
+        <div class="label">経度</div>
+        <div class="val">{{ object.longitude|floatformat:6 }}</div>
+      </div>
+
+      <div class="item">
+        <div class="label">アイコン画像</div>
+        {% if object.icon_image %}
+          <img class="thumb" src="{{ object.icon_image.url }}" alt="icon">
+        {% else %}
+          <div class="val" style="font-weight:400;">なし</div>
+        {% endif %}
+      </div>
+    </div>
+
+    {# DeleteView は POST で削除 #}
+    <form method="post" class="actions">
+      {% csrf_token %}
+      <button type="submit" class="danger">削除する</button>
+
+      {% if basic_info_id %}
+        <a class="back" href="{% url 'admin_area_map:area_map_detail' basic_info_id %}">一覧へ戻る</a>
+      {% else %}
+        <a class="back" href="javascript:history.back()">戻る</a>
+      {% endif %}
+    </form>
+  </div>
+</div>
         
 
 {% endblock %}

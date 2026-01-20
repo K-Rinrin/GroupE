@@ -4,13 +4,29 @@
 {% block content %}
 
 
-    <h1>メイン部分（周辺MAP情報削除完了画面）</h1>
+<style>
+  .box{max-width:900px;margin:0 auto;}
+  .card{background:#fff;border:1px solid #ddd;border-radius:12px;padding:18px;}
+</style>
+
+<div class="box">
+  <h1>周辺MAP削除完了</h1>
+
+  <div class="card">
     <p>削除が完了しました。</p>
 
+    {% if request.GET.basic_info_id %}
+      <a class="btn-update" href="{% url 'admin_area_map:area_map_detail' request.GET.basic_info_id %}">
+        一覧へ戻る
+      </a>
+    {% else %}
+      <a class="btn-update" href="{% url 'admin_area_map:area_map' %}">
+        トップへ戻る
+      </a>
+    {% endif %}
+  </div>
+</div>
 
-    <a href="{% url 'admin_accounts:top' %}">
-        <span class="link_name">戻る</span>
-    </a>       
 
         
     

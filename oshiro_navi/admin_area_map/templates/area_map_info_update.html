@@ -5,21 +5,188 @@
 
 
 
-    <h1>メイン部分（周辺MAP情報更新画面）</h1><br>
-        
-        
-    鶴ヶ城<br>
-    <ul>
-        <a href= "{% url 'admin_area_map:area_map_info_update_success' %}" class="update-btn">
-            <span class="link_name">更新</span>
-        </a>       
-    </ul>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-    <ul>
-        <a href= "{% url 'admin_area_map:area_map' %}" class="register-btn">
-            <span class="link_name">戻る</span>
-        </a>       
-    </ul>
+<style>
+  .wrap{display:flex; gap:24px; align-items:flex-start;}
+  #map{width:520px;height:320px;background:#dff2d8;border:1px solid #aaa;}
+  .side{min-width:360px;}
+  .icon-list{display:flex; flex-direction:column; gap:10px; margin-top:10px;}
+  .icon-btn{padding:14px; border:1px solid #aaa; cursor:pointer; background:#fff; text-align:center;}
+  .icon-btn.active{outline:3px solid #ff5a5a;}
+  .actions{margin-top:16px; display:flex; gap:10px; flex-wrap:wrap;}
+  .hint{font-size:12px; opacity:.8; margin-top:6px;}
+  .warn{color:#c00; font-size:12px; margin-top:8px;}
+  .preview{margin-top:8px; font-size:12px; opacity:.9;}
+  .thumb{display:block; margin-top:6px; width:64px; height:64px; object-fit:cover; border:1px solid #aaa; border-radius:8px;}
+</style>
+
+<div class="basic-info-form">
+  <h2>周辺MAP更新</h2>
+  <hr style="width:100%;">
+
+  {% if form.errors %}
+    <div style="color:red; margin-bottom:12px;">
+      <div>入力に誤りがあります。確認してください。</div>
+      {{ form.non_field_errors }}
+      {% for field in form %}
+        {% for error in field.errors %}
+          <div>{{ field.label }}：{{ error }}</div>
+        {% endfor %}
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <div class="wrap">
+    <!-- 左：地図 -->
+    <div>
+      <div id="map"></div>
+      <div class="hint">①カテゴリを選ぶ → ②地図クリックで位置変更 → ③保存</div>
+      <div class="warn" id="warn" style="display:none;">※地図をクリックして位置を指定してください</div>
+
+      <div style="margin-top:10px;">
+        <a href="{% url 'admin_area_map:area_map_detail' basic_info_id %}">一覧へ戻る</a>
+      </div>
+    </div>
+
+    <!-- 右：フォーム -->
+    <div class="side">
+      <form method="post" enctype="multipart/form-data" id="updForm">
+        {% csrf_token %}
+
+        <!-- hidden（forms.pyでHiddenInput前提） -->
+        {{ form.latitude }}{{ form.longitude }}
+
+        <!-- icon_name は hidden化してボタンで選択 -->
+        <div style="display:none;">{{ form.icon_name }}</div>
+
+        <div style="font-weight:bold;">カテゴリ</div>
+        <div class="icon-list">
+          <div class="icon-btn" data-value="QR">QR</div>
+          <div class="icon-btn" data-value="トイレ">トイレ</div>
+          <div class="icon-btn" data-value="見どころポイント">見どころポイント</div>
+          <div class="icon-btn" data-value="バリアフリー情報">バリアフリー情報</div>
+        </div>
+
+        <div style="margin-top:12px;">
+          <div>アイコン画像（任意）</div>
+          {{ form.icon_image }}
+
+          {% if object.icon_image %}
+            <div class="preview">
+              現在の画像：
+              <img class="thumb" src="{{ object.icon_image.url }}" alt="current icon">
+            </div>
+          {% else %}
+            <div class="preview">現在の画像：なし</div>
+          {% endif %}
+        </div>
+
+        <div class="actions">
+          <button type="submit" class="btn-update">保存</button>
+          <a class="btn-delete" href="{% url 'admin_area_map:area_map_info_delete' object.pk %}">削除</a>
+          <a class="btn-cancel" href="{% url 'admin_area_map:area_map_detail' basic_info_id %}">戻る</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  // --- カテゴリ別スタイル（色で見分ける） ---
+  const CATEGORY_STYLE = {
+    "QR":             { color: "#1f78ff", fillColor: "#1f78ff" },
+    "トイレ":         { color: "#2ea043", fillColor: "#2ea043" },
+    "見どころポイント": { color: "#ff8c00", fillColor: "#ff8c00" },
+    "バリアフリー情報": { color: "#8a2be2", fillColor: "#8a2be2" },
+  };
+
+  const map = L.map('map').setView([{{ map_center.lat }}, {{ map_center.lng }}], {{ map_center.zoom }});
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
+
+  // hidden input（nameで取る）
+  const latEl = document.querySelector('input[name="latitude"]');
+  const lngEl = document.querySelector('input[name="longitude"]');
+  const iconSelect = document.querySelector('[name="icon_name"]');
+  const warnEl = document.getElementById("warn");
+
+  // 初期値（DBの値をフォームに入れている前提）
+  const initLat = parseFloat(latEl?.value || "{{ object.latitude }}");
+  const initLng = parseFloat(lngEl?.value || "{{ object.longitude }}");
+  const initCategory = (iconSelect?.value || "{{ object.icon_name|escapejs }}") || "QR";
+  const initImageUrl = "{% if object.icon_image %}{{ object.icon_image.url }}{% else %}{% endif %}";
+
+  function makeLayer(lat, lng, category, imageUrl){
+    // 画像があるなら画像ピン、なければ色丸ピン
+    if (imageUrl) {
+      const icon = L.icon({
+        iconUrl: imageUrl,
+        iconSize: [36, 36],
+        iconAnchor: [18, 36],
+        popupAnchor: [0, -34],
+      });
+      return L.marker([lat, lng], { icon });
+    }
+    const style = CATEGORY_STYLE[category] || { color:"#333", fillColor:"#333" };
+    return L.circleMarker([lat, lng], {
+      radius: 10,
+      weight: 3,
+      opacity: 1,
+      fillOpacity: 0.85,
+      ...style
+    });
+  }
+
+  let layer = makeLayer(initLat, initLng, initCategory, initImageUrl).addTo(map);
+  layer.bindPopup(initCategory).openPopup();
+  map.setView([initLat, initLng], {{ map_center.zoom }});
+
+  function redraw(lat, lng, category){
+    // 更新画面では「画像はアップロード前にURLが確定しない」ので、
+    // ここでは既存画像URLの有無で描画（新画像は保存後に反映）
+    const img = initImageUrl;
+    if (layer) map.removeLayer(layer);
+    layer = makeLayer(lat, lng, category, img).addTo(map);
+    layer.bindPopup(category).openPopup();
+  }
+
+  function setLatLng(lat, lng){
+    latEl.value = lat;
+    lngEl.value = lng;
+    redraw(lat, lng, iconSelect?.value || initCategory);
+    if (warnEl) warnEl.style.display = "none";
+  }
+
+  // 地図クリックで位置変更
+  map.on("click", e => setLatLng(e.latlng.lat, e.latlng.lng));
+
+  // カテゴリボタン
+  const buttons = document.querySelectorAll(".icon-btn");
+  function activate(value){
+    buttons.forEach(b => b.classList.toggle("active", b.dataset.value === value));
+    if (iconSelect) iconSelect.value = value;
+    // カテゴリ変更したら色も変える
+    const lat = parseFloat(latEl.value || initLat);
+    const lng = parseFloat(lngEl.value || initLng);
+    redraw(lat, lng, value);
+  }
+  buttons.forEach(btn => btn.addEventListener("click", () => activate(btn.dataset.value)));
+
+  // 初期カテゴリを反映
+  activate(initCategory);
+
+  // 保存前チェック
+  document.getElementById("updForm").addEventListener("submit", (e) => {
+    const lat = parseFloat(latEl.value || "0");
+    const lng = parseFloat(lngEl.value || "0");
+    if (!lat || !lng) {
+      e.preventDefault();
+      if (warnEl) warnEl.style.display = "block";
+    }
+  });
+</script>
+
         
     
 {% endblock %}

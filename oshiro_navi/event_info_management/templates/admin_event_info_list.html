@@ -3,49 +3,44 @@
 {% block content %}
 
 
-<div class="content-container">
-    <h1>イベント一覧</h1>
+<div class="container">
+    <div class="header-area">
+        <h1 class="page-title">公式イベント一覧</h1>
+        <a href="{% url 'event_info_management:admin_event_info_register' %}" class="btn-register-new">+ 新規公式イベント登録</a>
+    </div>
 
-    <!-- 新規登録ボタン -->
-    <a href="{% url 'event_info_management:admin_event_info_register' %}" class="btn btn-register">新規イベント登録</a>
-    <!-- イベント一覧テーブル -->
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>イベント名</th>
-                    <th>開催日</th> 
-                    <th>場所</th>
-                    <th>操作</th>
-                </tr>
-            </thead>
+    <div class="event-card-container">
+        {% for event in admin_events %}
+        <div class="event-card admin-border">
+            <div class="card-body">
+                <h3 class="event-title">{{ event.event_info }}</h3>
+                <div class="event-details">
+                    <p><strong>開催場所：</strong> {{ event.venue }}</p>
+                    <p><strong>期間：</strong> {{ event.start_date|date:"Y/m/d" }} 〜 {{ event.end_date|date:"Y/m/d" }}</p>
+                    <p><strong>時間：</strong> {{ event.start_time|time:"H:i"|default:"未設定" }} 〜 {{ event.end_time|time:"H:i"|default:"未設定" }}</p>
+                </div>
+                
+                <div class="status-badge">
+                    {% if event.public_settings %}
+                        <span class="badge badge-public">公開中</span>
+                    {% else %}
+                        <span class="badge badge-private">非公開</span>
+                    {% endif %}
+                </div>
+            </div>
 
-            <tbody>
-                <!-- ダミーデータ例：ここは実際のデータに置き換えて！ -->
-                <tr>
-                    <td>1</td>
-                    <td>サンプルイベント</td>
-                    <td>2024-12-01</td>
-                    <td>東京城</td>
-                    <td>
-                        <a href="{% url 'event_info_management:admin_event_info_update' %}" class="btn btn-update">更新</a>
-                        <a href="{% url 'event_info_management:admin_event_info_delete' %}" class="btn btn-delete">削除</a>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>2</td>
-                    <td>冬の城祭り</td>
-                    <td>2024-12-15</td>
-                    <td>大阪城</td>
-                    <td>
-                        <a href="event_update.html" class="btn btn-update">更新</a>
-                        <a href="event_delete.html" class="btn btn-delete">削除</a>
-                    </td>
-                </tr>
-
-            </tbody>
-        </table>
+            <div class="card-actions">
+                <a href="{% url 'event_info_management:admin_event_info_detail' event.pk %}" class="btn btn-detail">詳細</a>
+                <a href="{% url 'event_info_management:admin_event_info_update' event.pk %}" class="btn btn-update">更新</a>
+                <a href="{% url 'event_info_management:admin_event_info_delete' event.pk %}" class="btn btn-delete">削除</a>
+            </div>
+        </div>
+        {% empty %}
+        <div class="no-data">
+            <p>登録されている公式イベントはありません。</p>
+        </div>
+        {% endfor %}
+    </div>
 </div>
 
 
