@@ -5,32 +5,172 @@
 
 
 
-        <h1>メイン部分（周辺MAP情報一覧画面）</h1>
-        
-        
-        鶴ヶ城<br>
-        <ul>
-            <a href= "{% url 'admin_area_map:area_map_info_registar' %}" class="register-btn">
-                <span class="link_name">登録</span>
-            </a>       
-        </ul>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-        <ul>
-            <a href= "{% url 'admin_area_map:area_map_info_update' %}" class="update-btn">
-                <span class="link_name">更新</span>
-            </a>       
-        </ul>
+<style>
+  .wrap{display:flex; gap:24px; align-items:flex-start;}
+  #map{width:520px;height:320px;background:#dff2d8;border:1px solid #aaa;}
+  .side{min-width:320px;}
+  .icon-list{display:flex; flex-direction:column; gap:10px; margin-top:10px;}
+  .icon-btn{padding:10px; border:1px solid #aaa; cursor:pointer; background:#fff;}
+  .icon-btn.active{outline:3px solid #ff5a5a;}
+  .top-actions{display:flex; align-items:center; gap:12px;}
+  .hint{font-size:12px; opacity:.8; margin-top:6px;}
+</style>
 
-        <ul>
-            <a href= "{% url 'admin_area_map:area_map_info_delete' %}" class="delete-btn">
-                <span class="link_name">削除</span>
-            </a>       
-        </ul>
-        
-        
+<div class="content-container basic-info-list">
+  <h1>周辺MAP一覧</h1>
 
+  <div class="top-actions">
+    <a href="{% url 'admin_area_map:area_map_info_registar' basic_info_id %}" class="btn-register">周辺MAP登録</a>
+    <a href="javascript:history.back()">戻る</a>
+  </div>
 
+  <hr style="width: 100%;">
 
+  <div class="wrap">
+    <div>
+      <div id="map"></div>
+      <div class="hint">※ピンをクリックすると更新ページへ移動します</div>
+    </div>
+
+    <div class="side">
+      <div style="font-weight:bold;">カテゴリ</div>
+      <div class="icon-list">
+        <div class="icon-btn active" data-filter="ALL">すべて</div>
+        <div class="icon-btn" data-filter="QR">QR</div>
+        <div class="icon-btn" data-filter="トイレ">トイレ</div>
+        <div class="icon-btn" data-filter="見どころポイント">見どころポイント</div>
+        <div class="icon-btn" data-filter="バリアフリー情報">バリアフリー情報</div>
+      </div>
+    </div>
+  </div>
+
+  <hr style="width: 100%;">
+
+  <table class="basic-info-table" id="mapTable">
+    <thead>
+      <tr>
+        <th>アイコン</th>
+        <th>緯度</th>
+        <th>経度</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for m in maps %}
+      <tr class="basic-info-card"
+    data-icon="{{ m.icon_name|escape }}"
+    data-lat="{{ m.latitude }}"
+    data-lng="{{ m.longitude }}"
+    data-image-url="{% if m.icon_image %}{{ m.icon_image.url }}{% endif %}"
+    data-update-url="{% url 'admin_area_map:area_map_info_update' m.id %}">
+        <td class="castle-row">{{ m.icon_name }}</td>
+        <td class="castle-row">{{ m.latitude|floatformat:6 }}</td>
+        <td class="castle-row">{{ m.longitude|floatformat:6 }}</td>
+        <td class="basic-info-actions">
+          <a class="btn-update" href="{% url 'admin_area_map:area_map_info_update' m.id %}">更新</a>
+          <a class="btn-delete" href="{% url 'admin_area_map:area_map_info_delete' m.id %}">削除</a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="4" style="text-align:center; padding:14px;">データがありません</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<script>
+  const map = L.map('map').setView([{{ map_center.lat }}, {{ map_center.lng }}], {{ map_center.zoom }});
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
+
+  // カテゴリ別カラー（画像がないときはこれで見分ける）
+  const CATEGORY_STYLE = {
+    "QR": { color:"#1f78ff", fillColor:"#1f78ff" },
+    "トイレ": { color:"#2ea043", fillColor:"#2ea043" },
+    "見どころポイント": { color:"#ff8c00", fillColor:"#ff8c00" },
+    "バリアフリー情報": { color:"#8a2be2", fillColor:"#8a2be2" },
+  };
+
+  const rows = Array.from(document.querySelectorAll("#mapTable tbody tr[data-update-url]"));
+  const items = []; // { row, layer, iconName }
+
+  function makeLayer(lat, lng, iconName, imageUrl){
+    // 画像があるなら「画像ピン」
+    if (imageUrl) {
+      const icon = L.icon({
+        iconUrl: imageUrl,
+        iconSize: [36, 36],
+        iconAnchor: [18, 36],
+        popupAnchor: [0, -34],
+      });
+      return L.marker([lat, lng], { icon });
+    }
+
+    // 画像がないなら「カテゴリ色の丸ピン」
+    const style = CATEGORY_STYLE[iconName] || { color:"#333", fillColor:"#333" };
+    return L.circleMarker([lat, lng], {
+      radius: 10,
+      weight: 3,
+      opacity: 1,
+      fillOpacity: 0.85,
+      ...style
+    });
+  }
+
+  // まず全部作る
+  rows.forEach(row => {
+    const lat = parseFloat(row.dataset.lat);
+    const lng = parseFloat(row.dataset.lng);
+    const iconName = row.dataset.icon;
+    const updateUrl = row.dataset.updateUrl;
+    const imageUrl = (row.dataset.imageUrl || "").trim();
+
+    const layer = makeLayer(lat, lng, iconName, imageUrl).addTo(map);
+    layer.bindPopup(iconName);
+
+    layer.on("click", () => window.location.href = updateUrl);
+
+    items.push({ row, layer, iconName });
+  });
+
+  // 初期表示で範囲フィット
+  if (items.length > 0) {
+    const group = L.featureGroup(items.map(x => x.layer));
+    map.fitBounds(group.getBounds().pad(0.2));
+  }
+
+  function applyFilter(value){
+    items.forEach(x => {
+      const ok = (value === "ALL") || (x.iconName === value);
+
+      // 表（行）
+      x.row.style.display = ok ? "" : "none";
+
+      // 地図（レイヤー）
+      if (ok) {
+        if (!map.hasLayer(x.layer)) x.layer.addTo(map);
+      } else {
+        if (map.hasLayer(x.layer)) map.removeLayer(x.layer);
+      }
+    });
+  }
+
+  // カテゴリボタン
+  const btns = document.querySelectorAll(".icon-btn");
+  btns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      btns.forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      applyFilter(btn.dataset.filter);
+    });
+  });
+
+  // 初期：すべて
+  applyFilter("ALL");
+</script>
 
 
 

@@ -1,0 +1,33 @@
+{% extends 'admin_base.html' %}
+{% block title %}周辺MAP機能{% endblock %}
+{% block content %}
+
+<div class="content-container basic-info-list">
+  <h1>周辺MAP（城を選択）</h1>
+  <hr style="width:100%;">
+
+  <table class="basic-info-table">
+    <thead>
+      <tr>
+        <th>城名</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for b in basic_infos %}
+      <tr class="basic-info-card">
+        <td class="castle-name"><strong>{{ b.oshiro_info.oshiro_name }}</strong></td>
+        <td class="basic-info-actions">
+          <a class="btn-register" href="{% url 'admin_area_map:area_map_detail' b.id %}">
+            周辺MAPを開く
+          </a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="2" style="text-align:center; padding:14px;">基本情報がありません</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

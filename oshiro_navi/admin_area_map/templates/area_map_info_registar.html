@@ -4,22 +4,187 @@
 {% block content %}
 
 
-    <h1>メイン部分（周辺MAP情報登録画面）</h1><br>
-        
-        
-    鶴ヶ城<br>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-    <ul>
-        <a href= "{% url 'admin_area_map:area_map_info_registar_success' %}" class="register-btn">
-            <span class="link_name">登録</span>
-        </a>       
-    </ul>
+<style>
+  .wrap{display:flex; gap:24px; align-items:flex-start;}
+  #map{width:520px;height:320px;background:#dff2d8;border:1px solid #aaa;}
+  .side{min-width:320px;}
+  .icon-list{display:flex; flex-direction:column; gap:10px; margin-top:10px;}
+  .icon-btn{padding:14px; border:1px solid #aaa; cursor:pointer; background:#fff; text-align:center;}
+  .icon-btn.active{outline:3px solid #ff5a5a;}
+  .actions{margin-top:16px; display:flex; gap:10px;}
+  .hint{font-size:12px; opacity:.8; margin-top:6px;}
+  .warn{color:#c00; font-size:12px; margin-top:8px; display:none;}
+</style>
 
-    <ul>
-        <a href= "{% url 'admin_area_map:area_map' %}" class="register-btn">
-            <span class="link_name">戻る</span>
-        </a>       
-    </ul>
+<div class="basic-info-form">
+  <h2>周辺MAP登録</h2>
+  <hr style="width:100%;">
+
+  {% if form.errors %}
+  <div style="color:red; margin-bottom:12px;">
+    <div>入力に誤りがあります。確認してください。</div>
+    {{ form.non_field_errors }}
+    {% for field in form %}
+      {% for error in field.errors %}
+        <div>{{ field.label }}：{{ error }}</div>
+      {% endfor %}
+    {% endfor %}
+  </div>
+{% endif %}
+  <div class="wrap">
+    <!-- 左：地図 -->
+    <div>
+      <div id="map"></div>
+      <div class="hint">①カテゴリを選ぶ → ②地図をクリックで設置 → ③登録</div>
+      <div id="warn" class="warn">※地図をクリックして位置を指定してください</div>
+      <div style="margin-top:10px;">
+        <a href="{% url 'admin_area_map:area_map' %}">戻る</a>
+
+      </div>
+    </div>
+
+    <!-- 右：カテゴリ -->
+    <div class="side">
+      <form method="post" enctype="multipart/form-data" id="regForm">
+        {% csrf_token %}
+        <input type="hidden" name="pins_json" id="pins_json">
+
+
+        <!-- hidden（forms.pyでHiddenInputにしてる前提） -->
+        {{ form.latitude }}{{ form.longitude }}
+
+        <!-- icon_name は hidden化してボタンで選択 -->
+        <div style="display:none;">{{ form.icon_name }}</div>
+
+        <div style="font-weight:bold;">カテゴリ</div>
+        <div class="icon-list">
+          <div class="icon-btn active" data-value="QR">QR</div>
+          <div class="icon-btn" data-value="トイレ">トイレ</div>
+          <div class="icon-btn" data-value="見どころポイント">見どころポイント</div>
+          <div class="icon-btn" data-value="バリアフリー情報">バリアフリー情報</div>
+        </div>
+
+        <div style="margin-top:12px;">
+          <div>アイコン画像（任意）</div>
+          {{ form.icon_image }}
+        </div>
+
+        <div class="actions">
+          <button type="submit" class="btn-update">登録</button>
+          <a class="btn-cancel" href="{% url 'admin_area_map:area_map' %}">戻る</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  console.log("JS start");
+
+  const map = L.map('map').setView([{{ map_center.lat }}, {{ map_center.lng }}], {{ map_center.zoom }});
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
+
+  // hidden input（nameで取る）
+  const latEl = document.querySelector('input[name="latitude"]');
+  const lngEl = document.querySelector('input[name="longitude"]');
+  const iconSelect = document.querySelector('[name="icon_name"]');
+  const pinsJsonEl = document.getElementById("pins_json"); // ★追加
+  const warnEl = document.getElementById("warn");
+
+  // --- カテゴリ別スタイル（色で見分ける） ---
+  const CATEGORY_STYLE = {
+    "QR":             { color: "#1f78ff", fillColor: "#1f78ff" },
+    "トイレ":         { color: "#2ea043", fillColor: "#2ea043" },
+    "見どころポイント": { color: "#ff8c00", fillColor: "#ff8c00" },
+    "バリアフリー情報": { color: "#8a2be2", fillColor: "#8a2be2" },
+  };
+
+  // 置いた仮ピンを全部保持
+  const markers = []; // { marker, category, lat, lng }
+
+  function getCurrentCategory(){
+    return (iconSelect && iconSelect.value) ? iconSelect.value : "QR";
+  }
+
+  // ★pins_json を常に更新する
+  function syncPinsJson(){
+    if (!pinsJsonEl) return;
+    pinsJsonEl.value = JSON.stringify(
+      markers.map(x => ({ category: x.category, lat: x.lat, lng: x.lng }))
+    );
+    console.log("pins_json:", pinsJsonEl.value);
+  }
+
+  function addTempPin(lat, lng){
+    if (!latEl || !lngEl) {
+      console.warn("latitude/longitude input not found");
+      return;
+    }
+
+    const category = getCurrentCategory();
+    const style = CATEGORY_STYLE[category] || { color: "#333", fillColor: "#333" };
+
+    const m = L.circleMarker([lat, lng], {
+      radius: 10,
+      weight: 3,
+      opacity: 1,
+      fillOpacity: 0.8,
+      ...style
+    }).addTo(map);
+
+    m.bindPopup(category);
+
+    markers.push({ marker: m, category, lat, lng });
+
+    // （任意）最後に置いた座標を hidden に入れておく
+    latEl.value = lat;
+    lngEl.value = lng;
+
+    // ★ここで pins_json も更新（これがないと保存できない）
+    syncPinsJson();
+
+    if (warnEl) warnEl.style.display = "none";
+
+    console.log("added pin:", category, lat, lng, "total:", markers.length);
+  }
+
+  // 地図クリックで追加
+  map.on("click", e => addTempPin(e.latlng.lat, e.latlng.lng));
+
+  // --- カテゴリボタン ---
+  const buttons = document.querySelectorAll(".icon-btn");
+  function activate(value){
+    buttons.forEach(b => b.classList.toggle("active", b.dataset.value === value));
+    if (iconSelect) iconSelect.value = value;
+    console.log("category set:", value);
+  }
+  buttons.forEach(btn => btn.addEventListener("click", () => activate(btn.dataset.value)));
+  activate("QR");
+
+  // --- 右クリックで最後を取り消し ---
+  map.on("contextmenu", () => {
+    const last = markers.pop();
+    if (last) {
+      map.removeLayer(last.marker);
+      syncPinsJson(); // ★削除後も更新
+      console.log("removed last pin. total:", markers.length);
+    }
+  });
+
+  // --- 登録前チェック ---
+  document.getElementById("regForm").addEventListener("submit", (e) => {
+    if (markers.length === 0) {
+      e.preventDefault();
+      if (warnEl) warnEl.style.display = "block";
+      return;
+    }
+    // 念のため送信直前にも同期
+    syncPinsJson();
+  });
+</script>
 
 
 {% endblock %}

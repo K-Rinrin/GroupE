@@ -4,14 +4,15 @@
 {% block content %}
 
 
-    <h1>メイン部分（周辺MAP情報更新完了画面）</h1>
-    <p>更新が完了しました。</p>
+<div class="content-container basic-info-list">
+  <h1>周辺MAP更新完了</h1>
+  <p>更新が完了しました。</p>
 
-
-    <a href="{% url 'admin_accounts:top' %}">
-        <span class="link_name">戻る</span>
-    </a>       
-
-        
-    
+  {# views.py で basic_info_id を context に入れてる前提 #}
+  {% if request.GET.basic_info_id %}
+    <a class="btn-update" href="{% url 'admin_area_map:area_map_detail' request.GET.basic_info_id %}">一覧へ戻る</a>
+  {% else %}
+    <a class="btn-update" href="{% url 'admin_area_map:area_map' %}">トップへ戻る</a>
+  {% endif %}
+</div>
 {% endblock %}
