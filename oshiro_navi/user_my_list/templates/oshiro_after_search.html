@@ -1,16 +1,59 @@
 {% extends "user_base.html" %}
 {% load static %}
-{% block title %}{% endblock %}
+
+{% block title %}検索結果 - お城リスト{% endblock %}
+
 {% block content %}
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <title>お城リスト検索</title>
-</head>
-<body>
-    <h1>お城リスト検索画面</h1>
-    <a href="{% url 'usermy_list:oshiroinfo' %}">詳細</a>   
-</body>
-</html>
+<div class="container" style="max-width: 900px; margin: 30px auto;">
+    
+    <div style="background: #fff; padding: 20px; border-radius: 10px; margin-bottom: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+        <form method="get" action="{% url 'usermy_list:aftersearch' %}" style="display: flex; gap: 10px;">
+            <input type="text" name="keyword" value="{{ keyword }}" placeholder="お城名や住所で再検索..." 
+                style="flex: 1; padding: 10px 15px; border: 1px solid #ddd; border-radius: 5px;">
+            <button type="submit" style="background: #ffc107; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold;">
+                検索
+            </button>
+        </form>
+    </div>
+
+    <div class="result-info" style="margin-bottom: 20px; padding-left: 5px;">
+        <h2 style="font-size: 1.2em; color: #555;">「{{ keyword }}」の検索結果：<span style="color: #d9534f; font-weight: bold;">{{ oshiro_list|length }}件</span></h2>
+    </div>
+
+    <div class="oshiro-grid" style="display: grid; gap: 15px;">
+        {% for oshiro in oshiro_list %}
+        <div class="oshiro-item" style="background: #fff; padding: 20px; border-radius: 10px; border: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; transition: transform 0.2s;">
+            <div>
+                <h3 style="margin: 0 0 5px 0; font-size: 1.25em; color: #333;">{{ oshiro.oshiro_name }}</h3>
+                <p style="margin: 0; color: #888; font-size: 0.9em;">📍 {{ oshiro.address }}</p>
+            </div>
+            
+            <a href="{% url 'usermy_list:oshiroinfo' oshiro.id %}" 
+               style="text-decoration: none; color: #d9534f; border: 1px solid #d9534f; padding: 8px 20px; border-radius: 20px; font-size: 0.9em; font-weight: bold; transition: all 0.3s;">
+                詳細
+            </a>
+        </div>
+        {% empty %}
+        <div style="text-align: center; padding: 50px; color: #999;">
+            <p>条件に一致するお城が見つかりませんでした。</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div style="margin-top: 30px; text-align: center;">
+        <a href="{% url 'usermy_list:oshirolist' %}" style="color: #666; text-decoration: none;">← 検索画面に戻る</a>
+    </div>
+</div>
+
+<style>
+    .oshiro-item:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        border-color: #d9534f !important;
+    }
+    .oshiro-item a:hover {
+        background: #d9534f;
+        color: #fff !important;
+    }
+</style>
 {% endblock %}

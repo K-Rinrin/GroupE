@@ -1,20 +1,80 @@
 {% extends "user_base.html" %}
 {% load static %}
-{% block title %}{% endblock %}
-{% block content %}
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <title>基本情報</title>
-</head>
-<body>
-    <h1>基本情報画面</h1>
-    <a href="{% url 'usermy_list:oshiroinfo' %}">お城情報</a>   
-    <a href="{% url 'usermy_list:oshirobasicinfo' %}">基本情報</a> 
-    <a href="{% url 'usermy_list:oshiroreview' %}">口コミ</a>   
-  
 
-</body>
-</html>
+{% block title %}{{ oshiro.oshiro_name }} - 基本情報{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 800px; margin: 30px auto; background: #fff; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+    
+    <div class="oshiro-image-header" style="width: 100%; height: 350px; overflow: hidden; position: relative; background: #eee;">
+        {% if oshiro.basicinfo.highlights_img %}
+            <img src="{{ oshiro.basicinfo.highlights_img.url }}" alt="{{ oshiro.oshiro_name }}" style="width: 100%; height: 100%; object-fit: cover;">
+        {% elif oshiro.oshiro_images %}
+            <img src="{{ oshiro.oshiro_images.url }}" alt="{{ oshiro.oshiro_name }}" style="width: 100%; height: 100%; object-fit: cover;">
+        {% else %}
+            <div style="text-align: center; padding-top: 150px; color: #aaa;">No Image Available</div>
+        {% endif %}
+        
+        <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.7)); padding: 40px 20px 20px;">
+            <h1 style="color: white; margin: 0; font-size: 2em; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">{{ oshiro.oshiro_name }}</h1>
+        </div>
+    </div>
+
+    <div class="info-tabs" style="display: flex; border-bottom: 2px solid #eee; background: #fdfdfd;">
+        <a href="{% url 'usermy_list:oshiroinfo' oshiro.id %}" class="tab-item" style="flex: 1; text-align: center; padding: 15px; text-decoration: none; color: #888; font-weight: bold;">お城情報</a>
+        <a href="{% url 'usermy_list:oshirobasicinfo' oshiro.id %}" class="tab-item" style="flex: 1; text-align: center; padding: 15px; text-decoration: none; color: #d9534f; border-bottom: 3px solid #d9534f; font-weight: bold;">基本情報</a>
+        <a href="{% url 'usermy_list:oshiroreview' oshiro.id %}" class="tab-item" style="flex: 1; text-align: center; padding: 15px; text-decoration: none; color: #888; font-weight: bold;">口コミ</a>
+    </div>
+
+    <div class="info-content" style="padding: 40px 50px;">
+        {% with basic=oshiro.basicinfo %}
+        {% if basic %}
+            <h2 style="font-size: 1.2em; border-left: 5px solid #d9534f; padding-left: 10px; margin-bottom: 20px; color: #333;">施設案内</h2>
+            <table style="width: 100%; border-collapse: collapse; table-layout: fixed; margin-bottom: 40px;">
+                <tr>
+                    <th style="width: 150px; text-align: left; vertical-align: top; color: #888; font-weight: normal; padding: 15px 0; border-bottom: 1px solid #f0f0f0;">入場料</th>
+                    <td style="padding: 15px 0 15px 20px; color: #333; border-bottom: 1px solid #f0f0f0;">{{ basic.admission }} 円</td>
+                </tr>
+                <tr>
+                    <th style="width: 150px; text-align: left; vertical-align: top; color: #888; font-weight: normal; padding: 15px 0; border-bottom: 1px solid #f0f0f0;">営業時間</th>
+                    <td style="padding: 15px 0 15px 20px; color: #333; border-bottom: 1px solid #f0f0f0;">{{ basic.business_opening_hours|time:"H:i" }} ～ {{ basic.business_closing_hours|time:"H:i" }}</td>
+                </tr>
+                <tr>
+                    <th style="width: 150px; text-align: left; vertical-align: top; color: #888; font-weight: normal; padding: 15px 0; border-bottom: 1px solid #f0f0f0;">アクセス</th>
+                    <td style="padding: 15px 0 15px 20px; color: #333; border-bottom: 1px solid #f0f0f0;">{{ basic.access_info|linebreaksbr }}</td>
+                </tr>
+            </table>
+
+            <h2 style="font-size: 1.2em; border-left: 5px solid #d9534f; padding-left: 10px; margin-bottom: 20px; color: #333;">見どころ</h2>
+            <div style="margin-bottom: 40px; color: #444; line-height: 1.8; padding-left: 5px;">
+                {{ basic.highlights|linebreaksbr }}
+            </div>
+
+            {% if basic.gojoin_stamp or basic.gojoin %}
+            <h2 style="font-size: 1.2em; border-left: 5px solid #d9534f; padding-left: 10px; margin-bottom: 20px; color: #333;">御城印</h2>
+            <div style="display: flex; gap: 25px; align-items: flex-start; background: #fafafa; padding: 20px; border-radius: 10px;">
+                {% if basic.gojoin_stamp %}
+                    <img src="{{ basic.gojoin_stamp.url }}" style="width: 140px; border-radius: 5px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                {% endif %}
+                <p style="color: #444; line-height: 1.6; margin: 0;">{{ basic.gojoin|linebreaksbr|default:"" }}</p>
+            </div>
+            {% endif %}
+
+        {% else %}
+            <div style="text-align: center; padding: 80px 0; color: #bbb;">
+                <p>基本情報がまだ登録されていません。</p>
+            </div>
+        {% endif %}
+        {% endwith %}
+
+        <div style="margin-top: 50px; text-align: center;">
+            <a href="javascript:history.back()" style="color: #999; text-decoration: none; font-size: 0.9em; border: 1px solid #eee; padding: 8px 20px; border-radius: 20px;">← 戻る</a>
+        </div>
+    </div>
+</div>
+
+<style>
+    .tab-item { transition: 0.3s; }
+    .tab-item:hover { background: #fff5f5; color: #d9534f !important; }
+</style>
 {% endblock %}

@@ -1,19 +1,59 @@
 {% extends "user_base.html" %}
 {% load static %}
-{% block title %}{% endblock %}
+
+{% block title %}{{ oshiro.oshiro_name }} - お城情報{% endblock %}
+
 {% block content %}
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <title>お城情報</title>
-</head>
-<body>
-    <h1>お城情報画面</h1>
-    <a href="{% url 'usermy_list:oshiroinfo' %}">お城情報</a> 
-    <a href="{% url 'usermy_list:oshirobasicinfo' %}">基本情報</a> 
+<div class="container" style="max-width: 800px; margin: 30px auto; background: #fff; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
     
-    <a href="{% url 'usermy_list:oshiroreview' %}">口コミ</a> 
-</body>
-</html>
+    <div class="oshiro-image-header" style="width: 100%; height: 350px; overflow: hidden; position: relative; background: #eee;">
+        {% if oshiro.basicinfo.highlights_img %}
+            <img src="{{ oshiro.basicinfo.highlights_img.url }}" alt="{{ oshiro.oshiro_name }}" style="width: 100%; height: 100%; object-fit: cover;">
+        {% elif oshiro.oshiro_images %}
+            <img src="{{ oshiro.oshiro_images.url }}" alt="{{ oshiro.oshiro_name }}" style="width: 100%; height: 100%; object-fit: cover;">
+        {% else %}
+            <div style="text-align: center; padding-top: 150px; color: #aaa;">No Image Available</div>
+        {% endif %}
+        
+        <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.7)); padding: 40px 20px 20px;">
+            <h1 style="color: white; margin: 0; font-size: 2em; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">{{ oshiro.oshiro_name }}</h1>
+        </div>
+    </div>
+
+    <div class="info-tabs" style="display: flex; border-bottom: 2px solid #eee; background: #fdfdfd;">
+        <a href="{% url 'usermy_list:oshiroinfo' oshiro.id %}" class="tab-item" style="flex: 1; text-align: center; padding: 15px; text-decoration: none; color: #d9534f; border-bottom: 3px solid #d9534f; font-weight: bold;">お城情報</a>
+        <a href="{% url 'usermy_list:oshirobasicinfo' oshiro.id %}" class="tab-item" style="flex: 1; text-align: center; padding: 15px; text-decoration: none; color: #888; font-weight: bold;">基本情報</a>
+        <a href="{% url 'usermy_list:oshiroreview' oshiro.id %}" class="tab-item" style="flex: 1; text-align: center; padding: 15px; text-decoration: none; color: #888; font-weight: bold;">口コミ</a>
+    </div>
+
+    <div class="info-content" style="padding: 40px 50px;">
+        <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
+            <tr>
+                <th style="width: 150px; text-align: left; vertical-align: top; color: #888; font-weight: normal; padding: 15px 0; border-bottom: 1px solid #f0f0f0;">住所</th>
+                <td style="padding: 15px 0 15px 20px; color: #333; border-bottom: 1px solid #f0f0f0;">{{ oshiro.address }}</td>
+            </tr>
+            <tr>
+                <th style="width: 150px; text-align: left; vertical-align: top; color: #888; font-weight: normal; padding: 15px 0; border-bottom: 1px solid #f0f0f0;">築城年</th>
+                <td style="padding: 15px 0 15px 20px; color: #333; border-bottom: 1px solid #f0f0f0;">{{ oshiro.built_year }}年</td>
+            </tr>
+            <tr>
+                <th style="width: 150px; text-align: left; vertical-align: top; color: #888; font-weight: normal; padding: 15px 0; border-bottom: 1px solid #f0f0f0;">遺構</th>
+                <td style="padding: 15px 0 15px 20px; color: #333; border-bottom: 1px solid #f0f0f0;">{{ oshiro.ruins|default:"なし" }}</td>
+            </tr>
+            <tr>
+                <th style="width: 150px; text-align: left; vertical-align: top; color: #888; font-weight: normal; padding: 15px 0; border-bottom: 1px solid #f0f0f0;">構造</th>
+                <td style="padding: 15px 0 15px 20px; color: #333; border-bottom: 1px solid #f0f0f0;">{{ oshiro.structure|linebreaksbr }}</td>
+            </tr>
+        </table>
+        
+        <div style="margin-top: 40px; text-align: center;">
+            <a href="javascript:history.back()" style="color: #999; text-decoration: none; font-size: 0.9em; border: 1px solid #eee; padding: 8px 20px; border-radius: 20px;">← 戻る</a>
+        </div>
+    </div>
+</div>
+
+<style>
+    .tab-item { transition: 0.3s; }
+    .tab-item:hover { background: #fff5f5; color: #d9534f !important; }
+</style>
 {% endblock %}
