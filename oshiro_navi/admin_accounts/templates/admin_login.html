@@ -12,10 +12,10 @@
 <div class="login_container">
     <h1>管理者アカウントに<br>ログインしてください</h1>
     
-    {% if messages %}
-        {% for message in messages %}
-            <p style="color: red;">{{ message }}</p>
-        {% endfor %}
+    {% if error %}
+        <div class="error-msg" style="color: #e53e3e; background: #fff5f5; border: 1px solid #feb2b2; padding: 10px; border-radius: 4px; margin-bottom: 20px; text-align: center;">
+            {{ error }}
+        </div>
     {% endif %}
 
     <form class="login_form" method="POST" action="{% url 'admin_accounts:login' %}">

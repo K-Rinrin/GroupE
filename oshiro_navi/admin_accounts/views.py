@@ -20,8 +20,8 @@ class AdminLogoutView(View):
 # ログイン画面
 class AdminLoginView(View):
     def get(self, request):
-        # すでにログインしている場合はトップへ
-        if request.user.is_authenticated:
+        # すでにログイン済みで管理者の場合はトップへ
+        if request.user.is_authenticated and hasattr(request.user, 'admin_profile'):
             return redirect('admin_accounts:top')
         return render(request, 'admin_login.html')
 
@@ -29,17 +29,28 @@ class AdminLoginView(View):
         admin_id = request.POST.get('id')
         admin_pass = request.POST.get('pass')
 
-        # ユーザー認証
+        # 1. 認証（IDとパスワードの照合）
         user = authenticate(request, username=admin_id, password=admin_pass)
 
         if user is not None:
-            # 認証成功した場合
-            login(request, user)
-            return redirect('admin_accounts:top') # ログイン後TOP画面へ
+            # 2. 管理者プロフィールを持っているかチェック
+            if hasattr(user, 'admin_profile'):
+                login(request, user)
+                return redirect('admin_accounts:top')
+            else:
+                # ユーザーは存在するが、管理者ではない場合
+                context = {
+                    'error': 'このアカウントには管理者権限がありません。',
+                    'prev_id': admin_id,
+                }
+                return render(request, 'admin_login.html', context)
         else:
-            # 認証失敗した場合
-            messages.error(request, 'IDまたはパスワードが正しくありません。')
-            return render(request, 'admin_login.html')
+            # 認証失敗
+            context = {
+                'error': '管理者IDまたはパスワードが正しくありません。',
+                'prev_id': admin_id,
+            }
+            return render(request, 'admin_login.html', context)
 
 
 

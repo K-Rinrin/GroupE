@@ -10,6 +10,7 @@ from .forms import AdminUserCreateForm
 from django.contrib.auth import get_user_model
 from django.shortcuts import render, redirect
 from django.views import View
+from operator_accounts.models import Operator
 from django.contrib.auth import authenticate, login
 from django.urls import reverse
 
@@ -89,8 +90,8 @@ class AdminAccountDeleteSuccessView(TemplateView):
 # ログイン画面
 class OperatorLoginView(View):
     def get(self, request):
-        # すでにログイン済みならトップへ飛ばす
         if request.user.is_authenticated:
+            # すでにログインしている場合、Operatorならトップへ、そうでなければログアウトさせる等の処理
             return redirect('operator_accounts:top')
         return render(request, 'operator_login.html')
 
@@ -98,15 +99,26 @@ class OperatorLoginView(View):
         admin_id = request.POST.get('id')
         admin_pass = request.POST.get('pass')
 
-        # 1. ユーザーを認証する（DjangoのUserモデルと照合）
+        # 1. まずはユーザーを認証（IDとパスワードの照合）
         user = authenticate(request, username=admin_id, password=admin_pass)
 
         if user is not None:
-            # 認証成功した場合
-            login(request, user)
-            return redirect('operator_accounts:top')
+            # 2. 【重要】そのユーザーが「運営アカウント(Operator)」かチェック
+            is_operator = Operator.objects.filter(account=user).exists()
+            
+            if is_operator:
+                # 運営アカウントであればログイン成功
+                login(request, user)
+                return redirect('operator_accounts:top')
+            else:
+                # ユーザーは存在するが、運営アカウントではない（管理者や一般ユーザー）場合
+                context = {
+                    'error': 'このアカウントは運営用ではありません。',
+                    'prev_id': admin_id,
+                }
+                return render(request, 'operator_login.html', context)
         else:
-            # 認証失敗した場合
+            # 3. 認証失敗（IDまたはパスワード間違い）
             context = {
                 'error': 'IDまたはパスワードが正しくありません。',
                 'prev_id': admin_id,
