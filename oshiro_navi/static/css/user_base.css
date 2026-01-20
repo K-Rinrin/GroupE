@@ -1,6 +1,10 @@
 /* ====================================
 PC / Web 表示 
 ==================================== */
+html {
+    overflow-y: scroll;
+}
+
 .user-container {
     position: fixed;
     top: 0;

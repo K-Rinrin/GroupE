@@ -1,16 +1,99 @@
 {% extends "user_base.html" %}
 {% load static %}
-{% block title %}{% endblock %}
+
+{% block title %}更新完了{% endblock %}
+
 {% block content %}
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <title>プロフィール更新</title>
-</head>
-<body>
-    <h1>プロフィールを更新しました</h1>
-    <a href="{% url 'usermy_page:mypage' %}">マイページに戻る</a>
-</body>
-</html>
+<div class="mypage-container">
+    <div class="minimal-success-card">
+        <div class="minimal-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+        </div>
+
+        <h2 class="minimal-title">更新完了</h2>
+        <p class="minimal-message">プロフィール情報を保存しました。</p>
+
+        <div class="minimal-button-group">
+            <a href="{% url 'usermy_page:mypage' %}" class="btn-shibu">
+                マイページへ戻る
+                <span class="arrow">→</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* 落ち着いたトーンのカードスタイル */
+    .minimal-success-card {
+        max-width: 450px;
+        margin: 80px auto;
+        padding: 60px 30px;
+        background: #fdfdfd;
+        border: 1px solid #e0e0e0;
+        border-radius: 2px; /* 角を鋭角にして硬派な印象に */
+        text-align: center;
+        letter-spacing: 0.1em; /* 日本語でもゆとりを持たせる */
+    }
+
+    .minimal-icon {
+        color: #444444;
+        margin-bottom: 25px;
+    }
+
+    .minimal-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #1a1a1a;
+        margin-bottom: 8px;
+    }
+
+    .minimal-message {
+        font-size: 13px;
+        color: #888888;
+        margin-bottom: 45px;
+    }
+
+    /* しぶいボタンのデザイン */
+    .btn-shibu {
+        position: relative;
+        display: inline-block;
+        color: #1a1a1a;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 500;
+        padding: 14px 45px;
+        border: 1px solid #1a1a1a;
+        transition: all 0.4s ease;
+        background: transparent;
+    }
+
+    .btn-shibu .arrow {
+        display: inline-block;
+        margin-left: 10px;
+        transition: transform 0.4s ease;
+    }
+
+    /* ホバー時に色が反転する演出 */
+    .btn-shibu:hover {
+        background: #1a1a1a;
+        color: #ffffff;
+    }
+
+    .btn-shibu:hover .arrow {
+        transform: translateX(6px);
+    }
+
+    /* じわっと浮かび上がるアニメーション */
+    .minimal-success-card {
+        animation: fadeIn 1s ease-out;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(5px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
 {% endblock %}
