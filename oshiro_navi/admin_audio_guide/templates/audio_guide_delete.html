@@ -1,25 +1,51 @@
-{% extends 'admin_base.html' %}
-{% load static %}
-{% block title %}音声ガイド{% endblock %}
+{% extends "admin_base.html" %}
+{% block title %}音声ガイド削除確認{% endblock %}
+
 {% block content %}
+<div class="content-container">
+
+    <h2>音声ガイド削除確認</h2>
+    <hr style="width: 80%;">
+<div class="form-group">
+    <!-- 対象のお城 -->
+    <p>
+        <strong>対象のお城：</strong>
+        {{ audio_guide.oshiro_info.oshiro_name }}
+    </p>
+
+    
+        <p>
+            <strong>音声ガイドタイトル：</strong><br>
+            {{ audio_guide.title }} 
+        </p>
+    
 
 
-    <h1>メイン部分（音声ガイド削除画面）</h1><br>
-        
-        
-    鶴ヶ城<br>
-
-    <ul>
-        <a href= "{% url 'admin_audio_guide:audio_guide_delete_success' %}" class="register-btn">
-            <span class="link_name">削除</span>
-        </a>       
-    </ul>
-
-    <ul>
-        <a href= "{% url 'admin_audio_guide:audio_guide' %}" class="register-btn">
-            <span class="link_name">戻る</span>
-        </a>       
-    </ul>
+        <p>
+            <strong>ガイド説明：</strong><br>
+            {{ audio_guide.guide_explanation|linebreaksbr }} 
+        </p>
+</div>
 
 
+    <!-- 確認メッセージ -->
+    <p style="color: red; font-weight: bold;">
+        ※ この音声ガイドを削除すると元に戻せません。本当に削除しますか？
+    </p>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-delete">
+                削除する
+            </button>
+
+            <a href="{% url 'admin_audio_guide:audio_guide_list' oshiro_id %}"class="btn btn-cancel">
+                キャンセル
+            </a>
+        </div>
+    </form>
+
+</div>
 {% endblock %}

@@ -1,25 +1,56 @@
-{% extends 'admin_base.html' %}
-{% load static %}
-{% block title %}音声ガイド{% endblock %}
+{% extends "admin_base.html" %}
+{% block title %}音声ガイド新規登録{% endblock %}
+
 {% block content %}
 <div class="content-container">
 
-    <h1>メイン部分（音声ガイド登録画面）</h1><br>
-        
-        
-    
+    <h2>音声ガイド新規登録</h2>
+    <hr style="width: 80%;">
 
-    <ul>
-        <a href= "{% url 'admin_audio_guide:audio_guide_registar_success' %}" class="btn btn-register">
-            <span class="link_name">登録</span>
-        </a>       
-    </ul>
+    <!-- 選択中のお城表示 -->
+    <p>
+        <strong>対象のお城：</strong>
+        {{ oshiro.oshiro_name }}
+    </p>
 
-    <ul>
-        <a href= "{% url 'admin_audio_guide:audio_guide' %}" class="btn btn-cancel">
-            <span class="link_name">戻る</span>
-        </a>       
-    </ul>
+    <form method="post">
+        {% csrf_token %}
+
+        <!-- タイトル -->
+        <div class="form-group">
+            <label>音声ガイドタイトル</label><br>
+            <input
+                type="text"
+                name="title"
+                required
+                placeholder="例：天守の歴史"
+            >
+        </div>
+
+        <!-- 説明 -->
+        <div class="form-group">
+            <label>ガイド説明</label><br>
+            <textarea
+                name="guide_explanation"
+                rows="5"
+                placeholder="音声ガイドの内容説明を入力してください"
+            ></textarea>
+        </div>
+
+        <!-- ボタン -->
+        <div class="form-group">
+            <button type="submit" class="btn btn-register">
+                登録
+            </button>
+
+            <a
+                href="{% url 'admin_audio_guide:audio_guide_list' oshiro.id %}"
+                class="btn btn-cancel"
+            >
+                戻る
+            </a>
+        </div>
+
+    </form>
 </div>
-
 {% endblock %}

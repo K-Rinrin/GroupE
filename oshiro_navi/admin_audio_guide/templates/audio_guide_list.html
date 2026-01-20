@@ -3,29 +3,45 @@
 
 {% block content %}
 <div class="content-container">
-<h2>音声ガイド一覧</h2>
+<h2>{{ oshiro.oshiro_name }}：音声ガイド一覧</h2>
 <hr style="width: 80%;">
-<table border="1" cellpadding="8" cellspacing="0">
-<thead>
-    <tr>
-    <th>お城名</th>
-    <th>操作</th>
-    </tr>
-</thead>
-<tbody>
-    {% for row in rows %}
-    <tr>
-        <td>{{ row.oshiro.oshiro_name }}</td>
-
-        <td>
-        <a href="{% url 'admin_audio_guide:audio_guide_update' %}?oshiro_id={{ row.oshiro.id }}" class="btn btn-update">
-            <span class="btn btn-edit">編集</span>
-        </a>
-        </td>
-    </tr>
-    {% endfor %}
-</tbody>
-</table>
+<div style="display: flex; gap: 10px; align-items: center;">
+    <a class="btn btn-register" href="{% url 'admin_audio_guide:audio_guide_registar' oshiro.id %}">
+        ＋ 新規音声ガイド登録
+    </a>
+    <a href="{% url 'admin_audio_guide:audio_guide' %}" class="btn btn-cancel">
+        お城一覧画面へ戻る
+    </a>
 </div>
 
+
+<table border="1" cellpadding="8" cellspacing="0">
+    <thead>
+        <tr>
+            <th>タイトル</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in rows %}
+        <tr>
+            <td>{{ row.title }}</td>
+            <td>
+                <a href="{% url 'admin_audio_guide:audio_guide_update' oshiro.id row.id %}"class="btn btn-update">
+                    更新
+                </a>
+                <a href="{% url 'admin_audio_guide:audio_guide_delete' oshiro.id row.id %}"class="btn btn-delete">
+                    削除
+                </a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="3">音声ガイドはまだ登録されていません</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+</div>
 {% endblock %}

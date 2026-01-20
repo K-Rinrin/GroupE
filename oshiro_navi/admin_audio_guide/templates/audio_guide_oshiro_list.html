@@ -1,0 +1,35 @@
+{% extends "admin_base.html" %}
+{% block title %}音声ガイド一覧{% endblock %}
+
+{% block content %}
+<div class="content-container">
+<h2>音声ガイド：お城一覧</h2>
+<hr style="width: 80%;">
+
+<table border="1" cellpadding="8" cellspacing="0">
+    <thead>
+        <tr>
+            <th>お城名</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for oshiro in rows %}
+        <tr>
+            <td>{{ oshiro.oshiro_name }}</td> 
+            <td>
+                <a href="{% url 'admin_audio_guide:audio_guide_list' oshiro.id %}"
+                class="btn btn-update">
+                    音声ガイド一覧・編集
+                </a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="2">お城の情報が登録されていません。</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock %}

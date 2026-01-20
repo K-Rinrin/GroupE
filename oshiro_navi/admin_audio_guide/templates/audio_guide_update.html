@@ -1,25 +1,54 @@
-{% extends 'admin_base.html' %}
-{% load static %}
-{% block title %}音声ガイド{% endblock %}
+{% extends "admin_base.html" %}
+{% block title %}音声ガイド更新{% endblock %}
+
 {% block content %}
+<div class="content-container">
 
+    <h2>音声ガイド更新</h2>
+    <hr style="width: 80%;">
 
-    <h1>メイン部分（音声ガイド更新画面）</h1><br>
-        
-        
-    鶴ヶ城<br>
+    <!-- 対象のお城 -->
+    <p>
+        <strong>対象のお城：</strong>
+        {{ audio_guide.oshiro_info.oshiro_name }}
+    </p>
 
-    <ul>
-        <a href= "{% url 'admin_audio_guide:audio_guide_update_success' %}" class="register-btn">
-            <span class="link_name">更新</span>
-        </a>       
-    </ul>
+    <form method="post">
+        {% csrf_token %}
 
-    <ul>
-        <a href= "{% url 'admin_audio_guide:audio_guide' %}" class="register-btn">
-            <span class="link_name">戻る</span>
-        </a>       
-    </ul>
+        <!-- タイトル -->
+        <div class="form-group">
+    <label>音声ガイドタイトル</label><br>
+    <input
+        type="text"
+        name="title"
+        value="{{ audio_guide.title }}"  required
+    >
+</div>
 
+<div class="form-group">
+    <label>ガイド説明</label><br>
+    <textarea name="guide_explanation"rows="5">
+        {{ audio_guide.guide_explanation }}
+    </textarea> 
+</div>
 
+<p>
+    <strong>対象のお城：</strong>
+    {{ audio_guide.oshiro_name }} 
+</p>
+        <!-- ボタン -->
+        <div class="form-group">
+            <button type="submit" class="btn btn-update">
+                更新
+            </button>
+
+            <a href="{% url 'admin_audio_guide:audio_guide_list' oshiro_id %}"class="btn btn-cancel">
+                戻る
+            </a>
+        </div>
+
+    </form>
+
+</div>
 {% endblock %}
