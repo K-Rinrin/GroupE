@@ -1,4 +1,5 @@
 {% extends "admin_base.html" %}
+{% load static %}
 {% block title %}モデルコース登録 - {{ oshiro.oshiro_name }}{% endblock %}
 
 {% block content %}
@@ -82,29 +83,45 @@
         <h2>スポット2</h2>
         <!-- スポット2の入力欄も同様に -->
         <div class="form-group">
-            <label>スポット名</label><br>
-            <input type="text" name="spot2_name" placeholder="例: 茶室麟閣" style="width: 100%; max-width: 500px;">
+                <label>スポット名</label><br>
+                <input type="text" name="spot2_name" placeholder="例: 茶室麟閣" style="width: 100%; max-width: 500px;">
+            </div>
+            <div class="form-group">
+                <label>短い説明文</label><br>
+                <textarea name="spot2_short" rows="3"
+                          placeholder="例: 茶室麟閣の敷地内でお抹茶をお楽しみいただけます。" style="width: 100%; max-width: 500px;"></textarea>
+            </div>
+            <div class="form-group">
+                <label>詳細説明文</label><br>
+                <textarea name="spot2_detail" rows="4"
+                          placeholder="詳しい歴史や見どころなどを入力してください。" style="width: 100%; max-width: 500px;"></textarea>
+            </div>
+            <div class="form-group">
+                <label>スポット画像</label><br>
+                <input type="file" name="spot2_image" accept="image/*">
+            </div>
+            <div class="form-group">
+                <label>補足情報</label><br>
+                <textarea name="spot2_note" rows="2"
+                          placeholder="見学時間、料金、ボランティアガイドの有無など" style="width: 100%; max-width: 500px;"></textarea>
+            </div>
+            <hr>
         </div>
-        <!-- (省略：他項目も同様に記述) -->
-        
-        <hr>
+        <!-- ▲▲▲ スポット2エリア終了 ▲▲▲ -->
 
-        <!-- UIとしてのボタン（機能はJavaScriptが必要ですが、今回は見た目のみ） -->
+        <!-- ▼▼▼ 3. ボタンにIDを追加 ▼▼▼ -->
         <div style="margin-bottom: 20px;">
-            <button type="button" class="btn btn-secondary">＋ スポットを追加</button>
+            <button type="button" id="add-spot-btn" class="btn btn-secondary">＋ スポットを追加</button>
             <small>※現在は固定で2件までの登録となります</small>
         </div>
 
         <hr>
 
         <div class="form-actions" style="margin-top: 20px;">
-            <!-- キャンセルボタン -->
             <a href="{% url 'admin_model_course:model_couse_list' oshiro_id=oshiro.pk %}" 
                style="text-decoration: none; color: #666; margin-right: 20px;">
                 キャンセル
             </a>
-
-            <!-- 登録ボタン -->
             <button type="submit" class="btn btn-primary"
                     style="padding: 10px 30px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">
                 登録
@@ -114,14 +131,12 @@
     </form>
 </div>
 
-<!-- 簡易CSS -->
 <style>
-    .form-group {
-        margin-bottom: 15px;
-    }
-    label {
-        font-weight: bold;
-    }
+    .form-group { margin-bottom: 15px; }
+    label { font-weight: bold; }
 </style>
+
+<!-- ▼▼▼ 4. JSファイルの読み込み ▼▼▼ -->
+<script src="{% static 'js/model_course.js' %}"></script>
 
 {% endblock %}

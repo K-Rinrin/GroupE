@@ -12,6 +12,9 @@
         <a class="btn-new" href="{% url 'admin_model_course:model_couse_registar' oshiro_id=oshiro.pk %}">
             ＋ 新規登録
         </a>
+        <a class="btn-new" href="{% url 'admin_model_course:model_couse_search' %}">
+            お城選択画面へ戻る
+        </a>
     </div>
 
     <!-- カテゴリ選択 -->
@@ -51,7 +54,7 @@
                 <div class="course-meta">
                     <small>
                         <span class="difficulty-badge">{{ course.difficulty }}</span> |
-                        所要時間: {{ course.required_time }} | 
+                        所要時間: {{ course.required_time|time:"G:i" }}  | 
                         距離: {{ course.distance }}km
                     </small>
                 </div>
