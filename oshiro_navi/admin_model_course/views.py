@@ -101,12 +101,10 @@ class ModelCouseRegistarView(LoginRequiredMixin, TemplateView):
             )
 
             # 2. 子（スポット）の保存 (ループ処理)
-            # spot_name_1, spot_name_2... を順番に探して保存
-            # 最大30個までチェックする
             for i in range(1, 31):
                 name_key = f'spot_name_{i}'
                 
-                # 名前が入っている場合のみ保存
+                
                 if data.get(name_key):
                     ModelCourseSpot.objects.create(
                         model_course=course,
@@ -154,8 +152,6 @@ class ModelCouseUpdateView(LoginRequiredMixin, TemplateView):
         
         context['course'] = course
         context['oshiro'] = course.oshiro_info
-        # 登録済みのスポット一覧を渡す（順番通りに）
-        # テンプレートでは {% for spot in spots %} で展開する
         context['spots'] = course.spots.all().order_by('order')
         return context
 
@@ -176,7 +172,6 @@ class ModelCouseUpdateView(LoginRequiredMixin, TemplateView):
             course.save()
 
             # 2. 子情報の更新
-            # シンプルに全消しして再登録する（順序変更などに対応しやすいため）
             course.spots.all().delete()
 
             for i in range(1, 31):
