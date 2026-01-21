@@ -9,34 +9,30 @@ from admin_accounts.models import Admin  # Admin情報の参照用
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 
-class AdminOshiroRequiredMixin:
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        user = self.request.user
-        try:
-            admin_record = Admin.objects.get(account=user)
-            potential_castles = [
-                admin_record.oshiro_management1,
-                admin_record.oshiro_management2,
-                admin_record.oshiro_management3,
-                admin_record.oshiro_management4,
-                admin_record.oshiro_management5
-            ]
-            my_castles = [c for c in potential_castles if c is not None]
-            context['rows'] = my_castles
-        except Admin.DoesNotExist:
-            context['rows'] = []
-            context['error_message'] = "管理者情報が見つかりませんでした。"
-        except Exception as e:
-            context['rows'] = []
-            context['error_message'] = f"エラー: {e}"
-        return context
     
     
 # 音声ガイドお城一覧画面
-class AudioGuideOshiroListView(AdminOshiroRequiredMixin,LoginRequiredMixin,View):
+class AudioGuideOshiroListView(LoginRequiredMixin,View):
     def get(self, request):
-        oshiro_list = OshiroInfo.objects.all().order_by("id")
+        # 1. ログインユーザーが管理者プロフィールを持っているかチェック
+        if not hasattr(request.user, 'admin_profile'):
+            return render(request, "audio_guide_oshiro_list.html", {"rows": []})
+        
+        admin_profile = request.user.admin_profile
+
+        # 2. 担当しているお城のIDリストを作成（Noneを除外）
+        managed_castle_ids = [
+            admin_profile.oshiro_management1_id,
+            admin_profile.oshiro_management2_id,
+            admin_profile.oshiro_management3_id,
+            admin_profile.oshiro_management4_id,
+            admin_profile.oshiro_management5_id,
+        ]
+        managed_castle_ids = [cid for cid in managed_castle_ids if cid is not None]
+
+        # 3. 担当お城のIDリストに含まれるお城情報のみ取得
+        # OshiroInfo.objects.all() ではなく .filter(id__in=...) を使う
+        oshiro_list = OshiroInfo.objects.filter(id__in=managed_castle_ids).order_by("id")
         
         return render(
             request,
@@ -45,8 +41,9 @@ class AudioGuideOshiroListView(AdminOshiroRequiredMixin,LoginRequiredMixin,View)
         )
 
 
+
 # 音声ガイド一覧画面
-class AudioGuideListView(AdminOshiroRequiredMixin,LoginRequiredMixin,View):
+class AudioGuideListView(LoginRequiredMixin,View):
     def get(self, request, oshiro_id):
         oshiro = get_object_or_404(OshiroInfo, id=oshiro_id)
         rows = (    
@@ -66,7 +63,7 @@ class AudioGuideListView(AdminOshiroRequiredMixin,LoginRequiredMixin,View):
 
 
 # 登録画面
-class AudioGuideRegistarView(AdminOshiroRequiredMixin,LoginRequiredMixin,View):
+class AudioGuideRegistarView(LoginRequiredMixin,View):
     """音声ガイド新規登録"""
 
     def get(self, request, oshiro_id):
@@ -109,7 +106,7 @@ class AudioGuideRegistarView(AdminOshiroRequiredMixin,LoginRequiredMixin,View):
 
 
 # 登録完了画面
-class AudioGuideRegistarSuccessView(AdminOshiroRequiredMixin,LoginRequiredMixin,TemplateView):
+class AudioGuideRegistarSuccessView(LoginRequiredMixin,TemplateView):
     template_name = "audio_guide_registar_success.html"
 
     def get_context_data(self, **kwargs):
@@ -119,7 +116,7 @@ class AudioGuideRegistarSuccessView(AdminOshiroRequiredMixin,LoginRequiredMixin,
 
 
 # 更新画面
-class AudioGuideUpdateView(AdminOshiroRequiredMixin,LoginRequiredMixin,View):
+class AudioGuideUpdateView(LoginRequiredMixin,View):
     """音声ガイド更新"""
 
     def get(self, request, oshiro_id, audio_guide_id):
@@ -153,7 +150,7 @@ class AudioGuideUpdateView(AdminOshiroRequiredMixin,LoginRequiredMixin,View):
 
 
 # 更新完了画面
-class AudioGuideUpdateSuccessView(AdminOshiroRequiredMixin,LoginRequiredMixin,TemplateView):
+class AudioGuideUpdateSuccessView(LoginRequiredMixin,TemplateView):
     template_name = "audio_guide_update_success.html"
 
     def get_context_data(self, **kwargs):
@@ -164,7 +161,7 @@ class AudioGuideUpdateSuccessView(AdminOshiroRequiredMixin,LoginRequiredMixin,Te
 
 
 # 削除処理
-class AudioGuideDeleteView(AdminOshiroRequiredMixin,LoginRequiredMixin,View):
+class AudioGuideDeleteView(LoginRequiredMixin,View):
     # 削除画面の表示
     def get(self, request, oshiro_id, audio_guide_id):
         audio_guide = get_object_or_404(
@@ -199,7 +196,7 @@ class AudioGuideDeleteView(AdminOshiroRequiredMixin,LoginRequiredMixin,View):
         )
 
 # 削除完了画面
-class AudioGuideDeleteSuccessView(AdminOshiroRequiredMixin,LoginRequiredMixin,TemplateView):
+class AudioGuideDeleteSuccessView(LoginRequiredMixin,TemplateView):
     template_name = "audio_guide_delete_success.html"
 
     def get_context_data(self, **kwargs):

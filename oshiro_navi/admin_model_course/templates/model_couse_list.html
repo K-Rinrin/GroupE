@@ -6,13 +6,13 @@
 <div class="content-container basic-info-list">
     
     <h1>{{ oshiro.oshiro_name }} のモデルコース一覧</h1>
-    <hr style="width: 100%;">
+    <hr style="width: 80%;">
 
     <div class="action-bar" style="margin-bottom: 20px; text-align: right;">
-        <a class="btn-new" href="{% url 'admin_model_course:model_couse_registar' oshiro_id=oshiro.pk %}">
+        <a class="btn btn-register" href="{% url 'admin_model_course:model_couse_registar' oshiro_id=oshiro.pk %}">
             ＋ 新規登録
         </a>
-        <a class="btn-new" href="{% url 'admin_model_course:model_couse_search' %}">
+        <a class="btn btn-cancel" href="{% url 'admin_model_course:model_couse_search' %}">
             お城選択画面へ戻る
         </a>
     </div>
