@@ -9,28 +9,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 
 
-class AdminOshiroRequiredMixin:
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        user = self.request.user
-        try:
-            admin_record = Admin.objects.get(account=user)
-            potential_castles = [
-                admin_record.oshiro_management1,
-                admin_record.oshiro_management2,
-                admin_record.oshiro_management3,
-                admin_record.oshiro_management4,
-                admin_record.oshiro_management5
-            ]
-            my_castles = [c for c in potential_castles if c is not None]
-            context['rows'] = my_castles
-        except Admin.DoesNotExist:
-            context['rows'] = []
-            context['error_message'] = "管理者情報が見つかりませんでした。"
-        except Exception as e:
-            context['rows'] = []
-            context['error_message'] = f"エラー: {e}"
-        return context
+
 
 
 def _get_or_404(model_cls, **kwargs):
@@ -41,11 +20,31 @@ def _get_or_404(model_cls, **kwargs):
 
 # --- Viewクラス ---
 
-class OshiroStampListView(AdminOshiroRequiredMixin,LoginRequiredMixin,View):
-    """お城スタンプ一覧"""
+class OshiroStampListView(LoginRequiredMixin, View):
     def get(self, request):
-        # OneToOneの関係にあるお城情報もまとめて取得
-        stamps = OshiroStampInfo.objects.all().select_related('oshiro_info').order_by("id")
+        if not hasattr(request.user, 'admin_profile'):
+            return render(request, "oshiro_stamp_list.html", {"stamps": []})
+        
+        admin_profile = request.user.admin_profile
+
+        # 担当しているお城（1〜5）をリスト化（Noneを除外）
+        managed_castle_ids = [
+            admin_profile.oshiro_management1_id,
+            admin_profile.oshiro_management2_id,
+            admin_profile.oshiro_management3_id,
+            admin_profile.oshiro_management4_id,
+            admin_profile.oshiro_management5_id,
+        ]
+        managed_castle_ids = [cid for cid in managed_castle_ids if cid is not None]
+
+        # 担当お城のIDリストに含まれるOshiroInfoのみ取得
+        oshiros = OshiroInfo.objects.filter(id__in=managed_castle_ids).order_by("id")
+
+        stamps = []
+        for oshiro in oshiros:
+            stamp = OshiroStampInfo.objects.filter(oshiro_info=oshiro).first()
+            stamps.append({"oshiro": oshiro, "stamp": stamp})
+
         return render(request, "oshiro_stamp_list.html", {"stamps": stamps})
 
 
@@ -55,37 +54,50 @@ class OshiroStampUpdateSuccessView(LoginRequiredMixin,TemplateView):
     template_name = "oshiro_stamp_update_success.html"
 
 
-
-class OshiroStampUpdateView(AdminOshiroRequiredMixin,LoginRequiredMixin,View):
-    """お城スタンプ更新"""
-
-    def get(self, request, stamp_id):
-        stamp = _get_or_404(OshiroStampInfo, id=stamp_id)
-        oshiro_list = OshiroInfo.objects.order_by("id")
+class OshiroStampUpdateView(LoginRequiredMixin, View):
+    def get(self, request, oshiro_id):
+        # お城情報を取得
+        oshiro = get_object_or_404(OshiroInfo, id=oshiro_id)
+        # そのお城に紐づくスタンプがあるか確認（なければNone）
+        stamp = OshiroStampInfo.objects.filter(oshiro_info=oshiro).first()
+        
         return render(request, "oshiro_stamp_update.html", {
             "stamp": stamp,
-            "oshiro_list": oshiro_list
+            "oshiro": oshiro,  # スタンプがない場合でも、どのお城用か表示するために渡す
         })
 
-    def post(self, request, stamp_id):
+    def post(self, request, oshiro_id):
         if request.POST.get("cancel"):
             return redirect("admin_oshiro_stamp:oshiro_stamp_list")
 
-        stamp = _get_or_404(OshiroStampInfo, id=stamp_id)
+        oshiro = get_object_or_404(OshiroInfo, id=oshiro_id)
+        
+        stamp, created = OshiroStampInfo.objects.get_or_create(
+            oshiro_info=oshiro,
+            defaults={'admin': request.user.admin_profile} # 新規作成時のデフォルト値
+        )
 
         stamp_name = request.POST.get("stamp_name")
         stamp_image = request.FILES.get("stamp_image")
 
-        # 3. バリデーション
+        # 2. バリデーション
         if not stamp_name:
             return render(request, "oshiro_stamp_update.html", {
                 "stamp": stamp,
-                "oshiro": stamp.oshiro_info,
+                "oshiro": oshiro,
                 "error": "スタンプ名は必須項目です"
             })
+
+        # 3. データの更新
         stamp.stamp_name = stamp_name
+        
+        # 既存データ更新時にもadminを念のためセットする場合
+        stamp.admin = request.user.admin_profile 
+        
         if stamp_image:
             stamp.oshiro_stamp_image = stamp_image
+            
+        # 4. 保存（ここでエラーが解消されます）
         stamp.save()
 
         return redirect("admin_oshiro_stamp:oshiro_stamp_update_success")

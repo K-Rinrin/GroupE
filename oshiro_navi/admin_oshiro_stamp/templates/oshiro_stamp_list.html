@@ -16,15 +16,30 @@
             </tr>
         </thead>
         <tbody>
-            {% for stamp in stamps %}
+            {% for item in stamps %}
             <tr>
-                <td>{{ stamp.oshiro_info.oshiro_name }}</td>
-                <td>{{ stamp.stamp_name }}</td>
+                <td><strong>{{ item.oshiro.oshiro_name }}</strong></td>
+                
                 <td>
-                    <a href="{% url 'admin_oshiro_stamp:oshiro_stamp_update' stamp.id %}" class="btn btn-update">更新</a>
+                    {% if item.stamp %}
+                        {{ item.stamp.stamp_name }}
+                    {% else %}
+                        <span style="color: #999;">スタンプ未登録</span>
+                    {% endif %}
+                </td>
+
+                <td>
+                    <a href="{% url 'admin_oshiro_stamp:oshiro_stamp_update' item.oshiro.id %}" class="btn-update">
+                        更新
+                    </a>
                 </td>
             </tr>
             {% empty %}
+            <tr>
+                <td colspan="3" style="text-align:center; padding:16px;">
+                    管理対象のお城がありません。
+                </td>
+            </tr>
             {% endfor %}
         </tbody>
     </table>
