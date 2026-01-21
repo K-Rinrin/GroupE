@@ -55,6 +55,13 @@ class UserReview(models.Model):
         help_text="口コミ投稿者（利用者）"
     )
 
+    oshiro_info = models.ForeignKey(
+        "operator_oshiro_info.OshiroInfo",
+        on_delete=models.CASCADE,
+        db_column="oshiro_info",
+        help_text="口コミしたお城"
+    )
+
     review_title = models.CharField(
         max_length=20,
         help_text="口コミタイトル"

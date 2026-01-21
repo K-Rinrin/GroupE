@@ -22,7 +22,9 @@ class AreaMapInfo(models.Model):
 
     icon_image = models.ImageField(
         upload_to="area_map_icons/",
-        help_text="アイコンの画像"
+        blank=True,
+        null=True,
+        help_text="未選択ならカテゴリ既定アイコンを表示"
     )
 
     latitude = models.FloatField(

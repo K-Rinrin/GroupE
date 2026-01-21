@@ -23,7 +23,7 @@ class AudioGuide(models.Model):
     )
 
     title = models.CharField(
-        max_length=20,
+        max_length=100,
         help_text="音声ガイドのタイトル"
     )
 

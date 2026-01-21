@@ -33,6 +33,18 @@ class OshiroInfo(models.Model):
         help_text="遺構の説明"
     )
 
+    latitude = models.FloatField(
+        null=True,
+        blank=True,
+        help_text="お城中心の緯度（周辺MAPの初期表示に使用）"
+    )
+    longitude = models.FloatField(
+        null=True,
+        blank=True,
+        help_text="お城中心の経度（周辺MAPの初期表示に使用）"
+    )
+
+
     class Meta:
         db_table = "oshiro_info"
 
