@@ -1,21 +1,23 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, TemplateView, DetailView
-from django.db.models import Q
+from django.db.models import Q, Avg
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
+from django.core.serializers.json import DjangoJSONEncoder
+import json
+
+# モデルのインポート
 from operator_oshiro_info.models import OshiroInfo
 from admin_basic_info.models import BasicInfo
-from django.shortcuts import redirect
-from .forms import UserReviewForm 
-from user_accounts.models import UserReview
-from django.db.models import Avg
 from admin_area_map.models import AreaMapInfo 
+from user_accounts.models import UserReview, User
+from .forms import UserReviewForm 
 
-
-# 1. お城検索画面（検索窓だけがある画面）
+# 1. お城検索画面
 class OshirolistView(LoginRequiredMixin, TemplateView):
     template_name = "oshiro_list.html"
 
-# 2. お城検索結果画面（検索後にリストが出る画面）
+# 2. お城検索結果画面
 class OshiroAfterSearchView(LoginRequiredMixin, ListView):
     model = OshiroInfo
     template_name = "oshiro_after_search.html"
@@ -26,75 +28,97 @@ class OshiroAfterSearchView(LoginRequiredMixin, ListView):
         keyword = self.request.GET.get('keyword', '')
         
         if keyword:
-            # お城名、または住所にキーワードが含まれるものをフィルタリング
+            # キーワードがある場合は、名前か住所に含まれるものを絞り込む
             return OshiroInfo.objects.filter(
                 Q(oshiro_name__icontains=keyword) | Q(address__icontains=keyword)
             )
-        # キーワードがない場合は空のリストを返す
-        return OshiroInfo.objects.none()
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        # 検索結果画面でも何を検索したか表示するためにキーワードを渡す
-        context['keyword'] = self.request.GET.get('keyword', '')
-        return context
-
-
+        
+    
+        return OshiroInfo.objects.all()
 # 3. お城詳細情報画面
 class OshiroInfoView(LoginRequiredMixin, DetailView):
     model = OshiroInfo
     template_name = "oshiro_info.html"
     context_object_name = "oshiro"
 
-# 4. 基本情報画面（管理者が登録した情報）
+# 4. 基本情報画面
 class OshiroBasicInfoView(LoginRequiredMixin, DetailView):
     model = OshiroInfo
     template_name = "oshiro_basic_info.html"
     context_object_name = "oshiro"
 
-
-# 5. 口コミ画面（表示と投稿を同時に行う）
+# 5. 口コミ画面（表示・投稿制限・削除対応）
 class OshiroReviewView(LoginRequiredMixin, DetailView):
     model = OshiroInfo
     template_name = "user_review.html"
     context_object_name = "oshiro"
 
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # 投稿用フォームを渡す
-        context['form'] = UserReviewForm()
-
-        # --- モデル修正(oshiro_info追加)が終わるまでの暫定処理 ---
-        # 本来は以下のように書きますが、今はエラーが出るのでコメントアウトします
-        # reviews = UserReview.objects.filter(oshiro_info=self.object)
-        # context['reviews'] = reviews.order_by('-post_date_time')
-        # avg_score = reviews.aggregate(Avg('five_star_review'))['five_star_review__avg']
-        # context['avg_score'] = round(avg_score, 1) if avg_score else 0.0
-
-        # 一時的にエラーを回避するためのダミーデータ
-        context['reviews'] = [] 
-        context['avg_score'] = 0.0 # 初期値として0.0を表示させる
-        # ---------------------------------------------------
+        reviews = UserReview.objects.filter(oshiro_info=self.object).order_by('-post_date_time')
+        context['reviews'] = reviews
         
+        avg_score = reviews.aggregate(Avg('five_star_review'))['five_star_review__avg']
+        context['avg_score'] = round(avg_score, 1) if avg_score else 0.0
+
+        # --- 更新モードの判定 ---
+        # URLのパラメータに ?edit_id=◯◯ がついているかチェック
+        edit_id = self.request.GET.get('edit_id')
+        user_profile = User.objects.filter(account=self.request.user).first()
+        
+        if edit_id:
+            # 更新用：そのIDの口コミを探してフォームに入れる
+            edit_review = get_object_or_404(UserReview, id=edit_id, user=user_profile)
+            context['form'] = UserReviewForm(instance=edit_review)
+            context['edit_mode'] = True # 今は更新中だよ！という目印
+            context['edit_id'] = edit_id
+        else:
+            # 新規用
+            context['form'] = UserReviewForm()
+            context['edit_mode'] = False
+
+        # 現在このお城に口コミがあるか（更新モードの時は「投稿済み」メッセージを出さないようにする）
+        has_posted = UserReview.objects.filter(oshiro_info=self.object, user=user_profile).exists()
+        context['has_posted'] = has_posted
         return context
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        form = UserReviewForm(request.POST, request.FILES)
+        user_profile, _ = User.objects.get_or_create(account=request.user)
         
-        # 【修正】今は保存処理を動かさず、単に画面をリフレッシュ（リダイレクト）させるだけにする
+        # --- 更新か新規かの判定 ---
+        edit_id = request.GET.get('edit_id')
+        if edit_id:
+            # 更新処理
+            instance = get_object_or_404(UserReview, id=edit_id, user=user_profile)
+            form = UserReviewForm(request.POST, request.FILES, instance=instance)
+        else:
+            # 新規投稿処理（二重投稿チェック付き）
+            if UserReview.objects.filter(oshiro_info=self.object, user=user_profile).exists():
+                messages.error(request, "口コミの投稿は一人一回までです。")
+                return redirect('usermy_list:oshiroreview', pk=self.object.pk)
+            form = UserReviewForm(request.POST, request.FILES)
+
         if form.is_valid():
-            # review = form.save(commit=False)
-            # review.oshiro_info = self.object  # ここでエラーが出るので停止
-            # review.user = request.user.user_profile
-            # review.save()
+            review = form.save(commit=False)
+            review.oshiro_info = self.object
+            review.user = user_profile
+            review.save()
             return redirect('usermy_list:oshiroreview', pk=self.object.pk)
         
-        context = self.get_context_data()
-        context['form'] = form
-        return self.render_to_response(context)
-    
+        context = self.get_context_data(form=form)
+        return render(request, self.template_name, context)
+
+# ★ 口コミ削除用の関数
+def delete_review(request, pk):
+    review = get_object_or_404(UserReview, id=pk)
+    # 本人（Account）だけが削除可能
+    if review.user.account == request.user:
+        review.delete()
+        messages.success(request, "口コミを削除しました。")
+    return redirect('usermy_list:oshiroreview', pk=review.oshiro_info.pk)
+
+# 6. お城周辺MAP画面
 class OshiroMapView(LoginRequiredMixin, DetailView):
     model = OshiroInfo
     template_name = "oshiro_map.html"
@@ -102,13 +126,19 @@ class OshiroMapView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # 1. このお城に紐づく「基本情報」を取得
         basic_info = getattr(self.object, 'basicinfo', None)
-        
+        pins_data = []
         if basic_info:
-            # 2. その基本情報に紐づく「周辺MAP情報」をすべて取得
-            context['map_items'] = AreaMapInfo.objects.filter(basic_info=basic_info).order_by('id')
-        else:
-            context['map_items'] = []
-            
+            map_items = AreaMapInfo.objects.filter(basic_info=basic_info)
+            for item in map_items:
+                pins_data.append({
+                    'name': item.icon_name,
+                    'category': item.icon_name,
+                    'lat': item.latitude,
+                    'lng': item.longitude,
+                    'image': item.icon_image.url if item.icon_image else None,
+                })
+        
+        context['pins_json'] = json.dumps(pins_data, cls=DjangoJSONEncoder)
+        context['center'] = pins_data[0] if pins_data else {"lat": 37.4879, "lng": 139.9290}
         return context
