@@ -38,29 +38,32 @@
             <span class="marker-text">START</span>
         </div>
 
-        <!-- スポット1 -->
-        {% if course.spot1_name %}
+        <!-- ▼▼▼ スポット情報のループ表示 ▼▼▼ -->
+        {% for spot in course.spots.all %}
         <div class="timeline-item">
             <div class="timeline-line"></div>
+            
             <div class="spot-card">
-                <div class="spot-number">1</div>
+                
+                <div class="spot-number">{{ forloop.counter }}</div>
+                
                 <div class="spot-content">
-                    <h2 class="spot-name">{{ course.spot1_name }}</h2>
+                    <h2 class="spot-name">{{ spot.name }}</h2>
                     
                     <div class="spot-body">
-                        {% if course.spot1_image %}
+                        {% if spot.image %}
                         <div class="spot-image">
-                            <img src="{{ course.spot1_image.url }}" alt="{{ course.spot1_name }}">
+                            <img src="{{ spot.image.url }}" alt="{{ spot.name }}">
                         </div>
                         {% endif %}
                         
                         <div class="spot-text">
-                            <p class="short-desc">{{ course.spot1_short }}</p>
-                            <p class="detail-desc">{{ course.spot1_detail|linebreaksbr }}</p>
+                            <p class="short-desc">{{ spot.short_description }}</p>
+                            <p class="detail-desc">{{ spot.detail|linebreaksbr }}</p>
                             
-                            {% if course.spot1_note %}
+                            {% if spot.note %}
                             <div class="spot-note">
-                                <i class='bx bx-info-circle'></i> {{ course.spot1_note }}
+                                <i class='bx bx-info-circle'></i> {{ spot.note }}
                             </div>
                             {% endif %}
                         </div>
@@ -68,39 +71,8 @@
                 </div>
             </div>
         </div>
-        {% endif %}
+        {% endfor %}
 
-        <!-- スポット2 -->
-        {% if course.spot2_name %}
-        <div class="timeline-item">
-            <div class="timeline-line"></div>
-            <div class="spot-card">
-                <div class="spot-number">2</div>
-                <div class="spot-content">
-                    <h2 class="spot-name">{{ course.spot2_name }}</h2>
-                    
-                    <div class="spot-body">
-                        {% if course.spot2_image %}
-                        <div class="spot-image">
-                            <img src="{{ course.spot2_image.url }}" alt="{{ course.spot2_name }}">
-                        </div>
-                        {% endif %}
-                        
-                        <div class="spot-text">
-                            <p class="short-desc">{{ course.spot2_short }}</p>
-                            <p class="detail-desc">{{ course.spot2_detail|linebreaksbr }}</p>
-                            
-                            {% if course.spot2_note %}
-                            <div class="spot-note">
-                                <i class='bx bx-info-circle'></i> {{ course.spot2_note }}
-                            </div>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        {% endif %}
 
         <!-- GOAL地点 -->
         <div class="timeline-marker goal">
@@ -122,7 +94,7 @@
 </div>
 
 
-<!-- ▼ CSS (アイコン調整含む) ▼ -->
+<!-- ▼ CSS ▼ -->
 <style>
     /* --- ベース --- */
     .model-course-container {
@@ -172,7 +144,7 @@
     /* --- タイムラインエリア --- */
     .timeline-wrapper {
         position: relative;
-        padding-left: 20px;
+        padding-left: 10px;
     }
 
     /* マーカー (START/GOAL) */
@@ -182,7 +154,7 @@
         margin-bottom: 20px;
     }
     .marker-circle {
-        width: 50px;  /* アイコン用に大きく */
+        width: 50px;
         height: 50px;
         background: #333;
         color: #fff;
@@ -191,23 +163,22 @@
         align-items: center;
         justify-content: center;
         font-weight: bold;
-        margin-right: 15px;
+        margin-right: 20px;
         z-index: 2;
         overflow: hidden;
         flex-shrink: 0;
     }
     
-    /* STARTアイコンの設定 */
     .timeline-marker.start .marker-circle { 
+       
         border: 3px solid #fff;
+        
     }
     
-    /* アイコン画像を白くする設定 */
     .icon-img {
         width: 70%;
         height: auto;
         object-fit: contain;
-        /* 黒画像を白に反転 */
         filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(93deg) brightness(103%) contrast(103%);
     }
 
@@ -223,17 +194,17 @@
     /* タイムラインアイテム (スポット) */
     .timeline-item {
         position: relative;
-        padding-left: 65px;
+        padding-left: 65px; /* カードを右にずらして線と重ならないようにする */
         padding-bottom: 50px;
     }
     
     /* 縦線 */
     .timeline-line {
         position: absolute;
-        left: 24px; /* 円の中心 (50pxの半分 - 線の太さの半分) */
+        left: 24px; /* 円の中心 */
         top: 0;
         bottom: 0;
-        width: 2px;
+        width: 3px;
         background: #ddd;
         z-index: 1;
     }
@@ -243,7 +214,7 @@
         background: #fff;
         border: 1px solid #eee;
         border-radius: 8px;
-        padding: 20px;
+        padding: 25px;
         position: relative;
         box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
@@ -251,8 +222,8 @@
     /* 番号バッジ */
     .spot-number {
         position: absolute;
-        top: -10px; /* カードより少し上に */
-        left: -58px; /* カードの左側へ大きくずらす (線の上に重なるように調整) */
+        top: -10px;
+        left: -58px; /* 線の上に重なるように調整 */
         width: 35px;
         height: 35px;
         background: #333;
@@ -261,8 +232,8 @@
         text-align: center;
         line-height: 35px;
         font-weight: bold;
-        border: 3px solid #fff; /* 白枠をつけて線と分離 */
-        box-shadow: 0 0 0 1px #ddd; /* 薄い枠線 */
+        border: 3px solid #fff;
+        box-shadow: 0 0 0 1px #ddd;
         z-index: 3;
     }
 
@@ -272,36 +243,41 @@
         font-size: 1.4rem;
         color: #333;
         border-left: 5px solid #d4a024;
-        padding-left: 10px;
+        padding-left: 15px;
+        line-height: 1.4;
     }
 
     /* 画像とテキストのレイアウト */
     .spot-body {
         display: flex;
         flex-wrap: wrap;
-        gap: 20px;
+        gap: 25px;
+        align-items: flex-start;
     }
     .spot-image {
-        flex: 1 1 300px;
+        flex: 1 1 280px;
+        width: 100%;
     }
     .spot-image img {
         width: 100%;
         border-radius: 6px;
         object-fit: cover;
         max-height: 250px;
+        display: block;
     }
     .spot-text {
-        flex: 1 1 300px;
+        flex: 1 1 280px;
         line-height: 1.7;
     }
     .short-desc {
         font-weight: bold;
         margin-bottom: 10px;
         color: #d4a024;
+        font-size: 1.1rem;
     }
     .spot-note {
         background: #f8f8f8;
-        padding: 10px;
+        padding: 12px;
         border-radius: 4px;
         font-size: 0.9rem;
         color: #666;
@@ -324,9 +300,10 @@
 
     /* スマホ対応 */
     @media (max-width: 600px) {
-        .timeline-wrapper { padding-left: 0; }
-        .timeline-line { left: 24px; }
-        .spot-body { flex-direction: column; }
+        .timeline-item { padding-left: 55px; } 
+        .spot-number { left: -48px; }
+        .spot-body { flex-direction: column; gap: 15px; }
+        .spot-name { font-size: 1.2rem; }
     }
 </style>
 {% endblock %}
