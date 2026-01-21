@@ -24,6 +24,19 @@ def _safe_int(value, default=0):
         return default
 
 
+def _safe_float(value, default=None):
+    """緯度経度などの数値を安全にfloat変換（未入力はNone）"""
+    if value is None:
+        return default
+    s = str(value).strip()
+    if s == "":
+        return default
+    try:
+        return float(s)
+    except ValueError:
+        return default
+
+
 class OshiroInfoListView(View):
     """お城情報一覧"""
     def get(self, request):
@@ -46,12 +59,23 @@ class OshiroInfoRegisterView(View):
         structure = request.POST.get("structure")
         ruins = request.POST.get("ruins")
 
+        # ✅ 追加：緯度経度（未入力OK）
+        latitude_raw = request.POST.get("latitude")
+        longitude_raw = request.POST.get("longitude")
+        latitude = _safe_float(latitude_raw, default=None)
+        longitude = _safe_float(longitude_raw, default=None)
+
+        # 必須チェック（緯度経度は必須にしない）
         if not (oshiro_name and address and built_year_raw and structure and ruins):
             return render(request, "oshiro_info_register.html", {"error": "必要情報を入力してください"})
 
         built_year = _safe_int(built_year_raw, default=None)
         if built_year is None:
-            return render(request, "oshiro_info_register.html", {"error": "必要情報を入力してください"})
+            return render(request, "oshiro_info_register.html", {"error": "築城年は数字で入力してください"})
+
+        # ✅ もし緯度だけ/経度だけ入っていたらエラーにしたい場合（おすすめ）
+        if (latitude is None) != (longitude is None):
+            return render(request, "oshiro_info_register.html", {"error": "緯度と経度はセットで入力してください"})
 
         OshiroInfo.objects.create(
             oshiro_name=oshiro_name,
@@ -59,6 +83,9 @@ class OshiroInfoRegisterView(View):
             built_year=built_year,
             structure=structure,
             ruins=ruins,
+            # ✅ 追加
+            latitude=latitude,
+            longitude=longitude,
         )
 
         return redirect("operator_oshiro_info:register_success")
@@ -94,18 +121,33 @@ class OshiroInfoUpdateView(View):
         structure = request.POST.get("structure")
         ruins = request.POST.get("ruins")
 
+        # ✅ 追加：緯度経度（未入力OK）
+        latitude_raw = request.POST.get("latitude")
+        longitude_raw = request.POST.get("longitude")
+        latitude = _safe_float(latitude_raw, default=None)
+        longitude = _safe_float(longitude_raw, default=None)
+
         if not (oshiro_name and address and built_year_raw and structure and ruins):
             return render(request, "oshiro_info_update.html", {"oshiro": oshiro, "error": "必要情報を入力してください"})
 
         built_year = _safe_int(built_year_raw, default=None)
         if built_year is None:
-            return render(request, "oshiro_info_update.html", {"oshiro": oshiro, "error": "必要情報を入力してください"})
+            return render(request, "oshiro_info_update.html", {"oshiro": oshiro, "error": "築城年は数字で入力してください"})
+
+        # ✅ 緯度だけ/経度だけの入力はNG（おすすめ）
+        if (latitude is None) != (longitude is None):
+            return render(request, "oshiro_info_update.html", {"oshiro": oshiro, "error": "緯度と経度はセットで入力してください"})
 
         oshiro.oshiro_name = oshiro_name
         oshiro.address = address
         oshiro.built_year = built_year
         oshiro.structure = structure
         oshiro.ruins = ruins
+
+        # ✅ 追加
+        oshiro.latitude = latitude
+        oshiro.longitude = longitude
+
         oshiro.save()
 
         return redirect("operator_oshiro_info:update_success")

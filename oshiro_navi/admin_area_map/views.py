@@ -1,14 +1,32 @@
+# admin_area_map/views.py
 import json
-
 from django.urls import reverse
 from django.shortcuts import get_object_or_404, redirect
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView, TemplateView
+from django.views.generic import TemplateView, ListView, CreateView, UpdateView, DeleteView
 
 from .models import AreaMapInfo
 from .forms import AreaMapInfoForm
+from django.core.serializers.json import DjangoJSONEncoder
 from admin_basic_info.models import BasicInfo
 
 TSURUGAJO_CENTER = {"lat": 37.4879, "lng": 139.9290, "zoom": 16}
+
+def _get_map_center_from_basicinfo(basic_info_id: int):
+    """
+    BasicInfo → OshiroInfo の緯度経度を見て map_center を作る
+    無い場合は TSURUGAJO_CENTER にフォールバック
+    """
+    basic = get_object_or_404(
+        BasicInfo.objects.select_related("oshiro_info"),
+        pk=basic_info_id
+    )
+    oshiro = basic.oshiro_info
+
+    lat = oshiro.latitude if oshiro.latitude is not None else TSURUGAJO_CENTER["lat"]
+    lng = oshiro.longitude if oshiro.longitude is not None else TSURUGAJO_CENTER["lng"]
+    zoom = TSURUGAJO_CENTER["zoom"]
+
+    return {"lat": lat, "lng": lng, "zoom": zoom, "oshiro_name": oshiro.oshiro_name}
 
 
 class AreaMapTopView(TemplateView):
@@ -26,14 +44,29 @@ class AreaMapInfoListView(ListView):
     model = AreaMapInfo
 
     def get_queryset(self):
-        return AreaMapInfo.objects.filter(basic_info_id=self.kwargs["basic_info_id"]).order_by("-id")
+        return AreaMapInfo.objects.filter(
+            basic_info_id=self.kwargs["basic_info_id"]
+        ).order_by("-id")
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx["basic_info_id"] = self.kwargs["basic_info_id"]
         ctx["map_center"] = TSURUGAJO_CENTER
-        return ctx
 
+        # ★追加：JS用データ（表なしでもピンを描ける）
+        ctx["maps_json"] = json.dumps([
+            {
+                "id": m.id,
+                "icon_name": m.icon_name,
+                "lat": m.latitude,
+                "lng": m.longitude,
+                "image_url": (m.icon_image.url if m.icon_image else ""),
+                "update_url": reverse("admin_area_map:area_map_info_update", kwargs={"pk": m.id}),
+            }
+            for m in ctx["maps"]
+        ], cls=DjangoJSONEncoder)
+
+        return ctx
 
 class AreaMapInfoRegistarView(CreateView):
     template_name = "area_map_info_registar.html"
@@ -42,62 +75,73 @@ class AreaMapInfoRegistarView(CreateView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx["basic_info_id"] = self.kwargs["basic_info_id"]
-        ctx["map_center"] = TSURUGAJO_CENTER
+        basic_info_id = self.kwargs["basic_info_id"]
+        ctx["basic_info_id"] = basic_info_id
+
+        center = _get_map_center_from_basicinfo(basic_info_id)
+        ctx["map_center"] = {"lat": center["lat"], "lng": center["lng"], "zoom": center["zoom"]}
+        ctx["oshiro_name"] = center["oshiro_name"]
+
         return ctx
 
     def form_valid(self, form):
         basic_info = get_object_or_404(BasicInfo, pk=self.kwargs["basic_info_id"])
+        pins_json = (self.request.POST.get("pins_json") or "").strip()
+        uploaded_img = self.request.FILES.get("icon_image")
 
-        pins_json = self.request.POST.get("pins_json", "").strip()
-        if not pins_json:
-            form.add_error(None, "地図をクリックしてピンを追加してください。")
-            return self.form_invalid(form)
+        if pins_json:
+            try:
+                pins = json.loads(pins_json)
+            except json.JSONDecodeError:
+                form.add_error(None, "pins_json の形式が不正です。")
+                return self.form_invalid(form)
 
-        try:
-            pins = json.loads(pins_json)
-        except json.JSONDecodeError:
-            form.add_error(None, "ピン情報の読み取りに失敗しました。")
-            return self.form_invalid(form)
+            if not isinstance(pins, list) or len(pins) == 0:
+                form.add_error(None, "地図をクリックしてピンを追加してください。")
+                return self.form_invalid(form)
 
-        uploaded_image = form.cleaned_data.get("icon_image")
+            objs = []
+            for p in pins:
+                category = (p.get("category") or "").strip()
+                lat = p.get("lat")
+                lng = p.get("lng")
+                if not category or lat is None or lng is None:
+                    continue
 
-        objs = []
-        for p in pins:
-            category = p.get("category")
-            lat = p.get("lat")
-            lng = p.get("lng")
-            if category is None or lat is None or lng is None:
-                continue
+                obj = AreaMapInfo(
+                    basic_info=basic_info,
+                    icon_name=category,
+                    latitude=float(lat),
+                    longitude=float(lng),
+                )
+                if uploaded_img:
+                    obj.icon_image = uploaded_img
+                objs.append(obj)
 
-            obj = AreaMapInfo(
-                basic_info=basic_info,
-                icon_name=str(category),
-                latitude=float(lat),
-                longitude=float(lng),
-            )
-            if uploaded_image:
-                obj.icon_image = uploaded_image
-            objs.append(obj)
+            if len(objs) == 0:
+                form.add_error(None, "有効なピンがありません。")
+                return self.form_invalid(form)
 
-        if not objs:
-            form.add_error(None, "有効なピンがありません。")
-            return self.form_invalid(form)
+            for obj in objs:
+                obj.save()
 
-        AreaMapInfo.objects.bulk_create(objs)
-        return redirect(self.get_success_url())
+            return redirect(self.get_success_url())
+
+        form.instance.basic_info = basic_info
+        return super().form_valid(form)
 
     def get_success_url(self):
         return reverse(
             "admin_area_map:area_map_info_registar_success",
             kwargs={"basic_info_id": self.kwargs["basic_info_id"]}
-        )
+        ) + f"?basic_info_id={self.kwargs['basic_info_id']}"
 
 
 class AreaMapInfoRegistarSuccessView(TemplateView):
     template_name = "area_map_info_registar_success.html"
 
 
+# ※ 更新/削除を urls.py に書いているなら、ここも必要
 class AreaMapInfoUpdateView(UpdateView):
     template_name = "area_map_info_update.html"
     model = AreaMapInfo
@@ -105,8 +149,13 @@ class AreaMapInfoUpdateView(UpdateView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx["basic_info_id"] = self.object.basic_info_id
-        ctx["map_center"] = TSURUGAJO_CENTER
+        basic_info_id = self.object.basic_info_id
+        ctx["basic_info_id"] = basic_info_id
+
+        center = _get_map_center_from_basicinfo(basic_info_id)
+        ctx["map_center"] = {"lat": center["lat"], "lng": center["lng"], "zoom": center["zoom"]}
+        ctx["oshiro_name"] = center["oshiro_name"]
+
         return ctx
 
     def get_success_url(self):
@@ -120,11 +169,6 @@ class AreaMapInfoUpdateSuccessView(TemplateView):
 class AreaMapInfoDeleteView(DeleteView):
     template_name = "area_map_info_delete.html"
     model = AreaMapInfo
-
-    def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
-        ctx["basic_info_id"] = self.object.basic_info_id
-        return ctx
 
     def get_success_url(self):
         return reverse("admin_area_map:area_map_info_delete_success")

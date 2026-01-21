@@ -82,8 +82,6 @@
 </div>
 
 <script>
-  console.log("JS start");
-
   const map = L.map('map').setView([{{ map_center.lat }}, {{ map_center.lng }}], {{ map_center.zoom }});
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
 
@@ -91,64 +89,67 @@
   const latEl = document.querySelector('input[name="latitude"]');
   const lngEl = document.querySelector('input[name="longitude"]');
   const iconSelect = document.querySelector('[name="icon_name"]');
-  const pinsJsonEl = document.getElementById("pins_json"); // ★追加
+  const pinsJsonEl = document.getElementById("pins_json");
   const warnEl = document.getElementById("warn");
 
-  // --- カテゴリ別スタイル（色で見分ける） ---
-  const CATEGORY_STYLE = {
-    "QR":             { color: "#1f78ff", fillColor: "#1f78ff" },
-    "トイレ":         { color: "#2ea043", fillColor: "#2ea043" },
-    "見どころポイント": { color: "#ff8c00", fillColor: "#ff8c00" },
-    "バリアフリー情報": { color: "#8a2be2", fillColor: "#8a2be2" },
+  // ★カテゴリ既定アイコン（static/image 直下）
+  const DEFAULT_ICON_URL = {
+    "QR": "{% static 'image/qr.webp' %}",
+    "トイレ": "{% static 'image/toilet.webp' %}",
+    "見どころポイント": "{% static 'image/spot.jpeg' %}",
+    "バリアフリー情報": "{% static 'image/barrierfree.jpg' %}",
   };
 
   // 置いた仮ピンを全部保持
-  const markers = []; // { marker, category, lat, lng }
+  // ※previewUrl は「仮ピンに使った画像URL」
+  const markers = []; // { layer, category, lat, lng, previewUrl }
 
   function getCurrentCategory(){
     return (iconSelect && iconSelect.value) ? iconSelect.value : "QR";
   }
 
-  // ★pins_json を常に更新する
+  // ★pins_json を常に更新
   function syncPinsJson(){
     if (!pinsJsonEl) return;
     pinsJsonEl.value = JSON.stringify(
       markers.map(x => ({ category: x.category, lat: x.lat, lng: x.lng }))
     );
-    console.log("pins_json:", pinsJsonEl.value);
+  }
+
+  // ★「カテゴリ画像」の Leaflet Icon を作る
+  function makeCategoryIcon(category){
+    const url = DEFAULT_ICON_URL[category] || DEFAULT_ICON_URL["QR"];
+    return L.icon({
+      iconUrl: url,
+      iconSize: [32, 32],
+      iconAnchor: [16, 32],
+      popupAnchor: [0, -28],
+    });
   }
 
   function addTempPin(lat, lng){
-    if (!latEl || !lngEl) {
-      console.warn("latitude/longitude input not found");
-      return;
-    }
-
     const category = getCurrentCategory();
-    const style = CATEGORY_STYLE[category] || { color: "#333", fillColor: "#333" };
 
-    const m = L.circleMarker([lat, lng], {
-      radius: 10,
-      weight: 3,
-      opacity: 1,
-      fillOpacity: 0.8,
-      ...style
-    }).addTo(map);
+    // ★カテゴリ画像ピンで置く
+    const icon = makeCategoryIcon(category);
+    const layer = L.marker([lat, lng], { icon }).addTo(map);
 
-    m.bindPopup(category);
+    layer.bindPopup(category);
 
-    markers.push({ marker: m, category, lat, lng });
+    markers.push({
+      layer,
+      category,
+      lat,
+      lng,
+      previewUrl: (DEFAULT_ICON_URL[category] || "")
+    });
 
-    // （任意）最後に置いた座標を hidden に入れておく
-    latEl.value = lat;
-    lngEl.value = lng;
+    // （任意）最後に置いた座標を hidden に入れておく（既存のまま）
+    if (latEl) latEl.value = lat;
+    if (lngEl) lngEl.value = lng;
 
-    // ★ここで pins_json も更新（これがないと保存できない）
     syncPinsJson();
-
     if (warnEl) warnEl.style.display = "none";
-
-    console.log("added pin:", category, lat, lng, "total:", markers.length);
   }
 
   // 地図クリックで追加
@@ -159,7 +160,6 @@
   function activate(value){
     buttons.forEach(b => b.classList.toggle("active", b.dataset.value === value));
     if (iconSelect) iconSelect.value = value;
-    console.log("category set:", value);
   }
   buttons.forEach(btn => btn.addEventListener("click", () => activate(btn.dataset.value)));
   activate("QR");
@@ -168,9 +168,8 @@
   map.on("contextmenu", () => {
     const last = markers.pop();
     if (last) {
-      map.removeLayer(last.marker);
-      syncPinsJson(); // ★削除後も更新
-      console.log("removed last pin. total:", markers.length);
+      map.removeLayer(last.layer);
+      syncPinsJson();
     }
   });
 
@@ -181,10 +180,10 @@
       if (warnEl) warnEl.style.display = "block";
       return;
     }
-    // 念のため送信直前にも同期
     syncPinsJson();
   });
 </script>
+
 
 
 {% endblock %}

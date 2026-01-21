@@ -46,47 +46,22 @@
       </div>
     </div>
   </div>
-
-  <hr style="width: 100%;">
-
-  <table class="basic-info-table" id="mapTable">
-    <thead>
-      <tr>
-        <th>アイコン</th>
-        <th>緯度</th>
-        <th>経度</th>
-        <th>操作</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      {% for m in maps %}
-      <tr class="basic-info-card"
-    data-icon="{{ m.icon_name|escape }}"
-    data-lat="{{ m.latitude }}"
-    data-lng="{{ m.longitude }}"
-    data-image-url="{% if m.icon_image %}{{ m.icon_image.url }}{% endif %}"
-    data-update-url="{% url 'admin_area_map:area_map_info_update' m.id %}">
-        <td class="castle-row">{{ m.icon_name }}</td>
-        <td class="castle-row">{{ m.latitude|floatformat:6 }}</td>
-        <td class="castle-row">{{ m.longitude|floatformat:6 }}</td>
-        <td class="basic-info-actions">
-          <a class="btn-update" href="{% url 'admin_area_map:area_map_info_update' m.id %}">更新</a>
-          <a class="btn-delete" href="{% url 'admin_area_map:area_map_info_delete' m.id %}">削除</a>
-        </td>
-      </tr>
-      {% empty %}
-      <tr><td colspan="4" style="text-align:center; padding:14px;">データがありません</td></tr>
-      {% endfor %}
-    </tbody>
-  </table>
 </div>
+
+<!-- ★JSONはscriptタグに埋める（安全） -->
+<script id="maps-data" type="application/json">{{ maps_json|safe }}</script>
 
 <script>
   const map = L.map('map').setView([{{ map_center.lat }}, {{ map_center.lng }}], {{ map_center.zoom }});
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
 
-  // カテゴリ別カラー（画像がないときはこれで見分ける）
+  const DEFAULT_ICON_URL = {
+    "QR": "{% static 'image/qr.webp' %}",
+    "トイレ": "{% static 'image/toilet.webp' %}",
+    "見どころポイント": "{% static 'image/spot.jpeg' %}",
+    "バリアフリー情報": "{% static 'image/barrierfree.jpg' %}",
+  };
+
   const CATEGORY_STYLE = {
     "QR": { color:"#1f78ff", fillColor:"#1f78ff" },
     "トイレ": { color:"#2ea043", fillColor:"#2ea043" },
@@ -94,49 +69,40 @@
     "バリアフリー情報": { color:"#8a2be2", fillColor:"#8a2be2" },
   };
 
-  const rows = Array.from(document.querySelectorAll("#mapTable tbody tr[data-update-url]"));
-  const items = []; // { row, layer, iconName }
+  function resolveImageUrl(iconName, imageUrlFromDB){
+    if (imageUrlFromDB && imageUrlFromDB.trim() !== "") return imageUrlFromDB.trim();
+    return DEFAULT_ICON_URL[iconName] || "";
+  }
 
-  function makeLayer(lat, lng, iconName, imageUrl){
-    // 画像があるなら「画像ピン」
+  function makeLayer(lat, lng, iconName, imageUrlFromDB){
+    const imageUrl = resolveImageUrl(iconName, imageUrlFromDB);
+
     if (imageUrl) {
       const icon = L.icon({
         iconUrl: imageUrl,
-        iconSize: [36, 36],
-        iconAnchor: [18, 36],
-        popupAnchor: [0, -34],
+        iconSize: [32, 32],
+        iconAnchor: [16, 32],
+        popupAnchor: [0, -28],
       });
       return L.marker([lat, lng], { icon });
     }
 
-    // 画像がないなら「カテゴリ色の丸ピン」
     const style = CATEGORY_STYLE[iconName] || { color:"#333", fillColor:"#333" };
-    return L.circleMarker([lat, lng], {
-      radius: 10,
-      weight: 3,
-      opacity: 1,
-      fillOpacity: 0.85,
-      ...style
-    });
+    return L.circleMarker([lat, lng], { radius: 10, weight: 3, opacity: 1, fillOpacity: 0.85, ...style });
   }
 
-  // まず全部作る
-  rows.forEach(row => {
-    const lat = parseFloat(row.dataset.lat);
-    const lng = parseFloat(row.dataset.lng);
-    const iconName = row.dataset.icon;
-    const updateUrl = row.dataset.updateUrl;
-    const imageUrl = (row.dataset.imageUrl || "").trim();
+  // ★表ではなく JSON から読む
+  const maps = JSON.parse(document.getElementById("maps-data").textContent);
 
-    const layer = makeLayer(lat, lng, iconName, imageUrl).addTo(map);
-    layer.bindPopup(iconName);
-
-    layer.on("click", () => window.location.href = updateUrl);
-
-    items.push({ row, layer, iconName });
+  const items = []; // { layer, iconName }
+  maps.forEach(m => {
+    const layer = makeLayer(m.lat, m.lng, m.icon_name, m.image_url).addTo(map);
+    layer.bindPopup(m.icon_name);
+    layer.on("click", () => window.location.href = m.update_url);
+    items.push({ layer, iconName: m.icon_name });
   });
 
-  // 初期表示で範囲フィット
+  // ピンがあるなら、最初にいい感じに寄せる
   if (items.length > 0) {
     const group = L.featureGroup(items.map(x => x.layer));
     map.fitBounds(group.getBounds().pad(0.2));
@@ -145,11 +111,6 @@
   function applyFilter(value){
     items.forEach(x => {
       const ok = (value === "ALL") || (x.iconName === value);
-
-      // 表（行）
-      x.row.style.display = ok ? "" : "none";
-
-      // 地図（レイヤー）
       if (ok) {
         if (!map.hasLayer(x.layer)) x.layer.addTo(map);
       } else {
@@ -168,7 +129,6 @@
     });
   });
 
-  // 初期：すべて
   applyFilter("ALL");
 </script>
 

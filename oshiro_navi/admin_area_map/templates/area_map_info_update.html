@@ -94,12 +94,20 @@
 </div>
 
 <script>
-  // --- カテゴリ別スタイル（色で見分ける） ---
+  // --- カテゴリ別カラー（画像が無いときの保険） ---
   const CATEGORY_STYLE = {
     "QR":             { color: "#1f78ff", fillColor: "#1f78ff" },
     "トイレ":         { color: "#2ea043", fillColor: "#2ea043" },
     "見どころポイント": { color: "#ff8c00", fillColor: "#ff8c00" },
     "バリアフリー情報": { color: "#8a2be2", fillColor: "#8a2be2" },
+  };
+
+  // ★カテゴリ既定アイコン（static/image）
+  const DEFAULT_ICON_URL = {
+    "QR": "{% static 'image/qr.webp' %}",
+    "トイレ": "{% static 'image/toilet.webp' %}",
+    "見どころポイント": "{% static 'image/spot.jpeg' %}",
+    "バリアフリー情報": "{% static 'image/barrierfree.jpg' %}",
   };
 
   const map = L.map('map').setView([{{ map_center.lat }}, {{ map_center.lng }}], {{ map_center.zoom }});
@@ -111,23 +119,35 @@
   const iconSelect = document.querySelector('[name="icon_name"]');
   const warnEl = document.getElementById("warn");
 
-  // 初期値（DBの値をフォームに入れている前提）
+  // 初期値（DB）
   const initLat = parseFloat(latEl?.value || "{{ object.latitude }}");
   const initLng = parseFloat(lngEl?.value || "{{ object.longitude }}");
   const initCategory = (iconSelect?.value || "{{ object.icon_name|escapejs }}") || "QR";
-  const initImageUrl = "{% if object.icon_image %}{{ object.icon_image.url }}{% else %}{% endif %}";
 
-  function makeLayer(lat, lng, category, imageUrl){
-    // 画像があるなら画像ピン、なければ色丸ピン
+  // DBに画像があるなら media URL、無いなら空
+  const dbImageUrl = "{% if object.icon_image %}{{ object.icon_image.url }}{% else %}{% endif %}".trim();
+
+  // ★DB画像が無い場合はカテゴリ既定アイコンを採用
+  function resolveImageUrl(category){
+    if (dbImageUrl) return dbImageUrl;                 // 既存のアップ画像があるならそれを優先
+    return (DEFAULT_ICON_URL[category] || "");         // 無ければカテゴリ既定（static）
+  }
+
+  function makeLayer(lat, lng, category){
+    const imageUrl = resolveImageUrl(category);
+
+    // 画像ピン
     if (imageUrl) {
       const icon = L.icon({
         iconUrl: imageUrl,
-        iconSize: [36, 36],
-        iconAnchor: [18, 36],
-        popupAnchor: [0, -34],
+        iconSize: [32, 32],
+        iconAnchor: [16, 32],
+        popupAnchor: [0, -28],
       });
       return L.marker([lat, lng], { icon });
     }
+
+    // 保険：画像が無い場合は色丸
     const style = CATEGORY_STYLE[category] || { color:"#333", fillColor:"#333" };
     return L.circleMarker([lat, lng], {
       radius: 10,
@@ -138,23 +158,24 @@
     });
   }
 
-  let layer = makeLayer(initLat, initLng, initCategory, initImageUrl).addTo(map);
+  let layer = makeLayer(initLat, initLng, initCategory).addTo(map);
   layer.bindPopup(initCategory).openPopup();
   map.setView([initLat, initLng], {{ map_center.zoom }});
 
-  function redraw(lat, lng, category){
-    // 更新画面では「画像はアップロード前にURLが確定しない」ので、
-    // ここでは既存画像URLの有無で描画（新画像は保存後に反映）
-    const img = initImageUrl;
+  function redraw(){
+    const lat = parseFloat(latEl?.value || initLat);
+    const lng = parseFloat(lngEl?.value || initLng);
+    const category = (iconSelect?.value || initCategory);
+
     if (layer) map.removeLayer(layer);
-    layer = makeLayer(lat, lng, category, img).addTo(map);
+    layer = makeLayer(lat, lng, category).addTo(map);
     layer.bindPopup(category).openPopup();
   }
 
   function setLatLng(lat, lng){
     latEl.value = lat;
     lngEl.value = lng;
-    redraw(lat, lng, iconSelect?.value || initCategory);
+    redraw();
     if (warnEl) warnEl.style.display = "none";
   }
 
@@ -166,10 +187,7 @@
   function activate(value){
     buttons.forEach(b => b.classList.toggle("active", b.dataset.value === value));
     if (iconSelect) iconSelect.value = value;
-    // カテゴリ変更したら色も変える
-    const lat = parseFloat(latEl.value || initLat);
-    const lng = parseFloat(lngEl.value || initLng);
-    redraw(lat, lng, value);
+    redraw(); // ★カテゴリ変更でピンも切り替え
   }
   buttons.forEach(btn => btn.addEventListener("click", () => activate(btn.dataset.value)));
 
@@ -186,6 +204,7 @@
     }
   });
 </script>
+
 
         
     

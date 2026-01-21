@@ -19,6 +19,8 @@
                 <th>住所</th>
                 <th>構造</th>
                 <th>遺構</th>
+                <th>緯度</th>
+                <th>経度</th>
                 <th>操作</th>
             </tr>
         </thead>
@@ -31,6 +33,23 @@
                 <td class="castle-row">{{ o.address }}</td>
                 <td class="castle-row">{{ o.structure }}</td>
                 <td class="castle-row">{{ o.ruins }}</td>
+
+                <!-- ✅ 追加：未入力なら - 表示 -->
+                <td class="castle-row">
+                    {% if o.latitude is not None %}
+                        {{ o.latitude|floatformat:6 }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+                <td class="castle-row">
+                    {% if o.longitude is not None %}
+                        {{ o.longitude|floatformat:6 }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+
                 <td class="basic-info-actions">
                     <!-- ✅ update は ?id= が必要 -->
                     <a href="{% url 'operator_oshiro_info:update' %}?id={{ o.id }}" class="btn-update">
@@ -40,7 +59,7 @@
             </tr>
             {% empty %}
             <tr>
-                <td colspan="6" style="text-align:center; padding:16px;">
+                <td colspan="8" style="text-align:center; padding:16px;">
                     登録されているお城情報はありません。
                 </td>
             </tr>
