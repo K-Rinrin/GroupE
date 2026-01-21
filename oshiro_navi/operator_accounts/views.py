@@ -20,15 +20,6 @@ User = get_user_model()
 class OperatorTopView(TemplateView):
     template_name = "operator_top.html"
 
-class OperatorContactList(TemplateView):
-    template_name = "operator_contact_list.html"
-
-class OperatorContactForm(TemplateView):
-    template_name = "operator_contact_form.html"
-
-class OperatorContactConfirm(TemplateView):
-    template_name = "operator_contact_confirm.html"
-
 class AdminAccountListView(ListView):
     model = User # get_user_model()したもの
     template_name = 'admin_account_list.html'
