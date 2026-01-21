@@ -10,5 +10,6 @@ urlpatterns = [
     path('oshiro_basic_info/<int:pk>/', OshiroBasicInfoView.as_view(), name='oshirobasicinfo'),
     path('review/<int:pk>/', OshiroReviewView.as_view(), name='oshiroreview'),
     path('oshiroaftersearch/', OshiroAfterSearchView.as_view(), name='aftersearch'),
+    path('oshiromap/<int:pk>/', OshiroMapView.as_view(), name='oshiromap'),
 
 ]

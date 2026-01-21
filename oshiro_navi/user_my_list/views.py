@@ -8,6 +8,7 @@ from django.shortcuts import redirect
 from .forms import UserReviewForm 
 from user_accounts.models import UserReview
 from django.db.models import Avg
+from admin_area_map.models import AreaMapInfo 
 
 
 # 1. お城検索画面（検索窓だけがある画面）
@@ -93,3 +94,21 @@ class OshiroReviewView(LoginRequiredMixin, DetailView):
         context = self.get_context_data()
         context['form'] = form
         return self.render_to_response(context)
+    
+class OshiroMapView(LoginRequiredMixin, DetailView):
+    model = OshiroInfo
+    template_name = "oshiro_map.html"
+    context_object_name = "oshiro"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # 1. このお城に紐づく「基本情報」を取得
+        basic_info = getattr(self.object, 'basicinfo', None)
+        
+        if basic_info:
+            # 2. その基本情報に紐づく「周辺MAP情報」をすべて取得
+            context['map_items'] = AreaMapInfo.objects.filter(basic_info=basic_info).order_by('id')
+        else:
+            context['map_items'] = []
+            
+        return context
