@@ -2,8 +2,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-# モデルのインポート (ModelCourseSpot は削除したのでインポートしない)
-from .models import ModelCourse
+# モデルのインポート
+from .models import ModelCourse, ModelCourseSpot
 from operator_oshiro_info.models import OshiroInfo
 
 try:
@@ -11,7 +11,10 @@ try:
 except ImportError:
     pass
 
-# --- 検索画面 ---
+
+# ---------------------------------------------------------
+# 1. お城選択画面
+# ---------------------------------------------------------
 class ModelCouseSearchView(LoginRequiredMixin, TemplateView):
     template_name = "model_couse_search.html"
 
@@ -38,25 +41,24 @@ class ModelCouseSearchView(LoginRequiredMixin, TemplateView):
         return context
 
 
-# --- 一覧画面 ---
+# ---------------------------------------------------------
+# 2. 一覧画面
+# ---------------------------------------------------------
 class ModelCouseListView(LoginRequiredMixin, TemplateView):
     template_name = "model_couse_list.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        
-        # URLからお城IDを取得
         oshiro_id = self.kwargs.get('oshiro_id')
         oshiro = get_object_or_404(OshiroInfo, pk=oshiro_id)
+        
         queryset = ModelCourse.objects.filter(oshiro_info=oshiro)
 
-       
+        # 難易度フィルタリング
         difficulty_filter = self.request.GET.get('difficulty')
-        
         if difficulty_filter:
             queryset = queryset.filter(difficulty=difficulty_filter)
         
-     
         context['oshiro'] = oshiro
         context['rows'] = queryset
         context['current_difficulty'] = difficulty_filter
@@ -64,7 +66,9 @@ class ModelCouseListView(LoginRequiredMixin, TemplateView):
         return context
 
 
-# --- 新規登録 ---
+# ---------------------------------------------------------
+# 3. 新規登録
+# ---------------------------------------------------------
 class ModelCouseRegistarView(LoginRequiredMixin, TemplateView):
     template_name = "model_couse_registar.html"
 
@@ -84,31 +88,36 @@ class ModelCouseRegistarView(LoginRequiredMixin, TemplateView):
             files = request.FILES
             admin_obj = Admin.objects.get(account=user)
 
-            # 1つのテーブルにまとめて保存
-            ModelCourse.objects.create(
+            # 1. 親（コース）の保存
+            course = ModelCourse.objects.create(
                 oshiro_info=oshiro,
                 admin=admin_obj,
-                # 基本情報
                 model_course_name=data.get('course_name'),
                 course_overview=data.get('course_overview'),
                 required_time=data.get('required_time'),
                 distance=data.get('distance'),
                 difficulty=data.get('difficulty'),
-                five_star_review=0,
-                # スポット1
-                spot1_name=data.get('spot1_name'),
-                spot1_short=data.get('spot1_short'),
-                spot1_detail=data.get('spot1_detail'),
-                spot1_image=files.get('spot1_image'),
-                spot1_note=data.get('spot1_note'),
-                # スポット2
-                spot2_name=data.get('spot2_name'),
-                spot2_short=data.get('spot2_short'),
-                spot2_detail=data.get('spot2_detail'),
-                spot2_image=files.get('spot2_image'),
-                spot2_note=data.get('spot2_note')
+                five_star_review=0
             )
-            
+
+            # 2. 子（スポット）の保存 (ループ処理)
+            # spot_name_1, spot_name_2... を順番に探して保存
+            # 最大30個までチェックする
+            for i in range(1, 31):
+                name_key = f'spot_name_{i}'
+                
+                # 名前が入っている場合のみ保存
+                if data.get(name_key):
+                    ModelCourseSpot.objects.create(
+                        model_course=course,
+                        order=i,
+                        name=data.get(f'spot_name_{i}'),
+                        short_description=data.get(f'spot_short_{i}'),
+                        detail=data.get(f'spot_detail_{i}'),
+                        image=files.get(f'spot_image_{i}'),
+                        note=data.get(f'spot_note_{i}')
+                    )
+
             return redirect('admin_model_course:model_couse_registar_success', oshiro_id=oshiro.pk)
             
         except Exception as e:
@@ -118,7 +127,9 @@ class ModelCouseRegistarView(LoginRequiredMixin, TemplateView):
             return render(request, self.template_name, context)
 
 
-# --- 登録完了 ---
+# ---------------------------------------------------------
+# 4. 登録完了
+# ---------------------------------------------------------
 class ModelCouseRegistarSuccessView(LoginRequiredMixin, TemplateView):
     template_name = "model_couse_registar_success.html"
 
@@ -129,22 +140,25 @@ class ModelCouseRegistarSuccessView(LoginRequiredMixin, TemplateView):
         return context
 
 
-# --- 編集（更新） ---
+# ---------------------------------------------------------
+# 5. 編集（更新）
+# ---------------------------------------------------------
 class ModelCouseUpdateView(LoginRequiredMixin, TemplateView):
     template_name = "model_couse_update.html"
 
-    # GET: 既存データを表示
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         pk = self.kwargs.get('pk')
+        
         course = get_object_or_404(ModelCourse, pk=pk)
         
         context['course'] = course
         context['oshiro'] = course.oshiro_info
-        # HTML側では {{ course.spot1_name }} のように直接アクセスすればOK
+        # 登録済みのスポット一覧を渡す（順番通りに）
+        # テンプレートでは {% for spot in spots %} で展開する
+        context['spots'] = course.spots.all().order_by('order')
         return context
 
-    # POST: データを更新
     def post(self, request, *args, **kwargs):
         pk = self.kwargs.get('pk')
         course = get_object_or_404(ModelCourse, pk=pk)
@@ -153,30 +167,30 @@ class ModelCouseUpdateView(LoginRequiredMixin, TemplateView):
             data = request.POST
             files = request.FILES
 
-            # 基本情報
+            # 1. 親情報の更新
             course.model_course_name = data.get('course_name')
             course.course_overview = data.get('course_overview')
             course.required_time = data.get('required_time')
             course.distance = data.get('distance')
             course.difficulty = data.get('difficulty')
-
-            # スポット1 
-            course.spot1_name = data.get('spot1_name')
-            course.spot1_short = data.get('spot1_short')
-            course.spot1_detail = data.get('spot1_detail')
-            course.spot1_note = data.get('spot1_note')
-            if files.get('spot1_image'): # 画像があれば更新
-                course.spot1_image = files.get('spot1_image')
-
-            # スポット2
-            course.spot2_name = data.get('spot2_name')
-            course.spot2_short = data.get('spot2_short')
-            course.spot2_detail = data.get('spot2_detail')
-            course.spot2_note = data.get('spot2_note')
-            if files.get('spot2_image'): # 画像があれば更新
-                course.spot2_image = files.get('spot2_image')
-
             course.save()
+
+            # 2. 子情報の更新
+            # シンプルに全消しして再登録する（順序変更などに対応しやすいため）
+            course.spots.all().delete()
+
+            for i in range(1, 31):
+                name_key = f'spot_name_{i}'
+                if data.get(name_key):
+                    ModelCourseSpot.objects.create(
+                        model_course=course,
+                        order=i,
+                        name=data.get(f'spot_name_{i}'),
+                        short_description=data.get(f'spot_short_{i}'),
+                        detail=data.get(f'spot_detail_{i}'),
+                        image=files.get(f'spot_image_{i}'),
+                        note=data.get(f'spot_note_{i}')
+                    )
 
             return redirect('admin_model_course:model_couse_update_success', oshiro_id=course.oshiro_info.pk)
 
@@ -187,7 +201,9 @@ class ModelCouseUpdateView(LoginRequiredMixin, TemplateView):
             return render(request, self.template_name, context)
 
 
-# --- 編集完了 ---
+# ---------------------------------------------------------
+# 6. 編集完了
+# ---------------------------------------------------------
 class ModelCouseUpdateSuccessView(LoginRequiredMixin, TemplateView):
     template_name = "model_couse_update_success.html"
 

@@ -13,29 +13,22 @@
         {% csrf_token %}
 
         <h2>コース基本情報</h2>
-
         <div class="form-group">
             <label>モデルコース名 *</label><br>
-            <input type="text" name="course_name" required
-                   placeholder="例: 会津若松城とその周辺を巡る1日コース" style="width: 100%; max-width: 500px;">
+            <input type="text" name="course_name" required style="width: 100%; max-width: 500px;">
         </div>
-
         <div class="form-group">
             <label>コース概要 *</label><br>
-            <textarea name="course_overview" rows="4" required
-                      placeholder="このモデルコースの簡単な紹介文を入力してください。" style="width: 100%; max-width: 500px;"></textarea>
+            <textarea name="course_overview" rows="4" required style="width: 100%; max-width: 500px;"></textarea>
         </div>
-
         <div class="form-group">
             <label>所要時間 * (HH:MM)</label><br>
             <input type="time" name="required_time" required>
         </div>
-
         <div class="form-group">
             <label>距離 (km) *</label><br>
             <input type="number" step="0.1" name="distance" placeholder="例: 4.5" required>
         </div>
-
         <div class="form-group">
             <label>難易度 *</label><br>
             <select name="difficulty" required>
@@ -48,71 +41,41 @@
 
         <hr>
 
-        <h2>スポット1</h2>
-
-        <div class="form-group">
-            <label>スポット名 *</label><br>
-            <input type="text" name="spot1_name" placeholder="例: 史跡若松城『鶴ヶ城』" style="width: 100%; max-width: 500px;">
-        </div>
-
-        <div class="form-group">
-            <label>短い説明文</label><br>
-            <textarea name="spot1_short" rows="3"
-                      placeholder="例: 会津若松市のシンボル『鶴ヶ城』。白虎隊も見た国内唯一の赤瓦の天守閣が聳えます！" style="width: 100%; max-width: 500px;"></textarea>
-        </div>
-
-        <div class="form-group">
-            <label>詳細説明文</label><br>
-            <textarea name="spot1_detail" rows="4"
-                      placeholder="詳しい歴史や見どころなどを入力してください。" style="width: 100%; max-width: 500px;"></textarea>
-        </div>
-
-        <div class="form-group">
-            <label>スポット画像</label><br>
-            <input type="file" name="spot1_image" accept="image/*">
-        </div>
-
-        <div class="form-group">
-            <label>補足情報</label><br>
-            <textarea name="spot1_note" rows="2"
-                      placeholder="見学時間、料金、ボランティアガイドの有無など" style="width: 100%; max-width: 500px;"></textarea>
-        </div>
-
-        <hr>
-
-        <h2>スポット2</h2>
-        <!-- スポット2の入力欄も同様に -->
-        <div class="form-group">
-                <label>スポット名</label><br>
-                <input type="text" name="spot2_name" placeholder="例: 茶室麟閣" style="width: 100%; max-width: 500px;">
+        <!-- ▼▼▼ スポット追加エリア (ID: spots-container) ▼▼▼ -->
+        <div id="spots-container">
+            
+            <!-- 初期表示：スポット1 (name属性を連番形式に変更: spot_name_1) -->
+            <div class="spot-item" data-index="1">
+                <h2>スポット 1</h2>
+                <div class="form-group">
+                    <label>スポット名 *</label><br>
+                    <input type="text" name="spot_name_1" required placeholder="例: 史跡若松城『鶴ヶ城』" style="width: 100%; max-width: 500px;">
+                </div>
+                <div class="form-group">
+                    <label>短い説明文</label><br>
+                    <textarea name="spot_short_1" rows="3" style="width: 100%; max-width: 500px;"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>詳細説明文</label><br>
+                    <textarea name="spot_detail_1" rows="4" style="width: 100%; max-width: 500px;"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>スポット画像</label><br>
+                    <input type="file" name="spot_image_1" accept="image/*">
+                </div>
+                <div class="form-group">
+                    <label>補足情報</label><br>
+                    <textarea name="spot_note_1" rows="2" style="width: 100%; max-width: 500px;"></textarea>
+                </div>
+                <hr>
             </div>
-            <div class="form-group">
-                <label>短い説明文</label><br>
-                <textarea name="spot2_short" rows="3"
-                          placeholder="例: 茶室麟閣の敷地内でお抹茶をお楽しみいただけます。" style="width: 100%; max-width: 500px;"></textarea>
-            </div>
-            <div class="form-group">
-                <label>詳細説明文</label><br>
-                <textarea name="spot2_detail" rows="4"
-                          placeholder="詳しい歴史や見どころなどを入力してください。" style="width: 100%; max-width: 500px;"></textarea>
-            </div>
-            <div class="form-group">
-                <label>スポット画像</label><br>
-                <input type="file" name="spot2_image" accept="image/*">
-            </div>
-            <div class="form-group">
-                <label>補足情報</label><br>
-                <textarea name="spot2_note" rows="2"
-                          placeholder="見学時間、料金、ボランティアガイドの有無など" style="width: 100%; max-width: 500px;"></textarea>
-            </div>
-            <hr>
-        </div>
-        <!-- ▲▲▲ スポット2エリア終了 ▲▲▲ -->
 
-        <!-- ▼▼▼ 3. ボタンにIDを追加 ▼▼▼ -->
+        </div>
+        <!-- ▲▲▲ エリア終了 ▲▲▲ -->
+
+        <!-- ▼▼▼ 追加ボタン (常に表示する) ▼▼▼ -->
         <div style="margin-bottom: 20px;">
             <button type="button" id="add-spot-btn" class="btn btn-secondary">＋ スポットを追加</button>
-            <small>※現在は固定で2件までの登録となります</small>
         </div>
 
         <hr>
@@ -134,9 +97,21 @@
 <style>
     .form-group { margin-bottom: 15px; }
     label { font-weight: bold; }
+    /* ボタンを目立たせる */
+    .btn-secondary {
+        background-color: #6c757d;
+        color: white;
+        padding: 8px 16px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    .btn-secondary:hover {
+        background-color: #5a6268;
+    }
 </style>
 
-<!-- ▼▼▼ 4. JSファイルの読み込み ▼▼▼ -->
+<!-- ▼▼▼ 正しいJSファイルを読み込む ▼▼▼ -->
 <script src="{% static 'js/model_course.js' %}"></script>
 
 {% endblock %}

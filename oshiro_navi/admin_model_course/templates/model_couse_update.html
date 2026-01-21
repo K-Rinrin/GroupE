@@ -45,28 +45,28 @@
 
         <hr>
 
-    
+        <!-- ▼▼▼ スポット1 (spot1.name で参照) ▼▼▼ -->
         <h2>スポット1</h2>
         <div class="form-group">
             <label>スポット名</label><br>
-            <input type="text" name="spot1_name" value="{{ course.spot1_name|default:'' }}" style="width: 100%; max-width: 500px;">
+            <input type="text" name="spot1_name" value="{{ spot1.name|default:'' }}" style="width: 100%; max-width: 500px;">
         </div>
 
         <div class="form-group">
             <label>短い説明文</label><br>
-            <textarea name="spot1_short" rows="3" style="width: 100%; max-width: 500px;">{{ course.spot1_short|default:'' }}</textarea>
+            <textarea name="spot1_short" rows="3" style="width: 100%; max-width: 500px;">{{ spot1.short_description|default:'' }}</textarea>
         </div>
 
         <div class="form-group">
             <label>詳細説明文</label><br>
-            <textarea name="spot1_detail" rows="4" style="width: 100%; max-width: 500px;">{{ course.spot1_detail|default:'' }}</textarea>
+            <textarea name="spot1_detail" rows="4" style="width: 100%; max-width: 500px;">{{ spot1.detail|default:'' }}</textarea>
         </div>
 
         <div class="form-group">
             <label>スポット画像</label><br>
-            {% if course.spot1_image %}
+            {% if spot1.image %}
                 <div style="margin-bottom: 5px;">
-                    <img src="{{ course.spot1_image.url }}" alt="現在の画像" style="max-height: 100px;">
+                    <img src="{{ spot1.image.url }}" alt="現在の画像" style="max-height: 100px;">
                     <br><small>現在の画像（変更しない場合は選択不要）</small>
                 </div>
             {% endif %}
@@ -75,33 +75,33 @@
 
         <div class="form-group">
             <label>補足情報</label><br>
-            <textarea name="spot1_note" rows="2" style="width: 100%; max-width: 500px;">{{ course.spot1_note|default:'' }}</textarea>
+            <textarea name="spot1_note" rows="2" style="width: 100%; max-width: 500px;">{{ spot1.note|default:'' }}</textarea>
         </div>
 
         <hr>
 
-        <!-- ▼▼▼ スポット2 (フィールド名に合わせて修正) ▼▼▼ -->
+        <!-- ▼▼▼ スポット2 (spot2.name で参照) ▼▼▼ -->
         <h2>スポット2</h2>
         <div class="form-group">
             <label>スポット名</label><br>
-            <input type="text" name="spot2_name" value="{{ course.spot2_name|default:'' }}" style="width: 100%; max-width: 500px;">
+            <input type="text" name="spot2_name" value="{{ spot2.name|default:'' }}" style="width: 100%; max-width: 500px;">
         </div>
 
         <div class="form-group">
             <label>短い説明文</label><br>
-            <textarea name="spot2_short" rows="3" style="width: 100%; max-width: 500px;">{{ course.spot2_short|default:'' }}</textarea>
+            <textarea name="spot2_short" rows="3" style="width: 100%; max-width: 500px;">{{ spot2.short_description|default:'' }}</textarea>
         </div>
 
         <div class="form-group">
             <label>詳細説明文</label><br>
-            <textarea name="spot2_detail" rows="4" style="width: 100%; max-width: 500px;">{{ course.spot2_detail|default:'' }}</textarea>
+            <textarea name="spot2_detail" rows="4" style="width: 100%; max-width: 500px;">{{ spot2.detail|default:'' }}</textarea>
         </div>
 
         <div class="form-group">
             <label>スポット画像</label><br>
-            {% if course.spot2_image %}
+            {% if spot2.image %}
                 <div style="margin-bottom: 5px;">
-                    <img src="{{ course.spot2_image.url }}" alt="現在の画像" style="max-height: 100px;">
+                    <img src="{{ spot2.image.url }}" alt="現在の画像" style="max-height: 100px;">
                     <br><small>現在の画像</small>
                 </div>
             {% endif %}
@@ -110,7 +110,7 @@
 
         <div class="form-group">
             <label>補足情報</label><br>
-            <textarea name="spot2_note" rows="2" style="width: 100%; max-width: 500px;">{{ course.spot2_note|default:'' }}</textarea>
+            <textarea name="spot2_note" rows="2" style="width: 100%; max-width: 500px;">{{ spot2.note|default:'' }}</textarea>
         </div>
 
         <hr>
