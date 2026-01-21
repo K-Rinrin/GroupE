@@ -15,7 +15,7 @@
         
         <div class="course-spec">
             <div class="spec-item">
-                <i class='bx bx-time-five'></i> 所要時間：<strong>{{ course.required_time }}</strong>
+                <i class='bx bx-time-five'></i> 所要時間：<strong>{{ course.required_time|time:"G時間i分" }}</strong>
             </div>
             <div class="spec-item">
                 <i class='bx bx-walk'></i> 距離：<strong>{{ course.distance }}km</strong>
