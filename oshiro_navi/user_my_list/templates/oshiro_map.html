@@ -4,58 +4,123 @@
 {% block title %}{{ oshiro.oshiro_name }} - 周辺MAP{% endblock %}
 
 {% block content %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
 <div class="container" style="max-width: 800px; margin: 30px auto; background: #fff; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
     
     <div class="oshiro-image-header" style="width: 100%; height: 350px; overflow: hidden; position: relative; background: #eee;">
-        {% if oshiro.basicinfo.highlights_img %}
-            <img src="{{ oshiro.basicinfo.highlights_img.url }}" style="width: 100%; height: 100%; object-fit: cover;">
+        {% if oshiro.info.oshiro_images %}
+            <img src="{{ oshiro.info.oshiro_images.url }}" alt="{{ oshiro.oshiro_name }}" style="width: 100%; height: 100%; object-fit: cover;">
         {% elif oshiro.oshiro_images %}
-            <img src="{{ oshiro.oshiro_images.url }}" style="width: 100%; height: 100%; object-fit: cover;">
+            <img src="{{ oshiro.oshiro_images.url }}" alt="{{ oshiro.oshiro_name }}" style="width: 100%; height: 100%; object-fit: cover;">
         {% endif %}
         <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.7)); padding: 40px 20px 20px;">
             <h1 style="color: white; margin: 0; font-size: 2em;">{{ oshiro.oshiro_name }}</h1>
         </div>
     </div>
 
-   <div class="info-tabs" style="display: flex; border-bottom: 2px solid #eee; background: #fdfdfd;">
+    <div class="info-tabs" style="display: flex; border-bottom: 2px solid #eee; background: #fdfdfd;">
         <a href="{% url 'usermy_list:oshiroinfo' oshiro.id %}" class="tab-item" style="flex: 1; text-align: center; padding: 15px; text-decoration: none; color: #888; font-weight: bold;">お城情報</a>
-        <a href="{% url 'usermy_list:oshirobasicinfo' oshiro.id %}" class="tab-item" style="flex: 1; text-align: center; padding: 15px; text-decoration: none; color: #d9534f; border-bottom: 3px solid #d9534f; font-weight: bold;">基本情報</a>
+        <a href="{% url 'usermy_list:oshirobasicinfo' oshiro.id %}" class="tab-item" style="flex: 1; text-align: center; padding: 15px; text-decoration: none; color: #888; font-weight: bold;">基本情報</a>
         <a href="{% url 'usermy_list:oshiroreview' oshiro.id %}" class="tab-item" style="flex: 1; text-align: center; padding: 15px; text-decoration: none; color: #888; font-weight: bold;">口コミ</a>
-        <a href="{% url 'usermy_list:oshiromap' oshiro.id %}" class="tab-item" style="flex: 1; text-align: center; padding: 15px; text-decoration: none; color: #888; font-weight: bold;">周辺MAP</a>
-
+        <a href="{% url 'usermy_list:oshiromap' oshiro.id %}" class="tab-item" style="flex: 1; text-align: center; padding: 15px; text-decoration: none; color: #d9534f; border-bottom: 3px solid #d9534f; font-weight: bold;">周辺MAP</a>
     </div>
 
-    <div class="info-content" style="padding: 40px 50px;">
-        <h3 style="font-size: 1.2em; border-left: 5px solid #d9534f; padding-left: 10px; margin-bottom: 25px;">周辺スポット情報</h3>
-        
-        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;">
-            {% for item in map_items %}
-            <div style="border: 1px solid #eee; border-radius: 12px; padding: 15px; display: flex; align-items: center; background: #fafafa;">
-                <div style="width: 65px; height: 65px; background: #fff; border-radius: 8px; overflow: hidden; margin-right: 15px; border: 1px solid #ddd; flex-shrink: 0;">
-                    {% if item.icon_image %}
-                        <img src="{{ item.icon_image.url }}" style="width: 100%; height: 100%; object-fit: cover;">
-                    {% else %}
-                        <div style="text-align: center; line-height: 65px; color: #ccc; font-size: 0.8em;">No Image</div>
-                    {% endif %}
-                </div>
+    <div style="display: flex; height: 500px;">
+        <div id="map" style="flex: 2.2; height: 100%; border-right: 1px solid #eee;"></div>
 
-                <div style="flex-grow: 1;">
-                    <div style="font-weight: bold; font-size: 1.1em; margin-bottom: 8px;">{{ item.icon_name }}</div>
-                    <a href="https://www.google.com/maps/search/?api=1&query={{ item.latitude }},{{ item.longitude }}" 
-                       target="_blank" 
-                       style="display: inline-block; background: #d9534f; color: #fff; padding: 4px 12px; border-radius: 15px; font-size: 0.8em; text-decoration: none;">
-                       📍 地図で確認
-                    </a>
-                </div>
+        <div style="flex: 1; background: #fdfdfd; padding: 20px; overflow-y: auto;">
+            <h4 style="text-align: center; color: #666; font-size: 0.9em; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 15px;">カテゴリ</h4>
+            <div class="category-list">
+                <button class="cat-btn active" data-cat="すべて">すべて</button>
+                <button class="cat-btn" data-cat="QR">QR</button>
+                <button class="cat-btn" data-cat="トイレ">トイレ</button>
+                <button class="cat-btn" data-cat="見どころポイント">見どころポイント</button>
+                <button class="cat-btn" data-cat="バリアフリー情報">バリアフリー情報</button>
             </div>
-            {% empty %}
-                <p style="color: #999; text-align: center; padding: 20px;">周辺スポットはまだ登録されていません。</p>
-            {% endfor %}
-        </div>
-
-        <div style="margin-top: 40px; text-align: center;">
-            <a href="javascript:history.back()" style="color: #999; text-decoration: none; font-size: 0.9em; border: 1px solid #eee; padding: 8px 20px; border-radius: 20px;">← 戻る</a>
+            
+            <div style="margin-top: 30px; text-align: center;">
+                <a href="{% url 'usermy_list:oshiromap' oshiro.id %}" style="color: #999; text-decoration: none; font-size: 0.8em; border: 1px solid #eee; padding: 5px 15px; border-radius: 20px;">← 戻る</a>
+            </div>
         </div>
     </div>
 </div>
+
+<style>
+    .tab-item:hover { background: #fff5f5; color: #d9534f !important; transition: 0.3s; }
+    .cat-btn {
+        width: 100%; padding: 10px 5px; margin-bottom: 8px; border: 1px solid #ddd;
+        background: #fff; border-radius: 5px; cursor: pointer; transition: 0.2s;
+        font-size: 0.85em; color: #555;
+    }
+    .cat-btn:hover { background: #f9f9f9; border-color: #d9534f; }
+    .cat-btn.active { border: 2px solid #d9534f; font-weight: bold; color: #d9534f; }
+</style>
+
+<script>
+    const map = L.map('map').setView([{{ center.lat }}, {{ center.lng }}], 16);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(map);
+
+    const pinsData = {{ pins_json|safe }};
+    const markers = []; 
+
+    // 1. ピン（画像アイコン）の生成
+    pinsData.forEach(pin => {
+        let marker;
+        
+        // 画像がある場合は、その画像をアイコンにする
+        if (pin.image) {
+            const customIcon = L.icon({
+                iconUrl: pin.image,      // 登録された画像のURL
+                iconSize: [40, 40],      // アイコンのサイズ（横40px, 縦40px）
+                iconAnchor: [20, 20],    // アイコンの中心点を指定
+                popupAnchor: [0, -20],   // ポップアップが出る位置を調整
+                className: 'custom-map-icon' // CSSで枠線をつけたりする用
+            });
+            marker = L.marker([pin.lat, pin.lng], { icon: customIcon });
+        } else {
+            // 画像がない場合は通常の青いピン
+            marker = L.marker([pin.lat, pin.lng]);
+        }
+        
+        // クリックした時に名前が出るポップアップは残しておく
+        marker.bindPopup(`<strong>${pin.name}</strong>`);
+        marker.addTo(map);
+        
+        markers.push({
+            instance: marker,
+            category: pin.category
+        });
+    });
+
+    // 2. フィルタリング機能（ここは前と同じ）
+    const buttons = document.querySelectorAll('.cat-btn');
+    buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            buttons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const selectedCat = btn.getAttribute('data-cat'); 
+
+            markers.forEach(m => {
+                if (selectedCat === 'すべて' || m.category === selectedCat) {
+                    m.instance.addTo(map);
+                } else {
+                    map.removeLayer(m.instance);
+                }
+            });
+        });
+    });
+</script>
+
+<style>
+    /* 地図上のアイコン画像を丸く、白枠をつけるときれいに見えます */
+    .custom-map-icon {
+        border-radius: 50%;
+        border: 2px solid white;
+        box-shadow: 0 0 5px rgba(0,0,0,0.3);
+        object-fit: cover;
+    }
+</style>
+
 {% endblock %}

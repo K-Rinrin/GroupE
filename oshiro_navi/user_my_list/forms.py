@@ -4,12 +4,17 @@ from user_accounts.models import UserReview
 class UserReviewForm(forms.ModelForm):
     class Meta:
         model = UserReview
-        fields = ['review_title', 'review_comments', 'five_star_review', 'review_image']
+        fields = ['review_title', 'five_star_review', 'review_comments', 'review_image']
+        
         widgets = {
-            'review_title': forms.TextInput(attrs={'style': 'width: 100%; border: 1px solid #000; padding: 5px;'}),
-            'review_comments': forms.Textarea(attrs={'style': 'width: 100%; border: 1px solid #000; padding: 5px;', 'rows': 4}),
-            'five_star_review': forms.NumberInput(attrs={'style': 'width: 100%; border: 1px solid #000; padding: 5px;', 'min': 1, 'max': 5}), 'five_star_review': forms.RadioSelect(choices=[
-                (5, '5'), (4, '4'), (3, '3'), (2, '2'), (1, '1')
-            ]),            
+            'review_title': forms.TextInput(attrs={'class': 'form-control'}),
+            'review_comments': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
+            'review_image': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+            'five_star_review': forms.HiddenInput(), # JavaScriptで値を入れます
         }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # 画像だけを任意（入力しなくてOK）に設定
+        self.fields['review_image'].required = False
+        self.fields['five_star_review'].widget.attrs.update({'min': '1', 'max': '5'})

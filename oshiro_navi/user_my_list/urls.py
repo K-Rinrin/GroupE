@@ -1,5 +1,4 @@
 from django.urls import path
-
 from .views import *
 
 app_name = "usermy_list"
@@ -11,5 +10,5 @@ urlpatterns = [
     path('review/<int:pk>/', OshiroReviewView.as_view(), name='oshiroreview'),
     path('oshiroaftersearch/', OshiroAfterSearchView.as_view(), name='aftersearch'),
     path('oshiromap/<int:pk>/', OshiroMapView.as_view(), name='oshiromap'),
-
+    path('review/delete/<int:pk>/', delete_review, name='delete_review'),
 ]
