@@ -133,6 +133,9 @@
                         {% endif %}
                     </div>
                 </div>
+                <div style="margin-top: 30px; text-align: center;">
+                <a href="{% url 'usermy_list:oshiroreview' oshiro.id %}" style="color: #999; text-decoration: none; font-size: 0.8em; border: 1px solid #eee; padding: 5px 15px; border-radius: 20px;">← 戻る</a>
+            </div>
             </div>
         {% empty %}
             <p style="text-align: center; color: #999;">まだ口コミはありません。</p>

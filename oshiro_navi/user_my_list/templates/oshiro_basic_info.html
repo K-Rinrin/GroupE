@@ -78,7 +78,7 @@
         {% endwith %}
 
         <div style="margin-top: 50px; text-align: center;">
-            <a href="javascript:history.back()" style="color: #999; text-decoration: none; font-size: 0.9em; border: 1px solid #eee; padding: 8px 25px; border-radius: 20px; transition: 0.3s;">← 戻る</a>
+            <a href="{% url 'usermy_list:oshirobasicinfo' oshiro.id %}" style="color: #999; text-decoration: none; font-size: 0.9em; border: 1px solid #eee; padding: 8px 25px; border-radius: 20px; transition: 0.3s;">← 戻る</a>
         </div>
     </div>
 </div>
