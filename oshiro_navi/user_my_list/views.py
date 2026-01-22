@@ -55,29 +55,25 @@ class OshiroReviewView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        reviews = UserReview.objects.filter(oshiro_info=self.object).order_by('-post_date_time')
+        # 投稿者のプロフィール情報(User)まで一気に取得して効率化
+        reviews = UserReview.objects.filter(oshiro_info=self.object).select_related('user__account').order_by('-post_date_time')
         context['reviews'] = reviews
         
         avg_score = reviews.aggregate(Avg('five_star_review'))['five_star_review__avg']
         context['avg_score'] = round(avg_score, 1) if avg_score else 0.0
 
-        # --- 更新モードの判定 ---
-        # URLのパラメータに ?edit_id=◯◯ がついているかチェック
         edit_id = self.request.GET.get('edit_id')
         user_profile = User.objects.filter(account=self.request.user).first()
         
         if edit_id:
-            # 更新用：そのIDの口コミを探してフォームに入れる
             edit_review = get_object_or_404(UserReview, id=edit_id, user=user_profile)
             context['form'] = UserReviewForm(instance=edit_review)
-            context['edit_mode'] = True # 今は更新中だよ！という目印
+            context['edit_mode'] = True 
             context['edit_id'] = edit_id
         else:
-            # 新規用
             context['form'] = UserReviewForm()
             context['edit_mode'] = False
 
-        # 現在このお城に口コミがあるか（更新モードの時は「投稿済み」メッセージを出さないようにする）
         has_posted = UserReview.objects.filter(oshiro_info=self.object, user=user_profile).exists()
         context['has_posted'] = has_posted
         return context
@@ -86,14 +82,11 @@ class OshiroReviewView(LoginRequiredMixin, DetailView):
         self.object = self.get_object()
         user_profile, _ = User.objects.get_or_create(account=request.user)
         
-        # --- 更新か新規かの判定 ---
         edit_id = request.GET.get('edit_id')
         if edit_id:
-            # 更新処理
             instance = get_object_or_404(UserReview, id=edit_id, user=user_profile)
             form = UserReviewForm(request.POST, request.FILES, instance=instance)
         else:
-            # 新規投稿処理（二重投稿チェック付き）
             if UserReview.objects.filter(oshiro_info=self.object, user=user_profile).exists():
                 messages.error(request, "口コミの投稿は一人一回までです。")
                 return redirect('usermy_list:oshiroreview', pk=self.object.pk)
@@ -106,9 +99,16 @@ class OshiroReviewView(LoginRequiredMixin, DetailView):
             review.save()
             return redirect('usermy_list:oshiroreview', pk=self.object.pk)
         
-        context = self.get_context_data(form=form)
+        # --- ここが重要：エラー時に「入力内容」と「エラー」を保持して返す ---
+        context = self.get_context_data()
+        context['form'] = form  # 入力済みの値とエラーメッセージが入ったformを渡す
+        
+        if edit_id:
+            context['edit_mode'] = True
+            context['edit_id'] = edit_id
+            
         return render(request, self.template_name, context)
-
+    
 # ★ 口コミ削除用の関数
 def delete_review(request, pk):
     review = get_object_or_404(UserReview, id=pk)

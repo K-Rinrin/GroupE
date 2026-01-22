@@ -4,7 +4,6 @@
 {% block title %}{{ oshiro.oshiro_name }} - 口コミ{% endblock %}
 
 {% block content %}
-
 <div class="container" style="max-width: 800px; margin: 30px auto; background: #fff; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
     
     <div class="oshiro-image-header" style="width: 100%; height: 350px; overflow: hidden; position: relative; background: #eee;">
@@ -28,7 +27,6 @@
     </div>
 
     <div class="info-content" style="padding: 40px 50px;">
-        
         <div style="margin-bottom: 30px; border-bottom: 1px solid #eee; padding-bottom: 20px;">
             <h2 style="font-size: 1.2em; border-left: 5px solid #d9534f; padding-left: 10px; margin-bottom: 15px; color: #333;">みんなの評価</h2>
             <div style="display: flex; align-items: center; gap: 15px;">
@@ -38,7 +36,6 @@
         </div>
 
         <div style="margin-bottom: 50px; background: #fafafa; padding: 25px; border-radius: 10px; border: 1px solid #eee;">
-            {# 投稿済み かつ 更新モードでない時だけメッセージを出す #}
             {% if has_posted and not edit_mode %}
                 <div style="text-align: center; padding: 20px; color: #666;">
                     <p style="font-weight: bold; margin-bottom: 10px;">既に口コミを投稿済みです。</p>
@@ -49,24 +46,31 @@
                     {% if edit_mode %}口コミを更新する{% else %}お城口コミを投稿する{% endif %}
                 </h3>
                 
-                {# actionにedit_idを含めることで更新を識別する #}
-                <form method="post" enctype="multipart/form-data" action="?{% if edit_id %}edit_id={{ edit_id }}{% endif %}">
+                <form method="post" enctype="multipart/form-data" novalidate action="?{% if edit_id %}edit_id={{ edit_id }}{% endif %}">
                     {% csrf_token %}
                     <div style="margin-bottom: 15px;">
                         <label style="font-weight: bold; font-size: 0.9em; display: block; margin-bottom: 5px;">※ タイトル</label>
                         {{ form.review_title }}
+                        {% if form.review_title.errors %}
+                            <p style="color: #d9534f; font-size: 0.85em; margin-top: 5px; font-weight: bold;">{{ form.review_title.errors.0 }}</p>
+                        {% endif %}
                     </div>
                     <div style="margin-bottom: 15px;">
                         <label style="font-weight: bold; font-size: 0.9em; display: block; margin-bottom: 5px;">※ 評価</label>
                         <div id="star-rating" style="font-size: 2em; color: #ccc; cursor: pointer; display: inline-block;">
                             <span class="star" data-value="1">☆</span><span class="star" data-value="2">☆</span><span class="star" data-value="3">☆</span><span class="star" data-value="4">☆</span><span class="star" data-value="5">☆</span>
                         </div>
-                        {# JavaScriptで星を入れるため隠しフィールドとして扱うのが一般的ですが、そのままにしています #}
-                        {{ form.five_star_review }}
+                        <div style="display:none;">{{ form.five_star_review }}</div>
+                        {% if form.five_star_review.errors %}
+                            <p style="color: #d9534f; font-size: 0.85em; margin-top: 5px; font-weight: bold;">{{ form.five_star_review.errors.0 }}</p>
+                        {% endif %}
                     </div>
                     <div style="margin-bottom: 15px;">
                         <label style="font-weight: bold; font-size: 0.9em; display: block; margin-bottom: 5px;">※ コメント</label>
                         {{ form.review_comments }}
+                        {% if form.review_comments.errors %}
+                            <p style="color: #d9534f; font-size: 0.85em; margin-top: 5px; font-weight: bold;">{{ form.review_comments.errors.0 }}</p>
+                        {% endif %}
                     </div>
                     <div style="margin-bottom: 20px;">
                         <label style="font-weight: bold; font-size: 0.9em; display: block; margin-bottom: 5px;">写真</label>
@@ -92,17 +96,15 @@
                         {% if review.user.profile_image %}
                             <img src="{{ review.user.profile_image.url }}" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 1px solid #eee;">
                         {% else %}
-                            <div style="width: 50px; height: 50px; border-radius: 50%; background: #ddd; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px;">
-                                👤
-                            </div>
+                            <div style="width: 50px; height: 50px; border-radius: 50%; background: #ddd; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px;">👤</div>
                         {% endif %}
                     </div>
 
                     <div style="flex-grow: 1;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
-                              <a href="{% url 'usermy_page:otherprofile' user_id=review.user.id %}" style="text-decoration: none; color: #382dd1; font-weight: bold;">
-                                 {{ review.user.account.username }}さん
-                                </a>
+                            <a href="{% url 'usermy_page:otherprofile' user_id=review.user.id %}" style="text-decoration: none; color: #382dd1; font-weight: bold;">
+                                {{ review.user.account.username }}さん
+                            </a>
                             <div style="font-size: 0.85em; color: #999;">{{ review.post_date_time|date:"Y.m.d" }}</div>
                         </div>
 
@@ -121,27 +123,20 @@
 
                         {% if review.user.account == user %}
                             <div style="margin-top: 15px; padding-top: 10px; border-top: 1px dashed #eee; text-align: right;">
-                                {# ★修正：hrefを "?edit_id={{ review.pk }}" に変更 #}
-                                <a href="?edit_id={{ review.pk }}" style="display: inline-block; padding: 3px 12px; border: 2px solid #000; text-decoration: none; color: #000; font-size: 0.85em; margin-right: 10px; font-weight: bold; background: #fff;">
-                                    更新する
-                                </a>
-                                
-                                <a href="{% url 'usermy_list:delete_review' review.pk %}" 
-                                   onclick="return confirm('本当にこの口コミを削除しますか？')" 
-                                   style="display: inline-block; padding: 3px 12px; border: 2px solid #000; text-decoration: none; color: #fff; background: #000; font-size: 0.85em; font-weight: bold;">
-                                    削除する
-                                </a>
+                                <a href="?edit_id={{ review.pk }}" style="display: inline-block; padding: 3px 12px; border: 2px solid #000; text-decoration: none; color: #000; font-size: 0.85em; margin-right: 10px; font-weight: bold; background: #fff;">更新する</a>
+                                <a href="{% url 'usermy_list:delete_review' review.pk %}" onclick="return confirm('本当にこの口コミを削除しますか？')" style="display: inline-block; padding: 3px 12px; border: 2px solid #000; text-decoration: none; color: #fff; background: #000; font-size: 0.85em; font-weight: bold;">削除する</a>
                             </div>
                         {% endif %}
                     </div>
                 </div>
-                <div style="margin-top: 30px; text-align: center;">
-                <a href="{% url 'usermy_list:oshiroreview' oshiro.id %}" style="color: #999; text-decoration: none; font-size: 0.8em; border: 1px solid #eee; padding: 5px 15px; border-radius: 20px;">← 戻る</a>
-            </div>
             </div>
         {% empty %}
             <p style="text-align: center; color: #999;">まだ口コミはありません。</p>
         {% endfor %}
+
+        <div style="margin-top: 30px; text-align: center;">
+            <a href="{% url 'usermy_list:oshiroinfo' oshiro.id %}" style="color: #999; text-decoration: none; font-size: 0.8em; border: 1px solid #eee; padding: 5px 15px; border-radius: 20px;">← 戻る</a>
+        </div>
     </div>
 </div>
 
@@ -149,10 +144,8 @@
     const stars = document.querySelectorAll('.star');
     const ratingInput = document.getElementById('id_five_star_review');
 
-    // 初期表示設定（更新モードの時、既に評価があれば星を塗る）
-    const initialRating = ratingInput.value;
-    if (initialRating) {
-        updateStars(initialRating);
+    if (ratingInput.value) {
+        updateStars(ratingInput.value);
     }
 
     stars.forEach(star => {
@@ -165,7 +158,7 @@
 
     function updateStars(val) {
         stars.forEach(s => {
-            if (s.getAttribute('data-value') <= val) {
+            if (parseInt(s.getAttribute('data-value')) <= parseInt(val)) {
                 s.innerText = '★'; s.style.color = '#f39c12';
             } else {
                 s.innerText = '☆'; s.style.color = '#ccc';
