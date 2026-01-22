@@ -8,11 +8,8 @@
   <h1>周辺MAP更新完了</h1>
   <p>更新が完了しました。</p>
 
-  {# views.py で basic_info_id を context に入れてる前提 #}
-  {% if request.GET.basic_info_id %}
-    <a class="btn-update" href="{% url 'admin_area_map:area_map_detail' request.GET.basic_info_id %}">一覧へ戻る</a>
-  {% else %}
-    <a class="btn-update" href="{% url 'admin_area_map:area_map' %}">トップへ戻る</a>
-  {% endif %}
+  <a class="btn-update" href="{% url 'admin_area_map:area_map_detail' basic_info_id %}">
+    一覧へ戻る
+  </a>
 </div>
 {% endblock %}

@@ -40,10 +40,6 @@
       <div id="map"></div>
       <div class="hint">①カテゴリを選ぶ → ②地図をクリックで設置 → ③登録</div>
       <div id="warn" class="warn">※地図をクリックして位置を指定してください</div>
-      <div style="margin-top:10px;">
-        <a href="{% url 'admin_area_map:area_map' %}">戻る</a>
-
-      </div>
     </div>
 
     <!-- 右：カテゴリ -->
@@ -74,7 +70,7 @@
 
         <div class="actions">
           <button type="submit" class="btn-update">登録</button>
-          <a class="btn-cancel" href="{% url 'admin_area_map:area_map' %}">戻る</a>
+          <a class="btn-cancel" href="{% url 'admin_area_map:area_map_detail' basic_info_id %}">戻る</a>
         </div>
       </form>
     </div>

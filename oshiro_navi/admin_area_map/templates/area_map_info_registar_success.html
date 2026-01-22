@@ -4,13 +4,12 @@
 {% block content %}
 
 
-    <h1>メイン部分（周辺MAP情報登録完了画面）</h1>
-    <p>登録が完了しました。</p>
+    <h1 style="margin-bottom: 10px;">周辺MAP登録完了</h1>
+    <p style="margin-bottom: 18px;">登録が完了しました。</p>
 
-
-    <a href="{% url 'admin_area_map:area_map' %}">
-        <span class="link_name">戻る</span>
-    </a>       
+    <a class="btn-update" href="{% url 'admin_area_map:area_map_detail' basic_info_id %}">
+        一覧へ戻る
+    </a>    
 
         
     

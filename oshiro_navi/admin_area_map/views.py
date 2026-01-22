@@ -166,6 +166,10 @@ class AreaMapInfoRegistarView(CreateView):
 
 class AreaMapInfoRegistarSuccessView(TemplateView):
     template_name = "area_map_info_registar_success.html"
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx["basic_info_id"] = self.kwargs["basic_info_id"]
+        return ctx
 
 
 # ※ 更新/削除を urls.py に書いているなら、ここも必要
@@ -191,6 +195,11 @@ class AreaMapInfoUpdateView(UpdateView):
 
 class AreaMapInfoUpdateSuccessView(TemplateView):
     template_name = "area_map_info_update_success.html"
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        obj = get_object_or_404(AreaMapInfo, pk=self.kwargs["pk"])
+        ctx["basic_info_id"] = obj.basic_info_id
+        return ctx
 
 
 class AreaMapInfoDeleteView(DeleteView):
