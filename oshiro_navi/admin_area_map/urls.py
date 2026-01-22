@@ -20,5 +20,5 @@ urlpatterns = [
 
     # 削除
     path("area_map/delete/<int:pk>/", views.AreaMapInfoDeleteView.as_view(), name="area_map_info_delete"),
-    path("area_map/delete/success/", views.AreaMapInfoDeleteSuccessView.as_view(), name="area_map_info_delete_success"),
+    path("area_map/<int:basic_info_id>/delete/success/",views.AreaMapInfoDeleteSuccessView.as_view(),name="area_map_info_delete_success"),
 ]

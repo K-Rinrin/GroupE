@@ -4,6 +4,7 @@ from django.db.models import Q, Avg
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.core.serializers.json import DjangoJSONEncoder
+from django.templatetags.static import static
 import json
 
 # モデルのインポート
@@ -126,19 +127,40 @@ class OshiroMapView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        basic_info = getattr(self.object, 'basicinfo', None)
+
+        # ✅ カテゴリ既定アイコン（static）
+        DEFAULT_ICON_URL = {
+            "QR": static("image/qr.webp"),
+            "トイレ": static("image/toilet.webp"),
+            "見どころポイント": static("image/spot.jpeg"),
+            "バリアフリー情報": static("image/barrierfree.jpg"),
+        }
+
+        # ✅ BasicInfo（OneToOneの逆参照が basicinfo の前提）
+        basic_info = getattr(self.object, "basicinfo", None)
+
         pins_data = []
         if basic_info:
             map_items = AreaMapInfo.objects.filter(basic_info=basic_info)
             for item in map_items:
+                # ✅ DB画像があれば media を優先、無ければ static 既定を使う
+                image_url = item.icon_image.url if item.icon_image else DEFAULT_ICON_URL.get(item.icon_name)
+
                 pins_data.append({
-                    'name': item.icon_name,
-                    'category': item.icon_name,
-                    'lat': item.latitude,
-                    'lng': item.longitude,
-                    'image': item.icon_image.url if item.icon_image else None,
+                    "name": item.icon_name,
+                    "category": item.icon_name,
+                    "lat": item.latitude,
+                    "lng": item.longitude,
+                    "image": image_url,  # ✅ Noneになりにくくなる
                 })
-        
-        context['pins_json'] = json.dumps(pins_data, cls=DjangoJSONEncoder)
-        context['center'] = pins_data[0] if pins_data else {"lat": 37.4879, "lng": 139.9290}
+
+        context["pins_json"] = json.dumps(pins_data, cls=DjangoJSONEncoder)
+
+        # ✅ 地図の中心は「お城の緯度経度」を使う（無ければ鶴ヶ城にフォールバック）
+        context["center"] = {
+            "lat": self.object.latitude if self.object.latitude is not None else 37.4879,
+            "lng": self.object.longitude if self.object.longitude is not None else 139.9290,
+            "zoom": 16,
+        }
+
         return context

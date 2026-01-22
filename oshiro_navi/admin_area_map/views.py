@@ -198,8 +198,15 @@ class AreaMapInfoDeleteView(DeleteView):
     model = AreaMapInfo
 
     def get_success_url(self):
-        return reverse("admin_area_map:area_map_info_delete_success")
+        return reverse(
+            "admin_area_map:area_map_info_delete_success",
+            kwargs={"basic_info_id": self.object.basic_info_id}
+        )
 
 
 class AreaMapInfoDeleteSuccessView(TemplateView):
     template_name = "area_map_info_delete_success.html"
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx["basic_info_id"] = self.kwargs["basic_info_id"]
+        return ctx

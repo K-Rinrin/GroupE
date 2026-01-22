@@ -59,68 +59,63 @@
 </style>
 
 <script>
-    // 1. お城の登録された緯度経度を取得（データがない時のためにデフォルト値を設定）
-    // djangoモデルの latitude, longitude を直接使います
-    const oshiroLat = {{ oshiro.latitude|default:35.6895 }}; 
-    const oshiroLng = {{ oshiro.longitude|default:139.6917 }};
+  // 1. お城の登録された緯度経度を取得（デフォルト）
+  const oshiroLat = {{ oshiro.latitude|default:35.6895 }};
+  const oshiroLng = {{ oshiro.longitude|default:139.6917 }};
 
-    // 2. 地図の初期表示位置をお城の場所に設定
-    const map = L.map('map').setView([oshiroLat, oshiroLng], 16);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { 
-        attribution: '© OpenStreetMap' 
-    }).addTo(map);
+  // 2. 地図の初期表示位置をお城の場所に設定
+  const map = L.map('map').setView([oshiroLat, oshiroLng], 16);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap'
+  }).addTo(map);
 
-    // --- ★ お城そのものの場所に特別なピンを立てる ---
-    const castleMarker = L.marker([oshiroLat, oshiroLng], {
-        zIndexOffset: 1000 // 他のピンより上に表示
-    }).addTo(map);
-    castleMarker.bindPopup(`<strong>🏰 {{ oshiro.oshiro_name }}</strong><br>ここは中心地点です`).openPopup();
-    // ------------------------------------------
+  // ✅ ★中心地点ピンは出さない（このブロックを削除）
+  // const castleMarker = L.marker([oshiroLat, oshiroLng], { zIndexOffset: 1000 }).addTo(map);
+  // castleMarker.bindPopup(`<strong>🏰 {{ oshiro.oshiro_name }}</strong><br>ここは中心地点です`).openPopup();
 
-    const pinsData = {{ pins_json|safe }};
-    const markers = []; 
+  const pinsData = {{ pins_json|safe }};
+  const markers = [];
 
-    // 3. 周辺スポット（トイレや見どころ）のピン生成
-    pinsData.forEach(pin => {
-        let marker;
-        if (pin.image) {
-            const customIcon = L.icon({
-                iconUrl: pin.image,
-                iconSize: [40, 40],
-                iconAnchor: [20, 20],
-                popupAnchor: [0, -20],
-                className: 'custom-map-icon'
-            });
-            marker = L.marker([pin.lat, pin.lng], { icon: customIcon });
+  // 3. 周辺スポットのピン生成
+  pinsData.forEach(pin => {
+    let marker;
+
+    if (pin.image) {
+      const customIcon = L.icon({
+        iconUrl: pin.image,
+        iconSize: [40, 40],
+        iconAnchor: [20, 20],
+        popupAnchor: [0, -20],
+        className: 'custom-map-icon'
+      });
+      marker = L.marker([pin.lat, pin.lng], { icon: customIcon });
+    } else {
+      marker = L.marker([pin.lat, pin.lng]);
+    }
+
+    marker.bindPopup(`<strong>${pin.name}</strong>`);
+    marker.addTo(map);
+
+    markers.push({ instance: marker, category: pin.category });
+  });
+
+  // 4. フィルタリング
+  const buttons = document.querySelectorAll('.cat-btn');
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      buttons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const selectedCat = btn.getAttribute('data-cat');
+
+      markers.forEach(m => {
+        if (selectedCat === 'すべて' || m.category === selectedCat) {
+          m.instance.addTo(map);
         } else {
-            marker = L.marker([pin.lat, pin.lng]);
+          map.removeLayer(m.instance);
         }
-        
-        marker.bindPopup(`<strong>${pin.name}</strong>`);
-        marker.addTo(map);
-        
-        markers.push({
-            instance: marker,
-            category: pin.category
-        });
+      });
     });
-
-    // 4. フィルタリング機能
-    const buttons = document.querySelectorAll('.cat-btn');
-    buttons.forEach(btn => {
-        btn.addEventListener('click', () => {
-            buttons.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            const selectedCat = btn.getAttribute('data-cat'); 
-
-            markers.forEach(m => {
-                if (selectedCat === 'すべて' || m.category === selectedCat) {
-                    m.instance.addTo(map);
-                } else {
-                    map.removeLayer(m.instance);
-                }
-            });
-        });
-    });
+  });
 </script>
 {% endblock %}
