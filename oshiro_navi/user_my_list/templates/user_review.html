@@ -100,7 +100,9 @@
 
                     <div style="flex-grow: 1;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
-                            <div style="font-weight: bold; color: #333;">{{ review.user.account.username }}さん</div>
+                              <a href="{% url 'usermy_page:otherprofile' user_id=review.user.id %}" style="text-decoration: none; color: #382dd1; font-weight: bold;">
+                                 {{ review.user.account.username }}さん
+                                </a>
                             <div style="font-size: 0.85em; color: #999;">{{ review.post_date_time|date:"Y.m.d" }}</div>
                         </div>
 

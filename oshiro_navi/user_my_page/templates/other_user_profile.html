@@ -1,0 +1,46 @@
+{% extends "user_base.html" %}
+{% block content %}
+<div class="container" style="max-width: 800px; margin: 30px auto; font-family: 'Hiragino Kaku Gothic ProN', sans-serif;">
+    
+    <div style="background: white; border-radius: 15px; padding: 30px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+        {% if target_user.profile_image %}
+            <img src="{{ target_user.profile_image.url }}" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 4px solid #f8f9fa;">
+        {% else %}
+            <div style="width: 120px; height: 120px; border-radius: 50%; background: #eee; line-height: 120px; margin: 0 auto; color: #ccc;">No Image</div>
+        {% endif %}
+        
+        <h2 style="margin-top: 15px; color: #333;">{{ target_user.account.username }}</h2>
+        <p style="color: #666; font-size: 0.95em; line-height: 1.6; max-width: 500px; margin: 15px auto;">
+            {{ target_user.user_about|default:"自己紹介はまだありません。" }}
+        </p>
+    </div>
+
+    <div style="margin-top: 30px;">
+        <h3 style="font-size: 1.1em; border-left: 5px solid #ffc107; padding-left: 10px; margin-bottom: 20px;">獲得したお城スタンプ ({{ stamps.count }})</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 15px;">
+            {% for stamp in stamps %}
+                <div style="text-align: center; background: white; padding: 10px; border-radius: 10px;">
+                    <img src="{{ stamp.oshiro_stamp_info.oshiro_stamp_image.url }}" style="width: 60px; height: 60px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));">
+                    <p style="font-size: 0.7em; margin-top: 5px; color: #555;">{{ stamp.oshiro_stamp_info.stamp_name }}</p>
+                </div>
+            {% empty %}
+                <p style="color: #999; font-size: 0.9em;">まだスタンプを持っていません。</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div style="margin-top: 30px; background: white; border-radius: 15px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+        <h3 style="font-size: 1.1em; margin-bottom: 15px;">お気に入りのお城</h3>
+        <ul style="list-style: none; padding: 0;">
+            {% for item in my_list %}
+                <li style="padding: 12px 0; border-bottom: 1px solid #eee; display: flex; justify-content: space-between;">
+                    <span style="font-weight: bold; color: #444;">{{ item.oshiro_info.oshiro_name }}</span>
+                    <span style="font-size: 0.8em; color: #888;">📍 {{ item.oshiro_info.address }}</span>
+                </li>
+            {% empty %}
+                <li style="color: #999; font-size: 0.9em;">登録しているお城はありません。</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

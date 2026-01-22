@@ -11,5 +11,6 @@ urlpatterns = [
     path('profileupdate/', views.ProfileCompleteView.as_view(), name='profileupdate'),
     path('profile/', views.ProfileEditView.as_view(), name='profile'),
     path('mylistdelete/', views.MyListDeleteView.as_view(), name='mylistdelete'),
+    path('userprofile/<int:user_id>/', views.UserProfileView.as_view(), name='otherprofile'),
     
 ]
