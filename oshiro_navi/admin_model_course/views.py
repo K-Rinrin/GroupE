@@ -54,7 +54,6 @@ class ModelCouseListView(LoginRequiredMixin, TemplateView):
         
         queryset = ModelCourse.objects.filter(oshiro_info=oshiro)
 
-        # 難易度フィルタリング
         difficulty_filter = self.request.GET.get('difficulty')
         if difficulty_filter:
             queryset = queryset.filter(difficulty=difficulty_filter)
@@ -67,7 +66,7 @@ class ModelCouseListView(LoginRequiredMixin, TemplateView):
 
 
 # ---------------------------------------------------------
-# 3. 新規登録
+# 3. 新規登録 (Registar)
 # ---------------------------------------------------------
 class ModelCouseRegistarView(LoginRequiredMixin, TemplateView):
     template_name = "model_couse_registar.html"
@@ -79,6 +78,7 @@ class ModelCouseRegistarView(LoginRequiredMixin, TemplateView):
         return context
 
     def post(self, request, *args, **kwargs):
+        # 新規登録は oshiro_id を使う
         oshiro_id = self.kwargs.get('oshiro_id')
         oshiro = get_object_or_404(OshiroInfo, pk=oshiro_id)
         user = request.user
@@ -88,7 +88,7 @@ class ModelCouseRegistarView(LoginRequiredMixin, TemplateView):
             files = request.FILES
             admin_obj = Admin.objects.get(account=user)
 
-            # 1. 親（コース）の保存
+            # 1. 親（コース）の新規作成
             course = ModelCourse.objects.create(
                 oshiro_info=oshiro,
                 admin=admin_obj,
@@ -100,11 +100,9 @@ class ModelCouseRegistarView(LoginRequiredMixin, TemplateView):
                 five_star_review=0
             )
 
-            # 2. 子（スポット）の保存 (ループ処理)
+            # 2. 子（スポット）の作成
             for i in range(1, 31):
                 name_key = f'spot_name_{i}'
-                
-                
                 if data.get(name_key):
                     ModelCourseSpot.objects.create(
                         model_course=course,
@@ -121,7 +119,7 @@ class ModelCouseRegistarView(LoginRequiredMixin, TemplateView):
         except Exception as e:
             print(f"登録エラー: {e}")
             context = self.get_context_data(**kwargs)
-            context['error_message'] = f"エラーが発生しました: {e}"
+            context['error_message'] = f"エラー: {e}"
             return render(request, self.template_name, context)
 
 
@@ -139,7 +137,7 @@ class ModelCouseRegistarSuccessView(LoginRequiredMixin, TemplateView):
 
 
 # ---------------------------------------------------------
-# 5. 編集（更新）
+# 5. 編集（更新） (Update)
 # ---------------------------------------------------------
 class ModelCouseUpdateView(LoginRequiredMixin, TemplateView):
     template_name = "model_couse_update.html"
@@ -156,6 +154,7 @@ class ModelCouseUpdateView(LoginRequiredMixin, TemplateView):
         return context
 
     def post(self, request, *args, **kwargs):
+        # 更新は pk (コースID) を使う
         pk = self.kwargs.get('pk')
         course = get_object_or_404(ModelCourse, pk=pk)
         
@@ -171,19 +170,35 @@ class ModelCouseUpdateView(LoginRequiredMixin, TemplateView):
             course.difficulty = data.get('difficulty')
             course.save()
 
-            # 2. 子情報の更新
+            # ▼▼▼ 修正箇所：既存の画像を退避しておく ▼▼▼
+            existing_images = {}
+            for spot in course.spots.all():
+                if spot.image:
+                    existing_images[spot.order] = spot.image
+
+            # 2. 子情報の更新（一度全消し）
             course.spots.all().delete()
 
+            # 3. 再作成
             for i in range(1, 31):
                 name_key = f'spot_name_{i}'
+                
+                # 名前がある場合のみ保存
                 if data.get(name_key):
+                    # 画像の決定ロジック
+                    image_to_save = files.get(f'spot_image_{i}')
+                    
+                    # 新しい画像がなく、かつ古い画像があればそれを引き継ぐ
+                    if not image_to_save and i in existing_images:
+                        image_to_save = existing_images[i]
+
                     ModelCourseSpot.objects.create(
                         model_course=course,
                         order=i,
                         name=data.get(f'spot_name_{i}'),
                         short_description=data.get(f'spot_short_{i}'),
                         detail=data.get(f'spot_detail_{i}'),
-                        image=files.get(f'spot_image_{i}'),
+                        image=image_to_save,  # 設定した画像を保存
                         note=data.get(f'spot_note_{i}')
                     )
 

@@ -52,6 +52,12 @@
                             <span class="difficulty-label">{{ course.difficulty }}</span>
                             <span style="margin-left:10px;">⏱ {{ course.required_time|time:"G時間i分" }}</span>
                             <span style="margin-left:10px;">📏 {{ course.distance }}km</span>
+                            <span style="margin-left:10px; color:#f39c12; font-weight:bold;">
+                                <i class='bx bxs-star'></i> {{ course.five_star_review }}
+                                <span style="color:#666; font-weight:normal; font-size:0.9em;">
+                                    ({{ course.review_count }}件)
+                                </span>
+                            </span>
                         </div>
 
                         <p style="font-size:0.9em; color:#444;">{{ course.course_overview|truncatechars:50 }}</p>
