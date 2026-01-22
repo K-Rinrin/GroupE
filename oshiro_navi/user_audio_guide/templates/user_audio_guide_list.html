@@ -1,28 +1,263 @@
+{% extends "user_base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>音声ガイド</title>
-    <link rel="stylesheet" href="{% static 'css/audio_guide.css' %}">
-</head>  
-<body>
-<div class="voice-chat-card">
-    <div class="voice-chat-card-header">
-        <img class="avatar">
-        <div class="username">鶴ヶ城</div>
-        <div class="status"></div>
-    </div>
-    <div class="voice-chat-card-body">
-        <div class="audio-container">
-            <audio controls="controls">
-                <source type="audio/mp3" src="{% static 'audio/turugajo_history.wav' %}">
-                
-            </audio>
+
+{% block title %}音声ガイド一覧{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* 全体のコンテナ */
+    .guide-page-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+        background-color: #f0f2f5;
+        min-height: 100vh;
+    }
+
+    /* キャラクターカード（つむぎ） */
+    .voice-chat-card {
+        width: 100%;
+        max-width: 400px;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        overflow: hidden;
+        margin-bottom: 30px;
+    }
+
+    .voice-chat-card-header {
+        background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        border: 3px solid white;
+        object-fit: cover;
+        background-color: #eee;
+    }
+
+    .info-group {
+        margin-left: 15px;
+    }
+
+    .oshiro_name {
+        font-weight: bold;
+        font-size: 1.2rem;
+        color: #333;
+        display: flex;
+        align-items: center;
+    }
+
+    .status-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: #4cd137;
+        margin-left: 8px;
+        box-shadow: 0 0 5px #4cd137;
+    }
+
+    /* 音声再生セクション */
+    .voice-chat-card-body {
+        padding: 20px;
+    }
+
+    .guide-item {
+        background: #f8f9fa;
+        border-radius: 12px;
+        padding: 15px;
+        margin-bottom: 15px;
+        border-left: 5px solid #a1c4fd;
+    }
+
+    .guide-title {
+        font-weight: bold;
+        margin-bottom: 8px;
+        color: #444;
+        display: block;
+    }
+
+    .audio-player {
+        width: 100%;
+        height: 40px;
+        margin-top: 5px;
+    }
+
+    /* スピーカー設定エリア（折りたたみ風） */
+    .settings-area {
+        font-size: 0.8rem;
+        color: #666;
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 1px dashed #ccc;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+    }
+
+    select, input {
+        width: 100%;
+        padding: 8px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        margin-top: 5px;
+    }
+
+    .btn-play {
+        background: #a1c4fd;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 20px;
+        width: 100%;
+        margin-top: 10px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+
+    .btn-play:hover {
+        background: #89b4f7;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="guide-page-container">
+    <div class="voice-chat-card">
+        <div class="voice-chat-card-header">
+            <img src="{% static 'image/鶴ヶ城12345.jpg' %}" class="avatar" alt="つむぎ">
+            <div class="info-group">
+                <div class="oshiro_name">鶴ヶ城：音声ガイド <span class="status-dot"></span></div>
+                <small style="color: #666;">公式ガイドボイス：春日部つむぎ</small>
+            </div>
         </div>
+
+        <div class="voice-chat-card-body">
+            <div class="guide-item">
+                <span class="guide-title">音声ガイドプレイヤー</span>
+                <button style="display: none" id="speak" class="btn-play">再生する</button>
+                <audio id="player" class="audio-player" controls></audio>
+                
+                <div class="settings-area">
+                    <label>スタイル変更: <select  id="speaker"></select></label>
+                </div>
+            </div>
+
+            <hr style="border: none; border-top: 1px solid #000000; margin: 20px 0;">
+
+            <h5 style="margin-bottom: 15px; color: #555;">📜 登録済みガイド</h5>
+            {% for guide in rows %}
+            <div class="guide-item">
+                <span class="guide-title">🔊{{ guide.title }}</span>
+                <p style="font-size: 0.9rem; color: #777;">{{ guide.guide_explanation}}</p>
+                <button class="btn-play btn-inline-play" 
+                        data-text="{{ guide.title }}。{{ guide.guide_explanation }}" 
+                        style="padding: 5px 10px; font-size: 0.8rem; width: auto; margin-bottom: 10px;">
+                    音声ガイドを生成する
+                </button>
+                <hr style="border: none; border-top: 1px solid #000000; margin: 20px 0;">
+            </div>
+            {% empty %}
+            <p style="text-align: center; color: #999;">ガイドはまだ登録されていません。</p>
+            {% endfor %}
+        </div>
+        
     </div>
 </div>
-</body>
-</html>
 
+<script>
+
+const BASE = "http://127.0.0.1:50021";
+// 対象とするキャラクター名のリスト
+const TARGET_CHARACTERS = ["春日部つむぎ", "玄野武宏"];
+const DEFAULT_STYLE_ID = 8; // つむぎノーマル
+// 登録済みガイドの再生ボタンに対する処理
+document.addEventListener("click", (e) => {
+    // クリックされた要素が 'btn-inline-play' クラスを持っていた場合
+    if (e.target && e.target.classList.contains("btn-inline-play")) {
+        const textToSpeak = e.target.getAttribute("data-text");
+        const speakerId = document.getElementById("speaker").value; // 現在選択中のスタイルID（デフォルトはつむぎ）
+        
+        // 再生中であることを示すためにボタンを少し変える（任意）
+        const originalText = e.target.textContent;
+        e.target.textContent = "生成中...";
+        e.target.disabled = true;
+
+        synthesize(textToSpeak, speakerId).then(() => {
+            e.target.textContent = originalText;
+            e.target.disabled = false;
+        }).catch(() => {
+            e.target.textContent = "エラー";
+            e.target.disabled = false;
+        });
+    }
+});
+
+async function loadSpeakers() {
+    try {
+        const res = await fetch(`${BASE}/speakers`);
+        if (!res.ok) throw new Error("speakers API failed");
+        const data = await res.json();
+
+        const sel = document.getElementById("speaker");
+        sel.innerHTML = "";
+        
+        // 指定したキャラクターたちのスタイルをすべて追加
+        data.forEach((character) => {
+            if (TARGET_CHARACTERS.includes(character.name)) {
+                // キャラクターごとにグループ化（optgroup）すると見やすくなります
+                const group = document.createElement("optgroup");
+                group.label = character.name;
+
+                character.styles.forEach((st) => {
+                    const opt = document.createElement("option");
+                    opt.value = st.id;
+                    opt.textContent = `${character.name}（${st.name}）`;
+                    group.appendChild(opt);
+                });
+                sel.appendChild(group);
+            }
+        });
+
+        // デフォルト値の設定（つむぎノーマルがあれば選択）
+        sel.value = String(DEFAULT_STYLE_ID);
+
+    } catch (e) {
+        console.error("VOICEVOX connection failed:", e);
+    }
+}
+
+async function synthesize(text, speaker) {
+    const qRes = await fetch(`${BASE}/audio_query?text=${encodeURIComponent(text)}&speaker=${speaker}`, { method: "POST" });
+    const query = await qRes.json();
+    const sRes = await fetch(`${BASE}/synthesis?speaker=${speaker}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(query),
+    });
+    const blob = await sRes.blob();
+    const url = URL.createObjectURL(blob);
+    const audio = document.getElementById("player");
+    audio.src = url;
+    // audio.play();  オート再生
+}
+
+document.getElementById("speak").addEventListener("click", () => {
+    const text = document.getElementById("text").value;
+    const speaker = document.getElementById("speaker").value;
+    synthesize(text, speaker);
+});
+
+loadSpeakers();
+</script>
+{% endblock %}

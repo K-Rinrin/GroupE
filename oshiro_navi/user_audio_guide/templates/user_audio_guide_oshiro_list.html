@@ -1,0 +1,159 @@
+{% extends "user_base.html" %}
+{% load static %}
+{% block title %}音声ガイド：お城一覧{% endblock %}
+
+{% block content %}
+<div class="mypage-container" >
+    <h1 class="page-title">音声ガイド：お城一覧</h1>
+    <ul class="castle-result-list">
+        {% for oshiro in rows %}
+        <li class="result-item" style="border:1px solid #ddd; padding:15px; margin-bottom:15px; border-radius:8px; list-style:none;">
+            <div class="result-info">
+                <h3 class="result-name" style="margin:0 0 10px 0;">{{ oshiro.oshiro_name }}</h3>
+            </div>
+            <div style="text-align:right; margin-top:10px;">
+                <a href="{% url 'user_audio_guide:guide_list' oshiro.id %}" class="btn-detail-small" style="text-decoration:none; background:#333; color:#fff; padding:5px 15px; border-radius:4px;">
+                    音声ガイドを聞く
+                </a>
+            </div>
+        </li>
+        {% empty %}
+        <li class="no-result-msg" style="padding: 20px; text-align: center; color: #666;">
+            お城の情報が登録されていません。
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+
+<style>
+    /* コンテナ全体の調整 */
+.model-course-container {
+    padding: 20px;
+}
+
+.button-area {
+    text-align: right;
+    margin-top: 10px;
+}
+/* カテゴリタブ */
+.category-tabs {
+    display: flex;
+    flex-wrap: wrap; /* スマホで折り返す */
+    gap: 10px;
+    border-bottom: 2px solid #ddd;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+}
+
+.tab-item {
+    padding: 8px 16px;
+    text-decoration: none;
+    color: #555;
+    border-radius: 20px; /* 角丸ボタン風 */
+    background-color: #f0f0f0;
+    font-size: 0.9em;
+    transition: all 0.3s;
+}
+
+.tab-item:hover {
+    background-color: #e0e0e0;
+}
+
+/* 選択中のタブ */
+.tab-item.active {
+    background-color: #d4a024; /* お城テーマ色 */
+    color: white;
+    font-weight: bold;
+}
+
+/* 結果表示エリア */
+.result-header {
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+.castle-result-list {
+    padding: 0;
+    margin: 0;
+}
+
+/* 各モデルコースのカード */
+.result-item {
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    list-style: none;
+    background-color: #fff; /* 画像がない場合のフォールバック */
+    
+    /* 背景画像用の設定を追加 */
+    background-size: cover;      /* 枠いっぱいに広げる */
+    background-position: center; /* 中央合わせ */
+    background-repeat: no-repeat;
+    transition: transform 0.3s;  /* おまけ：ホバー時に少し動かすとおしゃれ */
+}
+
+.result-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.result-name {
+    margin: 0 0 10px 0;
+    font-size: 1.25em;
+}
+
+/* バッジと概要 */
+.course-badges {
+    margin-bottom: 10px;
+    font-size: 0.9em;
+    color: #666;
+}
+
+.badge-info {
+    margin-left: 10px;
+}
+
+.course-summary {
+    font-size: 0.9em;
+    color: #444;
+}
+
+/* ボタン・フッター */
+.item-footer {
+    text-align: right;
+    margin-top: 10px;
+}
+
+.btn-detail-small {
+    display: inline-block;
+    text-decoration: none;
+    background: #333;
+    color: #fff;
+    padding: 5px 15px;
+    border-radius: 4px;
+    transition: opacity 0.3s;
+}
+
+.btn-detail-small:hover {
+    opacity: 0.8;
+}
+
+.no-result-msg {
+    padding: 20px;
+    text-align: center;
+    color: #666;
+    list-style: none;
+}
+
+.back-link-area {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 50px;
+}
+</style>
+{% endblock %}

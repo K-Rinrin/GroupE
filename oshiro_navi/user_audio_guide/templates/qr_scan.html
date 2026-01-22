@@ -3,22 +3,51 @@
 {% block title %}音声ガイド読み込み後{% endblock %}
 {% block content %}
 
-<div style="width: 500px" id="reader"></div>
+<div class="container">
+    <h2>QRコードをスキャンしてください</h2>
+    <div style="width: 100%; max-width: 500px; margin: 0 auto;" id="reader"></div>
+    
+    <div id="result" style="text-align: center; margin-top: 20px;"></div>
+</div>
+
 <script src="{% static 'JS/html5-qrcode.min.js' %}"></script>
 <script>
-    var html5QrcodeScanner = new Html5QrcodeScanner(
-        "reader", { fps: 10, qrbox: 250 });
-            
     function onScanSuccess(decodedText, decodedResult) {
-        // Handle on success condition with the decoded text or result.
+        // 1. コンソールに結果を表示
         console.log(`Scan result: ${decodedText}`, decodedResult);
-        // ...
-        html5QrcodeScanner.clear();
-        // ^ this will stop the scanner (video feed) and clear the scan area.
+
+        // 2. 読み取ったURLにリダイレクト（移動）する
+        // 読み取った内容が http から始まるURLであることを確認して移動
+        if (decodedText.startsWith('http')) {
+            // スキャナーを停止
+            html5QrcodeScanner.clear().then(() => {
+                // 停止に成功したらURLへ移動
+                window.location.href = decodedText;
+            }).catch(error => {
+                console.error("停止エラー:", error);
+            });
+        } else {
+            // URLではないテキストだった場合の処理
+            document.getElementById('result').innerText = "読み取り内容: " + decodedText;
+        }
     }
 
-    html5QrcodeScanner.render(onScanSuccess);
-            
+    function onScanFailure(error) {
+        // スキャン失敗（コードが見つからない時など）はログを出さない（頻発するため）
+    }
+
+    // スキャナーの初期化
+    var html5QrcodeScanner = new Html5QrcodeScanner(
+        "reader", 
+        { 
+            fps: 10,        // 1秒間に10回スキャン
+            qrbox: 250,     // スキャン範囲のサイズ
+            rememberLastUsedCamera: true // 最後に使ったカメラを記憶
+        }
+    );
+
+    // 描画
+    html5QrcodeScanner.render(onScanSuccess, onScanFailure);
 </script>
 
 {% endblock %}
