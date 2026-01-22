@@ -71,7 +71,12 @@ class UserAccountView(View):
             try:
                 user = User.objects.create_user(username=username, email=email, password=password)
                 login(request, user)
-                return redirect('user_accounts:top') 
+                return render(request, 'user_account.html', {
+                    'success_message': 'アカウント登録が完了しました。ログインしてください。',
+                    'active_form': 'login',
+                    'values': {'email': email}  
+                })
+
             except Exception:
                 errors['signup_common'] = '登録処理に失敗しました'
                 return render(request, 'user_account.html', {

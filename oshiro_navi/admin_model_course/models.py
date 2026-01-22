@@ -1,4 +1,6 @@
 from django.db import models
+from django.core.validators import MinValueValidator, MaxValueValidator
+from django.conf import settings
  
  
 class ModelCourse(models.Model):
@@ -67,3 +69,30 @@ class ModelCourseSpot(models.Model):
  
     def __str__(self) -> str:
         return f"{self.order}. {self.name} ({self.model_course.model_course_name})"
+    
+
+
+
+class CourseReview(models.Model):
+    """
+    ユーザーによる個別の評価を保存するテーブル
+    """
+    model_course = models.ForeignKey(
+        ModelCourse, 
+        on_delete=models.CASCADE, 
+        related_name="reviews"
+    )
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
+    rating = models.IntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(5)],
+        help_text="評価（1〜5）"
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = "course_review"
+        # 1人のユーザーが同じコースに複数回評価できないようにする
+        unique_together = ('model_course', 'user')

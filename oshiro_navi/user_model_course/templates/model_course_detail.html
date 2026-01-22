@@ -84,9 +84,42 @@
 
     </div>
 
-    <!-- 戻るボタン -->
+
+    <!-- ▼ 3. レビューエリア ▼ -->
+    <div class="review-area" style="margin-top:50px; padding:30px; background:#f9f9f9; border-radius:8px; text-align:center;">
+        <h3><i class='bx bxs-star' style="color:#f39c12;"></i> このコースを評価する</h3>
+        
+        <div style="font-size:1.2em; margin-bottom:20px;">
+            現在の平均評価: <strong style="color:#f39c12; font-size:1.5em;">{{ course.five_star_review }}</strong> / 5.0
+        </div>
+
+        {% if user.is_authenticated %}
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="course_id" value="{{ course.id }}">
+                
+                <div class="stars">
+                    <!-- CSSで星を逆順に並べて判定します -->
+                    <input type="radio" id="star5" name="rating" value="5" {% if my_review.rating == 5 %}checked{% endif %}><label for="star5">★</label>
+                    <input type="radio" id="star4" name="rating" value="4" {% if my_review.rating == 4 %}checked{% endif %}><label for="star4">★</label>
+                    <input type="radio" id="star3" name="rating" value="3" {% if my_review.rating == 3 %}checked{% endif %}><label for="star3">★</label>
+                    <input type="radio" id="star2" name="rating" value="2" {% if my_review.rating == 2 %}checked{% endif %}><label for="star2">★</label>
+                    <input type="radio" id="star1" name="rating" value="1" {% if my_review.rating == 1 %}checked{% endif %}><label for="star1">★</label>
+                </div>
+                
+                <button type="submit" class="btn-review">評価を送る</button>
+            </form>
+        {% else %}
+            <p>評価するには<a href="{% url 'user_accounts:account' %}" style="color:#007bff; text-decoration:underline;">ログイン</a>してください。</p>
+        {% endif %}
+    </div>
+
+
+    <!-- 戻るボタンの修正 -->
     <div style="margin-top:50px; text-align:center;">
-        <a href="javascript:history.back()" class="btn-back">
+        <!-- ▼▼▼ 修正箇所 ▼▼▼ -->
+        <!-- course.oshiro_info.pk を使って、正しいお城の一覧へ戻るリンクを作る -->
+        <a href="{% url 'user_model_course:modelcourselist' %}?oshiro_id={{ course.oshiro_info.pk }}" class="btn-back">
             一覧へ戻る
         </a>
     </div>
@@ -304,6 +337,40 @@
         .spot-number { left: -48px; }
         .spot-body { flex-direction: column; gap: 15px; }
         .spot-name { font-size: 1.2rem; }
+    }
+
+    /* 星評価のCSS (右から左へ並べるテクニック) */
+    .stars {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: center;
+        margin-bottom: 20px;
+    }
+    .stars input { display: none; }
+    .stars label {
+        font-size: 40px;
+        color: #ccc;
+        cursor: pointer;
+        padding: 0 5px;
+        transition: color 0.2s;
+    }
+    /* ホバー時とチェック時の色変化 */
+    .stars input:checked ~ label,
+    .stars label:hover,
+    .stars label:hover ~ label {
+        color: #f39c12;
+    }
+    .btn-review {
+        padding: 10px 30px;
+        background: #333;
+        color: white;
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+    .btn-review:hover {
+        background: #555;
     }
 </style>
 {% endblock %}

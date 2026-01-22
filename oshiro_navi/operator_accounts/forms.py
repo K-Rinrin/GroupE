@@ -15,7 +15,7 @@ class AdminUserCreateForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password']
+        fields = ['username', 'email', 'password','account_name']
 
     def clean_managed_castles(self):
         #送信されたデータが入っています
