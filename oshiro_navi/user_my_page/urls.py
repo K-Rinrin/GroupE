@@ -7,10 +7,10 @@ urlpatterns = [
     path('mypage/', views.MyPageTopView.as_view(), name='mypage'),
     path('mylistregistar/', views.MyListRegistarView.as_view(), name='mylistregistar'), 
     path('mylistdeletecheck/<int:pk>/', views.MyListDeleteCheckView.as_view(), name='mylistdeletecheck'),
-    path('oshirostampregistar/', views.UserOshiroStampRegistar.as_view(), name='oshirostampregistar'),
     path('profileupdate/', views.ProfileCompleteView.as_view(), name='profileupdate'),
     path('profile/', views.ProfileEditView.as_view(), name='profile'),
     path('mylistdelete/', views.MyListDeleteView.as_view(), name='mylistdelete'),
     path('userprofile/<int:user_id>/', views.UserProfileView.as_view(), name='otherprofile'),
-    
+    path('get_stamp/', views.GetStampView.as_view(), name='get_stamp'),
+    path('oshirostampregistar/', views.OshiroStampBookView.as_view(), name='oshirostampregistar'),
 ]

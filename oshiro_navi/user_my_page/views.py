@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.db.models import Q
@@ -9,6 +9,14 @@ from user_accounts.models import User
 from user_accounts.models import User as UserProfile
 from operator_oshiro_info.models import OshiroInfo
 from user_my_list.models import OshiroMyList 
+from django.http import JsonResponse
+from django.utils import timezone
+from admin_oshiro_stamp.models import OshiroStampInfo
+from operator_oshiro_info.models import OshiroInfo
+from django.views.generic import ListView
+
+import math
+
 
 # --- 1. マイページトップ ---
 class MyPageTopView(LoginRequiredMixin, View):
@@ -114,12 +122,98 @@ class UserProfileView(View):
             'stamps': stamps,
         })
 
+
+
+# --- 6. スタンプ取得処理 ---
+def calculate_distance(lat1, lon1, lat2, lon2):
+    R = 6371000  # 地球の半径（メートル）
+    phi1 = math.radians(lat1)
+    phi2 = math.radians(lat2)
+    delta_phi = math.radians(lat2 - lat1)
+    delta_lambda = math.radians(lon2 - lon1)
+    a = math.sin(delta_phi / 2)**2 + math.cos(phi1) * math.cos(phi2) * math.sin(delta_lambda / 2)**2
+    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+    return R * c
+
+class GetStampView(LoginRequiredMixin, View):
+    def post(self, request):  # 引数から oshiro_id を削除
+        try:
+            user_lat = float(request.POST.get('latitude'))
+            user_lng = float(request.POST.get('longitude'))
+        except (TypeError, ValueError):
+            return JsonResponse({'status': 'error', 'message': '位置情報が取得できませんでした。'})
+
+        # 登録されている全てのお城を取得
+        all_castles = OshiroInfo.objects.all()
+        target_oshiro = None
+
+        # ループして1km以内のお城を探す
+        for oshiro in all_castles:
+            if oshiro.latitude and oshiro.longitude:
+                dist = calculate_distance(user_lat, user_lng, oshiro.latitude, oshiro.longitude)
+                if dist <= 1000:  # 1000m以内ならヒット
+                    target_oshiro = oshiro
+                    break  # 最初に見つかったお城で終了
+
+        # 近くにお城がなかった場合
+        if not target_oshiro:
+            return JsonResponse({'status': 'error', 'message': '近くにスタンプが押せるお城がありません（半径1km以内）。'})
+
+        # --- 以下、スタンプ付与処理 ---
+        stamp_info = OshiroStampInfo.objects.filter(oshiro_info=target_oshiro).first()
+        if not stamp_info:
+            return JsonResponse({'status': 'error', 'message': f'「{target_oshiro.oshiro_name}」はスタンプの準備ができていません。'})
+
+        user_profile, _ = UserProfile.objects.get_or_create(account=request.user)
+        
+        # すでに持っているかチェック
+        if OshiroStamp.objects.filter(oshiro_stamp_info=stamp_info, user=user_profile).exists():
+            return JsonResponse({'status': 'info', 'message': f'「{target_oshiro.oshiro_name}」のスタンプは既に獲得済みです！'})
+
+        # スタンプ作成
+        OshiroStamp.objects.create(
+            oshiro_stamp_info=stamp_info,
+            user=user_profile,
+            oshiro_stamp=1,
+            date=timezone.now().date()
+        )
+
+        return JsonResponse({'status': 'success', 'message': f'やった！「{target_oshiro.oshiro_name}」のスタンプをゲットしました！'})
+    
+class OshiroStampBookView(LoginRequiredMixin, ListView):
+    model = OshiroStamp
+    template_name = "user_oshiro_stamp_registar.html"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # 全スタンプ取得
+        all_stamps = OshiroStamp.objects.filter(user__account=self.request.user).order_by('date')
+        
+        # URLの ?page= の数字を取得。なければ1ページ目。
+        try:
+            page = int(self.request.GET.get('page', 1))
+        except:
+            page = 1
+            
+        # 1ページ6個ずつ表示するための切り出し
+        start = (page - 1) * 6
+        end = start + 6
+        context['stamps_on_page'] = all_stamps[start:end]
+        
+        # そのページの空き枠数
+        context['range_remaining'] = range(6 - context['stamps_on_page'].count())
+        
+        # ページ移動用のデータ
+        context['current_page'] = page
+        context['prev_page'] = page - 1
+        context['next_page'] = page + 1
+        context['total_count'] = all_stamps.count()
+        
+        return context
+
 # --- 5. 完了画面・その他 ---
 class ProfileCompleteView(LoginRequiredMixin, TemplateView):
     template_name = 'user_profile_update.html'
 
 class MyListDeleteView(LoginRequiredMixin, TemplateView):
     template_name = "my_list_delete.html"
-
-class UserOshiroStampRegistar(LoginRequiredMixin, TemplateView):
-    template_name = "user_oshiro_stamp_registar.html"

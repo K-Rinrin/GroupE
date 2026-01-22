@@ -4,69 +4,253 @@
 {% block title %}お城スタンプ帳{% endblock %}
 
 {% block content %}
+<style>
+    /* 全体レイアウト */
+    .stamp-book-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+    }
 
-    <div class="mypage-container stamp-book-container">
-        
-        <!-- ヘッダーエリア -->
-        <div class="stamp-header">
-            <h1 class="page-title">お城スタンプ</h1>
-            <div class="stamp-counter">
-                <span class="label">お城スタンプ数</span>
-                <span class="count">{{ stamp_count|default:"0" }}個</span>
-            </div>
-        </div>
+    /* ヘッダー */
+    .stamp-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 3px solid #000;
+        margin-bottom: 10px;
+        padding-bottom: 5px;
+    }
+    .stamp-header h1 { font-size: 24px; margin: 0; }
 
-        <!-- スタンプ一覧 (3x3 = 9個のグリッド) -->
+    /* 登録ボタンエリア */
+    .btn-group-top {
+        text-align: center;
+        margin-bottom: 30px;
+        padding: 20px;
+        background: #f9f9f9;
+        border-radius: 8px;
+    }
+    .btn-get-stamp {
+        padding: 15px 60px;
+        border: 2px solid #000;
+        background: #fff;
+        font-weight: bold;
+        cursor: pointer;
+        font-size: 18px;
+        box-shadow: 4px 4px 0px #000;
+        transition: 0.1s;
+    }
+    .btn-get-stamp:active {
+        box-shadow: 0px 0px 0px #000;
+        transform: translate(4px, 4px);
+    }
+
+    /* 矢印とスタンプ枠の横並び */
+    .stamp-main-area {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+    }
+
+    /* 矢印ボタン */
+    .nav-arrow {
+        font-size: 40px;
+        color: #000;
+        text-decoration: none;
+        width: 60px;
+        height: 120px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #eee;
+        border: 2px solid #000;
+        border-radius: 10px;
+        transition: 0.2s;
+    }
+    .nav-arrow:hover { background: #ddd; }
+    .nav-arrow.disabled {
+        color: #ccc;
+        border-color: #ccc;
+        background: #fafafa;
+        pointer-events: none;
+    }
+
+    /* スタンプグリッド（3列×2段） */
+    .stamp-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(2, 200px);
+        gap: 20px;
+        flex-grow: 1;
+    }
+
+    /* スタンプ1つの箱 */
+    .stamp-box {
+        border: 2px solid #000;
+        background: #fff;
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        height: 100%;
+        box-sizing: border-box;
+        position: relative;
+    }
+    .stamp-box.empty {
+        border: 1px dashed #bbb;
+        background: #fcfcfc;
+    }
+
+    .castle-name { font-weight: bold; font-size: 14px; text-align: center; }
+    
+    /* 画像エリア */
+    .stamp-image-wrap {
+        flex-grow: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        cursor: pointer;
+        overflow: hidden;
+    }
+    .stamp-image-wrap img {
+        max-width: 100%;
+        max-height: 110px;
+        object-fit: contain;
+    }
+
+    .stamp-date { font-size: 12px; color: #666; }
+
+    /* ページ表示 */
+    .page-indicator {
+        text-align: center;
+        margin-top: 25px;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    /* 拡大モーダル */
+    #image-modal {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(0,0,0,0.85);
+        align-items: center;
+        justify-content: center;
+    }
+    #modal-img { max-width: 90%; max-height: 80%; border: 5px solid #fff; }
+    .close-modal { position: absolute; top: 30px; right: 40px; color: #fff; font-size: 50px; cursor: pointer; }
+</style>
+
+<div class="stamp-book-container">
+    <div class="stamp-header">
+        <h1>お城スタンプ</h1>
+        <div>獲得数: <b>{{ total_count }}</b> / 18</div>
+    </div>
+
+    <div class="btn-group-top">
+        <button id="get-stamp-btn" class="btn-get-stamp">スタンプを登録する</button>
+    </div>
+
+    <div class="stamp-main-area">
+        <a href="?page={{ prev_page }}" class="nav-arrow {% if current_page <= 1 %}disabled{% endif %}">❮</a>
+
         <div class="stamp-grid">
-            
-            <!-- ▼ データがある分だけループで表示 ▼ -->
-            {% for stamp in object_list %}
-            <div class="stamp-box filled">
-                <div class="stamp-content">
-                    <div class="castle-name">{{ stamp.castle_name }}</div> <!-- 城名 -->
-                    <div class="stamp-date">{{ stamp.created_at|date:"Y.n.j" }}</div> <!-- 日付 -->
+            {% for stamp in stamps_on_page %}
+            <div class="stamp-box">
+                <div class="castle-name">{{ stamp.oshiro_stamp_info.oshiro_info.oshiro_name }}</div>
+                <div class="stamp-image-wrap" onclick="openModal(this)">
+                    {% if stamp.oshiro_stamp_info.oshiro_stamp_image %}
+                        <img src="{{ stamp.oshiro_stamp_info.oshiro_stamp_image.url }}" alt="stamp">
+                    {% endif %}
                 </div>
+                <div class="stamp-date">{{ stamp.date|date:"Y.n.j" }}</div>
             </div>
             {% endfor %}
 
-            <!-- ▼ データがない残りの枠を「空枠」として表示する ▼ -->
-            <!-- ※Backend(View)で空のオブジェクトを渡すか、JS等で9個になるまで埋める想定 -->
-           
-
+            {% for i in range_remaining %}
             <div class="stamp-box empty"></div>
-            <div class="stamp-box empty"></div>
-            <div class="stamp-box empty"></div>
-            <div class="stamp-box empty"></div>
-            
-            <!-- 合計が9個になるように調整 -->
-
+            {% endfor %}
         </div>
 
-        <!-- ページネーション (9個を超えたら次ページへ) -->
-        <div class="pagination">
-            {% if is_paginated %}
-            <span class="step-links">
-                {% if page_obj.has_previous %}
-                    <a href="?page={{ page_obj.previous_page_number }}">&lt; 前へ</a>
-                {% endif %}
-
-                <span class="current">
-                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
-                </span>
-
-                {% if page_obj.has_next %}
-                    <a href="?page={{ page_obj.next_page_number }}">次へ &gt;</a>
-                {% endif %}
-            </span>
-            {% endif %}
-        </div>
-
-        <!-- ボタンエリア -->
-        <div class="button-group mt-large">
-            <button type="button" class="btn-submit" onclick="location.href='#'">スタンプを登録する</button>
-            <a href="{% url 'usermy_page:mypage' %}" class="btn-cancel">マイページに戻る</a>
-        </div>
-
+        <a href="?page={{ next_page }}" class="nav-arrow {% if current_page >= 3 %}disabled{% endif %}">❯</a>
     </div>
 
+    <div class="page-indicator">{{ current_page }} / 3 ページ</div>
+
+    <div style="text-align: center; margin-top: 40px;">
+        <a href="{% url 'usermy_page:mypage' %}" style="color: #333; font-weight: bold;">マイページに戻る</a>
+    </div>
+</div>
+
+<div id="image-modal" onclick="closeModal()">
+    <span class="close-modal">&times;</span>
+    <img id="modal-img">
+</div>
+
+<script>
+    // モーダル開閉
+    function openModal(element) {
+        const imgTag = element.querySelector('img');
+        if (!imgTag) return;
+        const modal = document.getElementById('image-modal');
+        const modalImg = document.getElementById('modal-img');
+        modal.style.display = "flex";
+        modalImg.src = imgTag.src;
+    }
+    function closeModal() {
+        document.getElementById('image-modal').style.display = "none";
+    }
+
+    // スタンプ登録処理
+    document.getElementById('get-stamp-btn').addEventListener('click', function() {
+        const btn = this;
+        if (!navigator.geolocation) {
+            alert("お使いの端末はGPSに対応していません");
+            return;
+        }
+        
+        btn.disabled = true;
+        btn.innerText = "位置情報を確認中...";
+
+        navigator.geolocation.getCurrentPosition(
+            (pos) => {
+                const formData = new FormData();
+                formData.append('latitude', pos.coords.latitude);
+                formData.append('longitude', pos.coords.longitude);
+                formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+                fetch("{% url 'usermy_page:get_stamp' %}", {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(res => res.json())
+                .then(data => {
+                    alert(data.message);
+                    if (data.status === 'success') {
+                        location.reload();
+                    }
+                    btn.disabled = false;
+                    btn.innerText = "スタンプを登録する";
+                })
+                .catch(err => {
+                    alert("通信エラーが発生しました");
+                    btn.disabled = false;
+                    btn.innerText = "スタンプを登録する";
+                });
+            },
+            (err) => {
+                alert("位置情報の取得に失敗しました。GPSをオンにしてください。");
+                btn.disabled = false;
+                btn.innerText = "スタンプを登録する";
+            }
+        );
+    });
+</script>
 {% endblock %}
