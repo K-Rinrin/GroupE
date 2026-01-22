@@ -59,32 +59,43 @@
 </style>
 
 <script>
-    const map = L.map('map').setView([{{ center.lat }}, {{ center.lng }}], 16);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(map);
+    // 1. お城の登録された緯度経度を取得（データがない時のためにデフォルト値を設定）
+    // djangoモデルの latitude, longitude を直接使います
+    const oshiroLat = {{ oshiro.latitude|default:35.6895 }}; 
+    const oshiroLng = {{ oshiro.longitude|default:139.6917 }};
+
+    // 2. 地図の初期表示位置をお城の場所に設定
+    const map = L.map('map').setView([oshiroLat, oshiroLng], 16);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { 
+        attribution: '© OpenStreetMap' 
+    }).addTo(map);
+
+    // --- ★ お城そのものの場所に特別なピンを立てる ---
+    const castleMarker = L.marker([oshiroLat, oshiroLng], {
+        zIndexOffset: 1000 // 他のピンより上に表示
+    }).addTo(map);
+    castleMarker.bindPopup(`<strong>🏰 {{ oshiro.oshiro_name }}</strong><br>ここは中心地点です`).openPopup();
+    // ------------------------------------------
 
     const pinsData = {{ pins_json|safe }};
     const markers = []; 
 
-    // 1. ピン（画像アイコン）の生成
+    // 3. 周辺スポット（トイレや見どころ）のピン生成
     pinsData.forEach(pin => {
         let marker;
-        
-        // 画像がある場合は、その画像をアイコンにする
         if (pin.image) {
             const customIcon = L.icon({
-                iconUrl: pin.image,      // 登録された画像のURL
-                iconSize: [40, 40],      // アイコンのサイズ（横40px, 縦40px）
-                iconAnchor: [20, 20],    // アイコンの中心点を指定
-                popupAnchor: [0, -20],   // ポップアップが出る位置を調整
-                className: 'custom-map-icon' // CSSで枠線をつけたりする用
+                iconUrl: pin.image,
+                iconSize: [40, 40],
+                iconAnchor: [20, 20],
+                popupAnchor: [0, -20],
+                className: 'custom-map-icon'
             });
             marker = L.marker([pin.lat, pin.lng], { icon: customIcon });
         } else {
-            // 画像がない場合は通常の青いピン
             marker = L.marker([pin.lat, pin.lng]);
         }
         
-        // クリックした時に名前が出るポップアップは残しておく
         marker.bindPopup(`<strong>${pin.name}</strong>`);
         marker.addTo(map);
         
@@ -94,7 +105,7 @@
         });
     });
 
-    // 2. フィルタリング機能（ここは前と同じ）
+    // 4. フィルタリング機能
     const buttons = document.querySelectorAll('.cat-btn');
     buttons.forEach(btn => {
         btn.addEventListener('click', () => {
@@ -112,15 +123,4 @@
         });
     });
 </script>
-
-<style>
-    /* 地図上のアイコン画像を丸く、白枠をつけるときれいに見えます */
-    .custom-map-icon {
-        border-radius: 50%;
-        border: 2px solid white;
-        box-shadow: 0 0 5px rgba(0,0,0,0.3);
-        object-fit: cover;
-    }
-</style>
-
 {% endblock %}
