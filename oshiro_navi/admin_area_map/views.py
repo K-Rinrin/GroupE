@@ -34,7 +34,30 @@ class AreaMapTopView(TemplateView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx["basic_infos"] = BasicInfo.objects.select_related("oshiro_info").all().order_by("id")
+
+        # 管理者プロフィールがないなら空表示
+        if not hasattr(self.request.user, "admin_profile"):
+            ctx["basic_infos"] = BasicInfo.objects.none()
+            return ctx
+
+        ap = self.request.user.admin_profile
+
+        managed_castle_ids = [
+            ap.oshiro_management1_id,
+            ap.oshiro_management2_id,
+            ap.oshiro_management3_id,
+            ap.oshiro_management4_id,
+            ap.oshiro_management5_id,
+        ]
+        managed_castle_ids = [cid for cid in managed_castle_ids if cid is not None]
+
+        # ✅ BasicInfo を「担当城の OshiroInfo」に絞る
+        ctx["basic_infos"] = (
+            BasicInfo.objects
+            .select_related("oshiro_info")
+            .filter(oshiro_info_id__in=managed_castle_ids)
+            .order_by("id")
+        )
         return ctx
 
 
@@ -50,8 +73,12 @@ class AreaMapInfoListView(ListView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx["basic_info_id"] = self.kwargs["basic_info_id"]
-        ctx["map_center"] = TSURUGAJO_CENTER
+        basic_info_id = self.kwargs["basic_info_id"]
+        ctx["basic_info_id"] = basic_info_id
+
+        center = _get_map_center_from_basicinfo(basic_info_id)
+        ctx["map_center"] = {"lat": center["lat"], "lng": center["lng"], "zoom": center["zoom"]}
+        ctx["oshiro_name"] = center["oshiro_name"]
 
         # ★追加：JS用データ（表なしでもピンを描ける）
         ctx["maps_json"] = json.dumps([
