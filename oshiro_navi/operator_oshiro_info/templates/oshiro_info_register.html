@@ -10,7 +10,8 @@
   {% endif %}
 
   <!-- ✅ register にPOSTする（成功画面へは views.py が redirect する） -->
-  <form action="{% url 'operator_oshiro_info:register' %}" method="POST">
+  <form action="{% url 'operator_oshiro_info:register' %}" method="POST" enctype="multipart/form-data">
+
     {% csrf_token %}
 
     <!-- お城名 -->
@@ -42,6 +43,11 @@
       <label for="ruins">遺構</label>
       <input type="text" id="ruins" name="ruins" required>
     </div>
+
+    <div class="form-group">
+      <label for="oshiro_images">お城画像</label>
+      <input type="file" id="oshiro_images" name="oshiro_images" accept="image/*" required>
+    </div> 
 
     <!-- 緯度・経度 -->
      <div class="form-group">

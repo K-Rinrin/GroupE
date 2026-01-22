@@ -58,12 +58,17 @@ class OshiroInfoRegisterView(View):
         built_year_raw = request.POST.get("built_year")
         structure = request.POST.get("structure")
         ruins = request.POST.get("ruins")
+        oshiro_image = request.FILES.get("oshiro_images")
+
 
         # ✅ 追加：緯度経度（未入力OK）
         latitude_raw = request.POST.get("latitude")
         longitude_raw = request.POST.get("longitude")
         latitude = _safe_float(latitude_raw, default=None)
         longitude = _safe_float(longitude_raw, default=None)
+
+        if not (oshiro_name and address and built_year_raw and structure and ruins and oshiro_image):
+            return render(request, "oshiro_info_register.html", {"error": "必要情報を入力してください"})
 
         # 必須チェック（緯度経度は必須にしない）
         if not (oshiro_name and address and built_year_raw and structure and ruins):
@@ -79,6 +84,7 @@ class OshiroInfoRegisterView(View):
 
         OshiroInfo.objects.create(
             oshiro_name=oshiro_name,
+            oshiro_images=oshiro_image,
             address=address,
             built_year=built_year,
             structure=structure,
@@ -143,6 +149,10 @@ class OshiroInfoUpdateView(View):
         oshiro.built_year = built_year
         oshiro.structure = structure
         oshiro.ruins = ruins
+
+        oshiro_image = request.FILES.get("oshiro_images")
+        if oshiro_image:
+            oshiro.oshiro_images = oshiro_image
 
         # ✅ 追加
         oshiro.latitude = latitude

@@ -10,7 +10,8 @@
   {% endif %}
 
   <!-- ✅ update にPOSTする（成功画面へは views.py が redirect する） -->
-  <form action="{% url 'operator_oshiro_info:update' %}" method="POST">
+  <form action="{% url 'operator_oshiro_info:update' %}" method="POST" enctype="multipart/form-data">
+
     {% csrf_token %}
 
     <!-- ✅ 更新対象ID（必須） -->
@@ -50,6 +51,19 @@
       <input type="text" id="ruins" name="ruins"
              value="{{ oshiro.ruins }}" required>
     </div>
+
+    <div class="form-group">
+      <label for="oshiro_images">お城画像（差し替え）</label>
+      <input type="file" id="oshiro_images" name="oshiro_images" accept="image/*">
+    </div>
+
+    {% if oshiro.oshiro_images %}
+    <div class="form-group">
+      <div>現在の画像</div>
+      <img src="{{ oshiro.oshiro_images.url }}" alt="お城画像" style="max-width:240px; height:auto;">
+    </div>
+    {% endif %}
+
     <div class="form-group">
       <label for="latitude">緯度</label>
       <input type="text" id="latitude" name="latitude"
