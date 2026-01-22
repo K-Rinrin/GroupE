@@ -2,13 +2,41 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.views.generic.base import TemplateView
 from django.contrib.auth import authenticate, login, logout, get_user_model
+from django.views.generic import TemplateView
+from operator_oshiro_info.models import OshiroInfo
+from admin_basic_info.models import BasicInfo
+from event_info_management.models import OperatorEvent, AdminEvent
+from django.shortcuts import get_object_or_404
+
+
 
 User = get_user_model()
 
 
-# 1. ログイン後の画面
+# 1. ログイン後のtop画面
 class UserTopView(TemplateView):
     template_name = "user_top.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        # お城リスト（紐づくbasic_infoも一緒に取得）
+        context['oshiro_list'] = OshiroInfo.objects.all().select_related('basicinfo')
+        
+        # 最新イベント情報
+        # それぞれの最新3件を取得
+        admins = list(AdminEvent.objects.filter(public_settings=True).order_by('-start_date')[:3])
+        operators = list(OperatorEvent.objects.filter(public_settings=True).order_by('-start_date')[:3])
+
+        # 判別用の属性
+        for e in admins: e.event_type = 'admin'
+        for e in operators: e.event_type = 'operator'
+
+        # 2つのリストを合体させ、日付順（降順）でソートして上位3件をとる
+        all_events = sorted(admins + operators, key=lambda x: x.start_date, reverse=True)
+        context['latest_events'] = all_events[:3]
+        
+        return context
 
 
 
