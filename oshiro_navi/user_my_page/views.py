@@ -12,6 +12,7 @@ from user_my_list.models import OshiroMyList
 from django.http import JsonResponse
 from django.utils import timezone
 from admin_oshiro_stamp.models import OshiroStampInfo
+from operator_oshiro_info.models import OshiroInfo
 from django.views.generic import ListView
 
 import math
