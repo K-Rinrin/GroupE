@@ -170,12 +170,12 @@ class GetStampView(LoginRequiredMixin, View):
         if OshiroStamp.objects.filter(oshiro_stamp_info=stamp_info, user=user_profile).exists():
             return JsonResponse({'status': 'info', 'message': f'「{target_oshiro.oshiro_name}」のスタンプは既に獲得済みです！'})
 
+        # --- GetStampView 内のスタンプ作成部分 ---
+
         # スタンプ作成
         OshiroStamp.objects.create(
             oshiro_stamp_info=stamp_info,
-            user=user_profile,
-            oshiro_stamp=1,
-            date=timezone.now().date()
+            user=user_profile
         )
 
         return JsonResponse({'status': 'success', 'message': f'やった！「{target_oshiro.oshiro_name}」のスタンプをゲットしました！'})
