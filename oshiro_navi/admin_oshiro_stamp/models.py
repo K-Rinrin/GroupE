@@ -39,20 +39,15 @@ class OshiroStampInfo(models.Model):
         return f"OshiroStampInfo(id={self.id}, name={self.stamp_name})"
 
 
-class OshiroStamp(models.Model):
-    """
-    お城スタンプテーブル（oshiro_stamp）。
-    利用者が集めたスタンプ数や取得日を管理する。
-    """
 
-    # テーブル定義書では PK ○ が付いているので primary_key=True
-    oshiro_stamp_info = models.OneToOneField(
+
+class OshiroStamp(models.Model):
+    oshiro_stamp_info = models.ForeignKey(
         "admin_oshiro_stamp.OshiroStampInfo",
         on_delete=models.CASCADE,
         db_column="oshiro_stamp_info",
         help_text="対象のお城スタンプ情報"
     )
-
 
     date = models.DateField(
         auto_now_add=True,
@@ -63,12 +58,12 @@ class OshiroStamp(models.Model):
         "user_accounts.User",
         on_delete=models.CASCADE,
         db_column="user",
-
         help_text="スタンプを持っている利用者"
     )
 
     class Meta:
         db_table = "oshiro_stamp"
+        # 「同じユーザーが同じスタンプを2個以上持てない」という制限はここでかける
         unique_together = ('user', 'oshiro_stamp_info')
 
     def __str__(self) -> str:
