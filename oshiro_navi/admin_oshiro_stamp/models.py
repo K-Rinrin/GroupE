@@ -50,15 +50,12 @@ class OshiroStamp(models.Model):
         "admin_oshiro_stamp.OshiroStampInfo",
         on_delete=models.CASCADE,
         db_column="oshiro_stamp_info",
-        primary_key=True,
-        help_text="対象のお城スタンプ情報（主キー）"
+        help_text="対象のお城スタンプ情報"
     )
 
-    oshiro_stamp = models.IntegerField(
-        help_text="お城スタンプ数"
-    )
 
     date = models.DateField(
+        auto_now_add=True,
         help_text="スタンプ取得日"
     )
 
@@ -72,6 +69,7 @@ class OshiroStamp(models.Model):
 
     class Meta:
         db_table = "oshiro_stamp"
+        unique_together = ('user', 'oshiro_stamp_info')
 
     def __str__(self) -> str:
         return f"OshiroStamp(info={self.oshiro_stamp_info_id}, user={self.user_id})"
