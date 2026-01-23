@@ -17,8 +17,8 @@
         <form method="POST">
             {% csrf_token %}
             <div class="form-buttons">
-                <button type="submit" class="btn btn-delete">はい、削除します</button>
-                <a href="{% url 'event_info_management:operator_event_info_list' %}" class="btn btn-cancel">キャンセル</a>
+                <button type="submit" class="btn btn-delete">削除</button>
+                <a href="{% url 'event_info_management:operator_event_info_list' %}" class="btn btn-cancel">戻る</a>
             </div>
         </form>
     </div>
