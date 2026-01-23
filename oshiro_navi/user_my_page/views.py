@@ -186,9 +186,12 @@ class OshiroStampBookView(LoginRequiredMixin, ListView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # 全スタンプ取得
-        all_stamps = OshiroStamp.objects.filter(user__account=self.request.user).order_by('date')
+        # ここを .select_related() を使う形にすると動作が速く、確実になります
+        all_stamps = OshiroStamp.objects.filter(
+            user__account=self.request.user
+        ).select_related('oshiro_stamp_info__oshiro_info').order_by('date')
         
+        # ...（以下、ページ分割の処理は前回のままでOK）...
         # URLの ?page= の数字を取得。なければ1ページ目。
         try:
             page = int(self.request.GET.get('page', 1))
