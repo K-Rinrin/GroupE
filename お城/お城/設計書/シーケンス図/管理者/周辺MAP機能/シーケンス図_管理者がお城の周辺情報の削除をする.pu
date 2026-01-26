@@ -5,29 +5,43 @@
 ' 登場モノの定義
 ' ========================================
 actor "管理者" as Admin
-boundary "周辺ＭＡＰ機能画面" as b1
+boundary "周辺MAPトップ画面" as b0
 control "表示" as c1
-boundary "周辺ＭＡＰ削除画面" as b2
+boundary "周辺ＭＡＰ一覧画面" as b1
+boundary "周辺ＭＡＰ更新画面" as b2
+boundary "周辺MAP削除確認画面" as b3
 control "処理" as c2
-boundary "周辺ＭＡＰ削除完了画面" as b3
+boundary "周辺ＭＡＰ削除完了画面" as b4
 entity "周辺ＭＡＰ情報" as e1
 
 ' ========================================
 ' シーケンスの流れ
 ' ========================================
 
+c1 -> b0 : 表示する():method=GET()
+Admin -> b0 : 「周辺MAPを開く」ボタンを押下する
+b0 -> c1 : 起動する:method=GET()
 c1 -> b1 : 表示する():method=GET()
-Admin -> b1 : 「削除」ボタンを押下する
+Admin -> b1 : 削除したいピンを選択する
 b1 -> b2 : 表示する():method=GET()
-Admin -> b2 : ボタンを押下する
+Admin -> b2 : 「削除」ボタンを押下する
 b2 -> c2 : 起動する:method=GET()
 
 alt 「戻る」ボタンを押下した場合
-    c2 -> b1 : 表示する():method=GET()
+    b2 -> b1 : 表示する():method=GET()
 else 「削除」ボタンを押下した場合
-    c2 -> e1 : 削除する():boolean
-    e1 --> c2
-    c2 -> b3: 表示する():method=GET()
+    b2 -> b3: 表示する():method=GET()
+    
+    alt 「戻る」ボタンを押下した場合
+        b3 -> b2 : 表示する():method=GET()
+    else 「削除する」ボタンを押下した場合
+        c2 -> e1 : 削除する():boolean
+        e1 --> c2
+        c2 -> b4: 表示する():method=GET()
+    end
+    alt 「一覧へ戻る」ボタンを押下した場合
+        b4 -> b1 : 表示する():method=GET()
+    end
 end
 
 @enduml
