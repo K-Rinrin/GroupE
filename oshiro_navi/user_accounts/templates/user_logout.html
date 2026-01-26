@@ -1,18 +1,32 @@
-{% extends "user_base.html" %}
+
+
+
+
+
 {% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ログアウト画面</title>
+    <link rel="stylesheet" href="{% static 'css/user_base.css' %}">
+</head>
+<style>
+    body {
+    /* margin: 0; */
+    height: 100vh;      /* 画面の高さ100%分を確保 */
+    display: grid;
+    align-items: center;     /* 上下中央 */
 
-{% block title %}ログアウト{% endblock %}
-
-{% block content %}
-
+}
+</style>
+<body> 
     <div class="mypage-container">
         <h1 class="page-title">ログアウトしました。</h1>
-
         <div class="button-group">
             <a href="{% url 'user_accounts:account' %}" class="btn-submit">もう一度ログインする</a>
         </div>
-
     </div>
-
-
-{% endblock %}
+</body>
+</html>
