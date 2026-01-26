@@ -5,26 +5,37 @@
 ' 登場モノの定義
 ' ========================================
 actor "管理者" as Admin
-boundary "イベント更新画面" as b1
+boundary "イベント一覧画面" as b1
 control "表示" as c1
+boundary "イベント更新画面" as b2
 control "処理" as c2
-boundary "イベント更新完了画面" as b2
-entity "イベント情報" as e1
+boundary "イベント更新完了画面" as b3
+entity "管理者イベント情報" as e1
 
 ' ========================================
 ' シーケンスの流れ
 ' ========================================
 
 c1 -> b1 : 表示する():method=GET()
-Admin -> b1 : 必要情報を入力し「更新」ボタンを押下する
-b1 -> c2 : 起動する:method=POST()
+Admin -> b1 : 更新したいイベントの\n「更新」ボタンを押下する
+b1 -> b2 : 表示する:method=GET()
 
-alt 必要情報が未入力の場合
-    c2 -> b1 : 表示する():method=GET()
-else 必要情報が入力されている場合
-    c2 -> e1 : 更新する():boolean
-    e1 --> c2
-    c2 -> b2 : 表示する():method=GET()
+Admin -> b2 : 必要情報を入力しボタンを押下する
+
+
+alt 「戻る」ボタンを押下した場合
+    b2 -> b1 : 表示する():method=GET()
+
+else 「更新」ボタンを押下した場合
+    b2 -> c2 : 起動する:method=POST()
+
+    alt 必要情報が未入力の場合
+        c2 -> b2 : 表示する():method=GET()
+    else 必要情報が入力されている場合
+        c2 -> e1 : 更新する():boolean
+        e1 --> c2
+        c2 -> b3 : 表示する():method=GET()
+    end
 end
 
 @enduml
