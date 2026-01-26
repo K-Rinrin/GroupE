@@ -44,5 +44,8 @@
     {% endfor %}
 
     <input class="btn btn-register" type="submit" value="登録" />
+    <a href="{% url 'operator_accounts:account_list' %}" class="btn btn-cancel">
+            戻る
+        </a>
 </form>
 {% endblock %}
