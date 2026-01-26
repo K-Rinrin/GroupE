@@ -19,15 +19,18 @@ entity "お城情報" as e1
 c1 -> b1 : 表示する():method=GET()
 Operator -> b1 : 「更新」ボタンを押下する
 b1 -> b2 : 表示する():method=GET()
-Operator -> b2 : 必要情報を入力し、「更新」ボタンを押下する
-b2 -> c2 : 起動する:method=POST()
-
-alt 必要情報が未入力の場合
-    c2 -> b2 : エラーメッセージを表示する
-else 必要情報が入力されている場合
-    c2 -> e1 : 更新する():boolean
-    e1 --> c2
-    c2 -> b3: 表示する():method=GET()
+Operator -> b2 : 必要情報を入力し、ボタンを押下する
+alt 「戻る」ボタンを押下した場合
+    b2 -> b1 : 表示する():method=GET()
+else 「更新」ボタンを押下した場合
+    b2 -> c2 : 起動する:method=POST()
+    alt 必要情報が未入力の場合
+        c2 -> b2 : システムは「フィールドに入力されていません」\nとメッセージを画面に表示する
+    else 必要情報が入力されている場合
+        c2 -> e1 : 更新する():boolean
+        e1 --> c2
+        c2 -> b3: 表示する():method=GET()
+    end
 end
 
 @enduml

@@ -7,9 +7,7 @@
 actor "運営" as User
 boundary "ログアウト画面" as b1
 control "表示" as c1
-boundary "ログアウト確認画面" as b2
-boundary "Top画面" as b3
-boundary "ログイン画面" as b4
+boundary "ログアウト完了画面" as b2
 
 
 ' ========================================
@@ -19,11 +17,5 @@ boundary "ログイン画面" as b4
 c1 -> b1 : 表示する():method=GET()
 User -> b1 :「ログアウト」ボタンを押下する
 b1 -> b2 : 表示する():method=GET()
-User -> b2 :　ボタンを押下する
-alt 「戻る」ボタンを押下した場合
-    b2 -> b3 : 表示する():method=GET()
-else 「ログアウト」ボタンを押下した場合
-    b2-> b4 : 表示する():method=GET()
-end
 
 @enduml

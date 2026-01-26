@@ -7,7 +7,6 @@
 actor "運営" as Operator
 boundary "管理者アカウント画面" as b1
 control "表示" as c1
-boundary "管理者アカウント削除確認画面" as b2
 control "処理" as c2    
 boundary "管理者アカウント登録削除画面" as b3
 entity "アカウント" as e1
@@ -18,12 +17,11 @@ entity "アカウント" as e1
 
 c1 -> b1 : 表示する():method=GET()
 Operator -> b1 : 「削除」ボタンを押下する
-b1 -> b2 : 表示する():method=GET()
-Operator -> b2 : ボタンを押下する
+b1 -> b1 : 「本当にこのアカウント（アカウント名）を削除してもよろしいですか？」\nとメッセージを表示する():method=GET()
 alt 「キャンセル」ボタン押下した場合
-    b2 -> b1 : 表示する():method=GET()
-else 「削除」ボタン押下した場合
-    b2 -> c2 : 起動する():method=POST()
+    b1 -> b1 : 表示する():method=GET()
+else 「ok」ボタン押下した場合
+    b1 -> c2 : 起動する():method=POST()
     c2 -> e1 : 削除する():boolean
     c2 <-- e1
     c2 -> b3 : 表示する():method=GET()
