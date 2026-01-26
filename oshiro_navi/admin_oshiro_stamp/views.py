@@ -72,33 +72,41 @@ class OshiroStampUpdateView(LoginRequiredMixin, View):
 
         oshiro = get_object_or_404(OshiroInfo, id=oshiro_id)
         
-        stamp, created = OshiroStampInfo.objects.get_or_create(
-            oshiro_info=oshiro,
-            defaults={'admin': request.user.admin_profile} # 新規作成時のデフォルト値
-        )
+        # get_or_createではなく、まず存在確認だけ行う
+        stamp = OshiroStampInfo.objects.filter(oshiro_info=oshiro).first()
 
         stamp_name = request.POST.get("stamp_name")
         stamp_image = request.FILES.get("stamp_image")
 
-        # 2. バリデーション
+        # --- バリデーション ---
+        errors = []
         if not stamp_name:
+            errors.append("スタンプ名は必須項目です")
+
+        # 画像のチェック：
+        # 「既存の画像がない(stampが未作成、またはimageが空)」かつ「新しい画像も送られていない」場合
+        has_existing_image = stamp and stamp.oshiro_stamp_image
+        if not has_existing_image and not stamp_image:
+            errors.append("スタンプ画像を選択してください")
+
+        if errors:
             return render(request, "oshiro_stamp_update.html", {
                 "stamp": stamp,
                 "oshiro": oshiro,
-                "error": "スタンプ名は必須項目です"
+                "errors": errors, # リストで渡すと複数のエラーを表示できて便利です
             })
 
-        # 3. データの更新
-        stamp.stamp_name = stamp_name
+        # --- データの更新・保存 ---
+        if not stamp:
+            # 新規作成
+            stamp = OshiroStampInfo(oshiro_info=oshiro, admin=request.user.admin_profile)
         
-        # 既存データ更新時にもadminを念のためセットする場合
+        stamp.stamp_name = stamp_name
         stamp.admin = request.user.admin_profile 
         
         if stamp_image:
             stamp.oshiro_stamp_image = stamp_image
             
-        # 4. 保存（ここでエラーが解消されます）
         stamp.save()
 
         return redirect("admin_oshiro_stamp:oshiro_stamp_update_success")
-

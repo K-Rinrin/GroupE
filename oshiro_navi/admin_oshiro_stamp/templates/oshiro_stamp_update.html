@@ -16,7 +16,9 @@
                 <strong>対象のお城：</strong>
                 {{ oshiro.oshiro_name }}
             </p>
-
+            {% for error in errors %}
+                <p style="color:red; font-weight:bold;">{{ error }}</p>
+            {% endfor %}
         <!-- スタンプ名 -->
         <div class="form-group">
             <label>スタンプ名</label><br>
