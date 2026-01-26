@@ -3,6 +3,8 @@ from django.views.generic import CreateView, DeleteView,ListView
 from django.contrib.auth.views import LogoutView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from operator_oshiro_info.models import OshiroInfo
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
 from django.views.generic.base import TemplateView
 from django.urls import reverse_lazy
 from django.db.models import Q
@@ -17,8 +19,10 @@ from django.urls import reverse
 # Create your views here.
 User = get_user_model()
 
-class OperatorTopView(TemplateView):
+class OperatorTopView(LoginRequiredMixin,TemplateView):
     template_name = "operator_top.html"
+    login_url = reverse_lazy("operator_accounts:operator_login")  
+    redirect_field_name = "next"
 
 class AdminAccountListView(ListView):
     model = User # get_user_model()したもの

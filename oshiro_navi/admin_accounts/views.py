@@ -1,3 +1,5 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
 from django.shortcuts import render, redirect
 from django.views import View
 from django.views.generic.base import TemplateView
@@ -7,8 +9,20 @@ from django.contrib import messages # エラーメッセージ用
 
 # Create your views here.
 # ログイン後画面
-class AdminTopView(TemplateView):
+class AdminTopView(LoginRequiredMixin, TemplateView):
     template_name = "admin_top.html"
+    login_url = reverse_lazy("admin_accounts:login")
+
+    def dispatch(self, request, *args, **kwargs):
+        # ログイン必須（未ログインは login_urlへ）
+        response = super().dispatch(request, *args, **kwargs)
+
+        # ✅ ここに来る時点でログイン済み。管理者でなければログインへ返す
+        if not hasattr(request.user, "admin_profile"):
+            logout(request)
+            return redirect("admin_accounts:login")
+
+        return response
 
 # ログアウト画面
 class AdminLogoutView(View):

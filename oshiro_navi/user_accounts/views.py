@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.views.generic.base import TemplateView
 from django.contrib.auth import authenticate, login, logout, get_user_model
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
 from django.views.generic import TemplateView
 from operator_oshiro_info.models import OshiroInfo
 from admin_basic_info.models import BasicInfo
@@ -14,8 +16,10 @@ User = get_user_model()
 
 
 # 1. ログイン後のtop画面
-class UserTopView(TemplateView):
+class UserTopView(LoginRequiredMixin,TemplateView):
     template_name = "user_top.html"
+    login_url = reverse_lazy("user_accounts:account")  # ←ここが重要
+    redirect_field_name = "next"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
