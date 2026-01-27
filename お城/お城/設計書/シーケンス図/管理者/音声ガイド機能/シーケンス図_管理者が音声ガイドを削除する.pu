@@ -5,19 +5,36 @@
 ' 登場モノの定義
 ' ========================================
 actor "管理者" as admin
-boundary "音声ガイド機能画面" as b1
+boundary "音声ガイドお城一覧画面" as b0
 control "表示" as c1
+boundary "音声ガイド一覧画面" as b1
 boundary "音声ガイド削除確認画面" as b2
 control "処理" as c2
+entity "お城情報" as e0
 entity "音声ガイド" as e1
 boundary "音声ガイド削除完了画面" as b3
+
 ' ========================================
 ' シーケンスの流れ
 ' ========================================
+
+c1 -> e0 : 参照する()
+c1 <-- e0
+c1 -> b0 : 表示する():method=GET()
+
+admin -> b0 : 「音声ガイド一覧・編集」ボタンを押下する
+
+b0 -> c1 : 起動する():method=GET()
+c1 -> e1 : 参照する()
+c1 <-- e1
 c1 -> b1 : 表示する():method=GET()
-admin -> b1 : 「削除」ボタンを押下する
-b1 -> b2 : 表示する():method=GET()
-admin -> b2 : ボタンを押下する
+
+admin -> b1 : 削除したい音声ガイドの「削除」ボタンを押下する
+
+b1 -> c1 : 起動する():method=GET()
+c1 -> b2 : 表示する():method=GET()
+
+admin -> b2 : 「削除」ボタンを押下する
 
 alt 「戻る」ボタンを押下した場合
     b2 -> b1 : 表示する():method=GET()
@@ -26,6 +43,11 @@ else 「削除」ボタンを押下した場合
     c2 -> e1 :削除する():boolean
     c2 <-- e1
     c2 -> b3 : 表示する():method=GET()
+    alt 「音声ガイド一覧へ戻る」ボタンを押下した場合
+        c1 -> e1 : 参照する()
+        c1 <-- e1
+        b3 -> b1 : 表示する():method=GET()
+    end
 end
 
-
+@enduml
