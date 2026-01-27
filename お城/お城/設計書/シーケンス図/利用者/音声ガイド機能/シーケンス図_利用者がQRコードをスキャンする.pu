@@ -1,0 +1,39 @@
+@startuml 利用者が音声ガイドを再生する
+
+
+' ========================================
+' 登場モノの定義
+' ========================================
+actor "利用者" as User
+boundary "QRコードスキャン画面" as b1
+control "表示" as c1
+boundary "QR画像スキャン画面" as b2
+control "処理" as c2
+control "処理" as c3
+boundary "音声ガイドお城選択画面" as b3
+entity "お城情報" as e1
+' ========================================
+' シーケンスの流れ
+' ========================================
+c1 -> b1   : 表示する():method=GET()
+User -> b1 : ボタンを押下する
+alt 「Scan an Image File」を押下した場合
+    alt 「Choose Image - No image choosen  Or drop an image to scan」を押した場合
+    User -> b2 :画像を選択する
+    b2 -> c2 :起動する():method=POST()
+    c2 -> e1 :参照する():method=GET()
+    e1 --> c2 :
+    c2 ->  b3 :表示する():method=GET()
+    else 「Scan using camera directly」ボタンを押下した場合
+    b2 -> b1 :表示する():method=GET()
+    end
+else 「Request Camera Permissions」ボタンを押下した場合
+    b1 -> c3 :起動する():method=POST()
+    User -> c3 :カメラにQRコードをかざす
+    c2 -> e1 :参照する():method=GET()
+    e1 --> c2 :
+    c3 ->  b3 :表示する():method=GET()
+
+end
+
+@enduml
