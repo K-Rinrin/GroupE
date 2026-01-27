@@ -5,36 +5,50 @@
 ' 登場モノの定義
 ' ========================================
 actor "管理者" as admin
-boundary "モデルコース機能画面" as b1
+boundary "モデルコース作成画面" as b1
 control "表示" as c1
-boundary "モデルコース登録画面" as b2
+boundary "モデルコース一覧画面" as b2
+boundary "モデルコース登録画面" as b3
 control "処理" as c2
 control "処理" as c3
-entity "モデルコース" as e1
-boundary "モデルコース登録完了画面" as b3
+entity "お城情報" as e1
+entity "モデルコース" as e2
+entity "モデルコーススポット" as e3
+boundary "モデルコース登録完了画面" as b4
+
 ' ========================================
 ' シーケンスの流れ
 ' ========================================
 c1 -> e1 : 参照する()
 c1 <-- e1
 c1 -> b1 : 表示する():method=GET()
-admin -> b1 : 「新規登録」ボタンを押下する
-b1 -> b2 : 起動する():method=GET()
-admin -> b2 : 必要情報を入力しボタンを押下する
+admin -> b1 : 登録したいお城の「選択」ボタンを押下する
+b1 -> b2 : 表示する()::method=GET()
 
-alt 「キャンセル」ボタンを押下した場合
-    b2 -> b1 : 表示する():method=GET()
+admin -> b2 : 「新規登録」ボタンを押下する
+b2 -> b3 : 表示する():method=GET()
+admin -> b3 : 必要情報を入力しボタンを押下する
+
+
+alt 「戻る」ボタンを押下した場合
+    b3 -> b2 : 表示する():method=GET()
+
 else 「スポット追加」ボタンを押下した場合
-    b2 -> c2 : 起動する():method=GET()
-    c2 -> b2 : 表示する():method=GET()
+    c2 -> e3 : 参照する()
+    c2 <-- e3
+    b3 -> c2 : 起動する():method=GET()
+    c2 -> b3 : 表示する():method=GET()
+
 else 「登録」ボタンを押下した場合
-    b2 -> c3 : 起動する():method=POST()
+    b3 -> c3 : 起動する():method=POST()
     alt 未入力の場合
-        c3 -> b2 : 「必要情報を入力してください」と\n赤文字でメッセージを画面に表示する
+        c3 -> b3 : 「このフィールドを入力してください」\nとメッセージを画面に表示する
     else すべて入力されている場合
-        c3 -> e1 : 登録する():boolean
-        c3 <-- e1 
-        c3 -> b3 : 表示する():method=GET()
+        c3 -> e2 : 登録する():boolean
+        c3 <-- e2 
+        c3 -> e3 : 登録する():boolean
+        c3 <-- e3 
+        c3 -> b4 : 表示する():method=GET()
     end
 end
 
