@@ -5,8 +5,9 @@
 ' 登場モノの定義
 ' ========================================
 actor "管理者" as Admin
-boundary "周辺ＭＡＰ機能画面" as b1
+boundary "周辺MAPトップ画面" as b0
 control "表示" as c1
+boundary "周辺ＭＡＰ一覧画面" as b1
 boundary "周辺ＭＡＰ更新画面" as b2
 control "処理" as c2
 boundary "周辺ＭＡＰ更新完了画面" as b3
@@ -16,18 +17,25 @@ entity "周辺ＭＡＰ情報" as e1
 ' シーケンスの流れ
 ' ========================================
 
+c1 -> b0 : 表示する():method=GET()
+Admin -> b0 : 「周辺MAPを開く」ボタンを押下する
+b0 -> c1 : 起動する:method=GET()
 c1 -> b1 : 表示する():method=GET()
-Admin -> b1 : 「更新」ボタンを押下する
+Admin -> b1 : 更新したいピンを選択する
 b1 -> b2 : 表示する():method=GET()
-Admin -> b2 : 必要なピンをマップ上に配置し、「更新」ボタンを押下する
+Admin -> b2 : 更新したいピンをカテゴリから選択し、「保存」ボタンを押下する
 b2 -> c2 : 起動する:method=POST()
 
-alt 必要なピンをマップ上に配置していない場合
-    c2 -> b2 : 「ピンをマップ上に配置してください」と\n赤文字でメッセージを画面に表示する
-else 必要なピンをマップ上に配置されている場合
+alt 「戻る」ボタンを押下した場合
+    b2 -> b1 : 表示する():method=GET()
+else 「保存」ボタンを押下した場合
     c2 -> e1 : 更新する():boolean
     e1 --> c2
     c2 -> b3: 表示する():method=GET()
+
+    alt 「一覧へ戻る」ボタンを押下した場合
+        b3 -> b1 : 表示する():method=GET()
+    end
 end
 
 @enduml

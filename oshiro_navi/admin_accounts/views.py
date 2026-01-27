@@ -69,10 +69,3 @@ class AdminLoginView(View):
 
 
 
-
-class ContactView(TemplateView):
-    template_name = "admin_contact_form.html"
-
-class ContactConfirmView(TemplateView):
-    template_name = "admin_contact_confirm.html"
-
