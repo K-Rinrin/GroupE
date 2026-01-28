@@ -7,15 +7,14 @@
     <div class="profile-info">
         <h1>管理者アカウント一覧</h1>
     </div>
-    <hr style="width:80%; margin-bottom: 10px; margin-top: 10px;"> 
+    <hr style="width:80%; margin-bottom: 10px; margin-top: 10px;">
 
     <div class="top-bar">
-        <input type="text" name="search" value="{{ request.GET.search }}" placeholder="名前やメールで検索"style="width: 300px; padding: 5px; margin-right: 10px;">
-        <button type="submit" class="btn btn-cancel">検索</button>
+        <form method="get" action="">
+        <input type="text" name="search" value="{{ request.GET.search }}" placeholder="名前やメールで検索" style="width: 300px; padding: 5px; margin-right: 10px;">
+        <button type="submit" class="btn btn-search">検索</button>
         <a href="{% url 'operator_accounts:account_create' %}" class="btn btn-register" style="margin-left: 10px;"">＋新規管理者アカウント作成</a>
     </form>
-
-        
     </div>
 
     <section class="table-area">
