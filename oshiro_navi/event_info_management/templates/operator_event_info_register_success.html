@@ -1,9 +1,15 @@
 {% extends "operator_base.html" %}
 {% load static %}
+{% block title %}運営イベント登録完了{% endblock %}
 {% block content %}
 <div class="content-container">
-        <h1 class="page-title">イベント登録完了</h1>
-        <a href="{% url 'event_info_management:operator_event_info_list' %}" class="btn btn-cancel">イベント一覧へ戻る</a>
+        <h1 style="margin-bottom: 10px;">イベント登録完了</h1>
+        <hr style="width:80%; margin-bottom: 10px; margin-top: 10px;"> 
+        <p style="margin-bottom: 18px;">登録が完了しました。</p>
+
+        <a class="btn btn-cancel" href="{% url 'event_info_management:operator_event_info_list' %}">
+                一覧へ戻る
+        </a>    
 </div>
 {% endblock %}
 

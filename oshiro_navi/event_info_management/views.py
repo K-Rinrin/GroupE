@@ -129,6 +129,7 @@ class AdminEventInfoDetailView(DetailView):
         # セキュリティ：自分が登録したイベントのみ閲覧可能にする
         return AdminEvent.objects.filter(admin=self.request.user.admin_profile)
 
+
 # ここからoperator
 
 class OperatorEventInfoListView(ListView):

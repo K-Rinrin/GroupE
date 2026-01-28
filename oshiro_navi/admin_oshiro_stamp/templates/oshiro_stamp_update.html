@@ -4,49 +4,48 @@
 
 {% block content %}
 <div class="content-container">
-<h1>お城スタンプ更新</h1>
-    <hr style="width: 80%;">
+    <h1>お城スタンプ更新</h1>
+    <hr style="width:80%; margin-bottom: 10px; margin-top: 10px;">
     {% if error %}
         <p style="color:red; font-weight:bold;">{{ error }}</p>
     {% endif %}
 
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-            <p>
-                <strong>対象のお城：</strong>
-                {{ oshiro.oshiro_name }}
-            </p>
+        <p>
+            <strong>対象のお城：</strong>
+            {{ oshiro.oshiro_name }}
+        </p>
+
+        <table class="basic-info-table" border="1" cellpadding="8" cellspacing="0">
+        <!-- スタンプ名 -->
+        <tr>
+            <th><label>スタンプ名</label><p class="required-point">＊</p></th>
+            <td>
+            <input type="text"name="stamp_name"value="{{ stamp.stamp_name }}"required>
+            </td>
+        </tr>
+
+        <!-- お城スタンプ画像 -->
+        <tr>
+            <th><label>お城スタンプ画像</label><p class="required-point">＊
+                <br>
+            </p></th>
+            <td>
+                <div class="image-preview">
+                    <!-- 現在の画像表示 -->
+                    <img src="{{ stamp.oshiro_stamp_image.url }}" alt="スタンプ画像" style="max-width:240px; height:auto;">
+                    <!-- 変更する場合のみ -->
+                    
+                </div>
+                <input type="file"name="stamp_image"accept="image/*"onchange="previewImage(this)">
+            </td>
+        </tr>
+        </table>
+
             {% for error in errors %}
                 <p style="color:red; font-weight:bold;">{{ error }}</p>
             {% endfor %}
-        <!-- スタンプ名 -->
-        <div class="form-group">
-            <label>スタンプ名</label><br>
-            <input type="text"
-                name="stamp_name"
-                value="{{ stamp.stamp_name }}"
-                required>
-        </div>
-
-        <!-- 画像アップロード -->
-        <div class="form-group">
-            <label>お城スタンプ画像</label><br>
-
-            <!-- 現在の画像表示 -->
-            
-                <div class="image-preview">
-                    <img src="{{ stamp.oshiro_stamp_image.url }}"
-                        style="max-width:200px;">
-                </div>
-            
-
-            <!-- 変更する場合のみ -->
-            <input type="file"
-                name="stamp_image"
-                accept="image/*"
-                onchange="previewImage(this)">
-        </div>
-
         <button type="submit" class="btn btn-update">更新</button>
         <a href="{% url 'admin_oshiro_stamp:oshiro_stamp_list' %}"
         class="btn btn-cancel">戻る</a>

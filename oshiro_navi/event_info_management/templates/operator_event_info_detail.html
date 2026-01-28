@@ -1,17 +1,18 @@
 {% extends "operator_base.html" %}
 {% load static %}
+{% block title %}運営イベント詳細{% endblock %}
 {% block content %}
-<div class="container">
+<div class="content-container">
     <h1 class="page-title">イベント詳細</h1>
-
+    <hr style="width:80%; margin-bottom: 10px; margin-top: 10px;"> 
     <div class="detail-container card">
         <div class="detail-header">
             <h2>{{ event.event_info }}</h2>
             <div class="status-badge">
                 {% if event.public_settings %}
-                    <span class="badge badge-public">公開中</span>
+                    <span class="badge badge-public" style="color:  rgb(51, 166, 51);">公開中</span>
                 {% else %}
-                    <span class="badge badge-private">非公開</span>
+                    <span class="badge badge-private" style="color: red;">非公開</span>
                 {% endif %}
             </div>
         </div>

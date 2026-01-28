@@ -1,5 +1,5 @@
 {% extends "operator_base.html" %}
-{% block title %}基本情報一覧{% endblock %}
+{% block title %}お城情報一覧{% endblock %}
 
 {% block content %}
 <div class="content-container">
@@ -11,7 +11,7 @@
 
     <hr style="width:80%; margin-bottom: 10px; margin-top: 10px;"> 
 
-    <table class="basic-info-table">
+    <table class="basic-info-table" style="margin-bottom: 30px;">
         <thead>
             <tr>
                 <th>城名</th>
@@ -30,9 +30,9 @@
             <tr class="basic-info-card">
                 <td class="castle-name"><strong>{{ o.oshiro_name }}</strong></td>
                 <td class="castle-row">{{ o.built_year }}年</td>
-                <td class="castle-row">{{ o.address }}</td>
-                <td class="castle-row">{{ o.structure }}</td>
-                <td class="castle-row">{{ o.ruins }}</td>
+                <td class="castle-row">{{ o.address|truncatechars:4 }}</td>
+                <td class="castle-row">{{ o.structure|truncatechars:10 }}</td>
+                <td class="castle-row">{{ o.ruins|truncatechars:10 }}</td>
 
                 <!-- ✅ 追加：未入力なら - 表示 -->
                 <td class="castle-row">
