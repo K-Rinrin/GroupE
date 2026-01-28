@@ -10,7 +10,7 @@
 
 <style>
   .wrap{display:flex; gap:24px; align-items:flex-start;}
-  #map{width:520px;height:320px;background:#dff2d8;border:1px solid #aaa;}
+  #map{width:400px;height:320px;background:#dff2d8;border:1px solid #aaa;}
   .side{min-width:360px;}
   .icon-list{display:flex; flex-direction:column; gap:10px; margin-top:10px;}
   .icon-btn{padding:14px; border:1px solid #aaa; cursor:pointer; background:#fff; text-align:center;}
@@ -22,9 +22,9 @@
   .thumb{display:block; margin-top:6px; width:64px; height:64px; object-fit:cover; border:1px solid #aaa; border-radius:8px;}
 </style>
 
-<div class="basic-info-form">
-  <h2>周辺MAP更新</h2>
-  <hr style="width:100%;">
+<div class="content-container basic-info-list">
+  <h1>周辺MAP更新</h1>
+  <hr style="width:80%; margin-bottom: 10px; margin-top: 10px;">
 
   {% if form.errors %}
     <div style="color:red; margin-bottom:12px;">
@@ -42,8 +42,8 @@
     <!-- 左：地図 -->
     <div>
       <div id="map"></div>
-      <div class="hint">①カテゴリを選ぶ → ②地図クリックで位置変更 → ③保存</div>
-      <div class="warn" id="warn" style="display:none;">※地図をクリックして位置を指定してください</div>
+      <div class="hint" style="color: red;">①カテゴリを選ぶ → ②地図クリックで位置変更 → ③保存</div>
+      <div class="warn" id="warn" style="display:none;" style="color: red;">※地図をクリックして位置を指定してください</div>
 
     </div>
 
@@ -81,9 +81,9 @@
         </div>
 
         <div class="actions">
-          <button type="submit" class="btn-update">保存</button>
-          <a class="btn-delete" href="{% url 'admin_area_map:area_map_info_delete' object.pk %}">削除</a>
-          <a class="btn-cancel" href="{% url 'admin_area_map:area_map_detail' basic_info_id %}">戻る</a>
+          <button type="submit" class="btn btn-update">保存</button>
+          <a class="btn btn-delete" href="{% url 'admin_area_map:area_map_info_delete' object.pk %}">削除</a>
+          <a class="btn btn-cancel" href="{% url 'admin_area_map:area_map_detail' basic_info_id %}">戻る</a>
         </div>
       </form>
     </div>

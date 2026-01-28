@@ -4,30 +4,21 @@
 {% block content %}
 
 
-<style>
-  .box{max-width:900px;margin:0 auto;}
-  .card{background:#fff;border:1px solid #ddd;border-radius:12px;padding:18px;}
-</style>
-
-<div class="box">
+<div class="content-container basic-info-list">
   <h1>周辺MAP削除完了</h1>
-
-  <div class="card">
-    <p>削除が完了しました。</p>
+  <hr style="width:80%; margin-bottom: 10px; margin-top: 10px;">
+  <p>削除が完了しました。</p>
 
     {% if request.GET.basic_info_id %}
-      <a class="btn-update" href="{% url 'admin_area_map:area_map_detail' request.GET.basic_info_id %}">
+      <a class="btn btn-cancel" href="{% url 'admin_area_map:area_map_detail' request.GET.basic_info_id %}">
         一覧へ戻る
       </a>
     {% else %}
-      <a class="btn-update" href="{% url 'admin_area_map:area_map_detail' basic_info_id %}">
+      <a class="btn btn-cancel" href="{% url 'admin_area_map:area_map_detail' basic_info_id %}">
         一覧へ戻る
       </a>
     {% endif %}
   </div>
 </div>
 
-
-        
-    
 {% endblock %}

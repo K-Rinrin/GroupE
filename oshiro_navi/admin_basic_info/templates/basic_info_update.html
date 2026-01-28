@@ -2,12 +2,12 @@
 {% block title %}基本情報更新{% endblock %}
 {% block content %}
 
-<div class="basic-info-form">
+<div class="content-container basic-info-update">
 
-  <h2>基本情報更新画面</h2>
-  <hr style="width: 100%;">
+  <h1>基本情報更新画面</h1>
+  <hr style="width:80%; margin-bottom: 10px; margin-top: 10px;">
 
-  <p>＊がついている項目が必須</p>
+  
 
   {% if error %}
     <p style="color:red;">{{ error }}</p>
@@ -16,7 +16,8 @@
   {% if not oshiro %}
     <p style="color:red;">対象のお城が見つかりません。</p>
   {% else %}
-    <p>対象城：<b>{{ oshiro.oshiro_name }}</b></p>
+    <h2>対象城：<b>{{ oshiro.oshiro_name }}</b></h2>
+  <p style="color:red;">＊がついている項目は必須です</p>
 
     <form method="post" enctype="multipart/form-data">
       {% csrf_token %}
@@ -29,84 +30,83 @@
         <input type="hidden" name="stamp_map" value='{}'>
       {% endif %}
 
-      <!-- ✅ class を付ける -->
-      <table class="basic-info-table" border="1" cellpadding="8" cellspacing="0">
-        <tr>
-          <th>入場料 ＊</th>
-          <td>
-            <input type="number" name="admission"
-                   value="{% if basic %}{{ basic.admission }}{% endif %}" required>
-            円
-          </td>
-        </tr>
+        <table class="basic-info-table" border="1" cellpadding="8" cellspacing="0">
+          <tr>
+            <th>入場料 <p class="required-point">＊</p></th>
+            <td>
+              <input type="number" name="admission"
+                    value="{% if basic %}{{ basic.admission }}{% endif %}" required>
+              円
+            </td>
+          </tr>
 
-        <tr>
-          <th>営業開始時間 ＊</th>
-          <td>
-            <input type="time" name="business_opening_hours"
-                   value="{% if basic %}{{ basic.business_opening_hours|date:'H:i' }}{% endif %}" required>
-          </td>
-        </tr>
+          <tr>
+            <th>営業開始時間 <p class="required-point">＊</p></th>
+            <td>
+              <input type="time" name="business_opening_hours"
+                    value="{% if basic %}{{ basic.business_opening_hours|date:'H:i' }}{% endif %}" required>
+            </td>
+          </tr>
 
-        <tr>
-          <th>営業終了時間 ＊</th>
-          <td>
-            <input type="time" name="business_closing_hours"
-                   value="{% if basic %}{{ basic.business_closing_hours|date:'H:i' }}{% endif %}" required>
-          </td>
-        </tr>
+          <tr>
+            <th>営業終了時間 <p class="required-point">＊</p></th>
+            <td>
+              <input type="time" name="business_closing_hours"
+                    value="{% if basic %}{{ basic.business_closing_hours|date:'H:i' }}{% endif %}" required>
+            </td>
+          </tr>
 
-        <tr>
-          <th>アクセス情報 ＊</th>
-          <td>
-            <textarea name="access_info" rows="4" cols="70" required>{% if basic %}{{ basic.access_info }}{% endif %}</textarea>
-          </td>
-        </tr>
+          <tr>
+            <th>アクセス情報 <p class="required-point">＊</p></th>
+            <td>
+              <textarea name="access_info" rows="4" cols="70" required>{% if basic %}{{ basic.access_info }}{% endif %}</textarea>
+            </td>
+          </tr>
 
-        <tr>
-          <th>見どころ画像</th>
-          <td>
-            <input type="file" name="highlights_img">
-            {% if basic and basic.highlights_img %}
-              <div style="margin-top:8px;">
-                <div>現在の画像：</div>
-                <img src="{{ basic.highlights_img.url }}" alt="highlights" width="220">
-              </div>
-            {% endif %}
-          </td>
-        </tr>
+          <tr>
+            <th>見どころ画像</th>
+            <td>
+              <input type="file" name="highlights_img">
+              {% if basic and basic.highlights_img %}
+                <div style="margin-top:8px;">
+                  <div>現在の画像：</div>
+                  <img src="{{ basic.highlights_img.url }}" alt="highlights" width="220">
+                </div>
+              {% endif %}
+            </td>
+          </tr>
 
-        <tr>
-          <th>見どころ説明</th>
-          <td>
-            <textarea name="highlights" rows="4" cols="70">{% if basic %}{{ basic.highlights }}{% endif %}</textarea>
-          </td>
-        </tr>
+          <tr>
+            <th>見どころ説明</th>
+            <td>
+              <textarea name="highlights" rows="4" cols="70">{% if basic %}{{ basic.highlights }}{% endif %}</textarea>
+            </td>
+          </tr>
 
-        <tr>
-          <th>御城印画像</th>
-          <td>
-            <input type="file" name="gojoin_stamp">
-            {% if basic and basic.gojoin_stamp %}
-              <div style="margin-top:8px;">
-                <div>現在の画像：</div>
-                <img src="{{ basic.gojoin_stamp.url }}" alt="gojoin" width="220">
-              </div>
-            {% endif %}
-          </td>
-        </tr>
+          <tr>
+            <th>御城印画像</th>
+            <td>
+              <input type="file" name="gojoin_stamp">
+              {% if basic and basic.gojoin_stamp %}
+                <div style="margin-top:8px;">
+                  <div>現在の画像：</div>
+                  <img src="{{ basic.gojoin_stamp.url }}" alt="gojoin" width="220">
+                </div>
+              {% endif %}
+            </td>
+          </tr>
 
-        <tr>
-          <th>御城印説明</th>
-          <td>
-            <textarea name="gojoin" rows="4" cols="70">{% if basic %}{{ basic.gojoin }}{% endif %}</textarea>
-          </td>
-        </tr>
-      </table>
+          <tr>
+            <th>御城印説明</th>
+            <td>
+              <textarea name="gojoin" rows="4" cols="70">{% if basic %}{{ basic.gojoin }}{% endif %}</textarea>
+            </td>
+          </tr>
+        </table>
 
       <div style="margin-top:16px;">
-        <button type="submit">更新</button>
-        <button type="submit" name="cancel" value="1">戻る</button>
+        <button type="submit" class="btn btn-update">更新</button>
+        <a href="{% url 'admin_basic_info:basic_info_list' %}" class="btn btn-cancel">戻る</a>
       </div>
 
     </form>

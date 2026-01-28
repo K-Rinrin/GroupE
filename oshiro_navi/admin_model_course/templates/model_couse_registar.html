@@ -4,33 +4,44 @@
 
 {% block content %}
 
+
 <div class="content-container basic-info-list">
     <h1>モデルコース登録</h1>
-    <p><strong>対象のお城：{{ oshiro.oshiro_name }}</strong></p>
-    <hr>
+    <hr style="width:80%; margin-bottom: 10px; margin-top: 10px;">
+    <h2><strong>対象のお城：{{ oshiro.oshiro_name }}</strong></h2>
+    <p style="color:red;">＊がついている項目は必須です</p>
 
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
 
-        <h2>コース基本情報</h2>
         <div class="form-group">
-            <label>モデルコース名 *</label><br>
+            <label><p class="required-point">＊</p>
+                モデルコース名 
+            </label><br>
             <input type="text" name="course_name" required style="width: 100%; max-width: 500px;">
         </div>
         <div class="form-group">
-            <label>コース概要 *</label><br>
+            <label><p class="required-point">＊</p>
+                コース概要
+            </label><br>
             <textarea name="course_overview" rows="4" required style="width: 100%; max-width: 500px;"></textarea>
         </div>
         <div class="form-group">
-            <label>所要時間 * (HH:MM)</label><br>
+            <label><p class="required-point">＊</p>
+                所要時間  (HH:MM)
+            </label><br>
             <input type="time" name="required_time" required>
         </div>
         <div class="form-group">
-            <label>距離 (km) *</label><br>
+            <label><p class="required-point">＊</p>
+                距離 (km) 
+            </label><br>
             <input type="number" step="0.1" name="distance" placeholder="例: 4.5" required>
         </div>
         <div class="form-group">
-            <label>難易度 *</label><br>
+            <label><p class="required-point">＊</p>
+                難易度
+            </label><br>
             <select name="difficulty" required>
                 <option value="">選択してください</option>
                 <option value="初心者向け">初心者向け</option>

@@ -4,7 +4,8 @@
 {% block content %}
 <div class="content-container">
   <h1 class="page-title">お城情報登録</h1>
-
+  <hr style="width:80%; margin-bottom: 10px; margin-top: 10px;"> 
+  <p style="color:red;">＊がついている項目は必須です</p>
   {% if error %}
     <p style="color:red; font-weight:bold;">{{ error }}</p>
   {% endif %}
@@ -13,60 +14,81 @@
   <form action="{% url 'operator_oshiro_info:register' %}" method="POST" enctype="multipart/form-data">
 
     {% csrf_token %}
+    
+        <table class="basic-info-table" border="1" cellpadding="8" cellspacing="0">
+          <!-- お城名 -->
+          <tr>
+            <th><label for="oshiro_name">お城名</label><p class="required-point">＊</p></th>
+            <td>
+              <input type="text" id="oshiro_name" name="oshiro_name" required>
+            </td>
+          </tr>
 
-    <!-- お城名 -->
-    <div class="form-group">
-      <label for="oshiro_name">お城名</label>
-      <input type="text" id="oshiro_name" name="oshiro_name" required>
-    </div>
+          <!-- 築城年 -->
+          <tr>
+            <th><label for="built_year">築城年</label> <p class="required-point">＊</p></th>
+            <td>
+              <input type="number" id="built_year" name="built_year" required>
+            </td>
+          </tr>
 
-    <!-- 築城年 -->
-    <div class="form-group">
-      <label for="built_year">築城年</label>
-      <input type="number" id="built_year" name="built_year" required>
-    </div>
+          <!-- 住所 -->
+          <tr>
+            <th><label for="address">住所</label> <p class="required-point">＊</p></th>
+            <td>
+              <input type="text" id="address" name="address" required>
+            </td>
+          </tr>
 
-    <!-- 住所 -->
-    <div class="form-group">
-      <label for="address">住所</label>
-      <input type="text" id="address" name="address" required>
-    </div>
+          <!-- 構造 -->
+          <tr>
+            <th><label for="structure">構造</label> <p class="required-point">＊</p></th>
+            <td>
+              <input type="text" id="structure" name="structure" required>
+            </td>
+          </tr>
 
-    <!-- 構造 -->
-    <div class="form-group">
-      <label for="structure">構造</label>
-      <input type="text" id="structure" name="structure" required>
-    </div>
+          <!-- 遺構 -->
+          <tr>
+            <th><label for="ruins">遺構</label> <p class="required-point">＊</p></th>
+            <td>
+              <input type="text" id="ruins" name="ruins" required>
+            </td>
+          </tr>
 
-    <!-- 遺構 -->
-    <div class="form-group">
-      <label for="ruins">遺構</label>
-      <input type="text" id="ruins" name="ruins" required>
-    </div>
+          <!-- お城画像　-->
+          <tr>
+            <th><label for="oshiro_images">お城画像</label> <p class="required-point">＊</p></th>
+            <td>
+              <input type="file" id="oshiro_images" name="oshiro_images" accept="image/*" required>
+            </td>
+          </tr>
 
-    <div class="form-group">
-      <label for="oshiro_images">お城画像</label>
-      <input type="file" id="oshiro_images" name="oshiro_images" accept="image/*" required>
-    </div> 
+          <!-- 緯度 -->
+          <tr>
+            <th><label for="latitude">緯度</label> <p class="required-point">＊</p></th>
+            <td>
+              <input type="text" id="latitude" name="latitude"
+                value="{{ oshiro.latitude }}" required>
+            </td>
+          </tr>
 
-    <!-- 緯度・経度 -->
-     <div class="form-group">
-      <label for="latitude">緯度</label>
-      <input type="text" id="latitude" name="latitude"
-             value="{{ oshiro.latitude }}" required>
-    </div>
-    <div class="form-group">
-      <label for="longitude">経度</label>
-      <input type="text" id="longitude" name="longitude"
-             value="{{ oshiro.longitude }}" required>
-    </div>
+          <tr>
+            <th><label for="longitude">経度</label> <p class="required-point">＊</p></th>
+            <td>
+              <input type="text" id="longitude" name="longitude"
+                value="{{ oshiro.longitude }}" required>
+            </td>
+          </tr>
+        </table>
+
 
     <!-- ボタン -->
     <div class="form-buttons">
-      <button type="submit" class="btn-register">登録</button>
+      <button type="submit" class="btn btn-register">登録</button>
 
       <!-- 戻るはGETで一覧へ -->
-      <a href="{% url 'operator_oshiro_info:list' %}" class="btn-cancel">戻る</a>
+      <a href="{% url 'operator_oshiro_info:list' %}" class="btn btn-cancel">戻る</a>
 
       <!--  cancelボタン方式にしたいなら（viewsが対応している） -->
       <!-- <button type="submit" name="cancel" value="1" class="btn-cancel">戻る</button> -->

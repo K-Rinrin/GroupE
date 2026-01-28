@@ -2,10 +2,13 @@
 {% block title %}基本情報更新完了{% endblock %}
 
 {% block content %}
-<h1>基本情報更新完了</h1>
-<p>更新が完了しました。</p>
+<div class="content-container basic-info-list">
+  <h1>基本情報更新完了</h1>
+  <hr style="width:80%; margin-bottom: 10px; margin-top: 10px;">
+  <p>更新が完了しました。</p>
 
-<a href="{% url 'admin_basic_info:basic_info_list' %}">
-  基本情報一覧へ戻る
-</a>
+  <a class="btn btn-cancel" href="{% url 'admin_basic_info:basic_info_list' %}">
+    基本情報一覧へ戻る
+  </a>
+</div>
 {% endblock %}

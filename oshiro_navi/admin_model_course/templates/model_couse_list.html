@@ -6,7 +6,7 @@
 <div class="content-container basic-info-list">
     
     <h1>{{ oshiro.oshiro_name }} のモデルコース一覧</h1>
-    <hr style="width: 80%;">
+    <hr style="width:80%; margin-bottom: 10px; margin-top: 10px;">
 
     <div class="action-bar" style="margin-bottom: 20px; text-align: right;">
         <a class="btn btn-register" href="{% url 'admin_model_course:model_couse_registar' oshiro_id=oshiro.pk %}">
@@ -62,7 +62,7 @@
             </div>
 
             <div class="course-action">
-                <a class="btn btn-register" href="{% url 'admin_model_course:model_couse_update' pk=course.pk %}">
+                <a class="btn btn-update" href="{% url 'admin_model_course:model_couse_update' pk=course.pk %}">
                     更新
                 </a>
             </div>
@@ -128,23 +128,6 @@
         padding: 2px 6px;
         border-radius: 4px;
         font-size: 0.9em;
-    }
-    .btn-new {
-        display: inline-block;
-        padding: 8px 16px;
-        background-color: #28a745;
-        color: white;
-        text-decoration: none;
-        border-radius: 4px;
-        font-weight: bold;
-    }
-    .btn-register {
-        display: inline-block;
-        padding: 6px 12px;
-        background-color: #007bff;
-        color: white;
-        text-decoration: none;
-        border-radius: 4px;
     }
 </style>
 

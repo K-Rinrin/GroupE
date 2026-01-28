@@ -6,9 +6,9 @@
 
 <style>
   .box{max-width:900px;margin:0 auto;}
-  .card{background:#fff;border:1px solid #ddd;border-radius:12px;padding:18px;}
+  .card{width:60%;background:#fff;border:1px solid #ddd;border-radius:12px;padding:18px;}
   .row{display:flex;gap:16px;flex-wrap:wrap;margin-top:10px;}
-  .item{min-width:220px;}
+  .item{min-width:220px; }
   .label{font-size:12px;opacity:.75;margin-bottom:4px;}
   .val{font-size:16px;font-weight:600;}
   .actions{margin-top:18px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
@@ -17,9 +17,9 @@
   .thumb{width:72px;height:72px;object-fit:cover;border:1px solid #aaa;border-radius:10px;}
 </style>
 
-<div class="box">
+<div class="content-container basic-info-list">
   <h1>周辺MAP削除確認</h1>
-
+  <hr style="width:80%; margin-bottom: 10px; margin-top: 10px;">
   <div class="card">
     <p style="margin:0 0 10px 0;">
       以下のピンを削除します。よろしいですか？
@@ -54,12 +54,12 @@
     {# DeleteView は POST で削除 #}
     <form method="post" class="actions">
       {% csrf_token %}
-      <button type="submit" class="danger">削除する</button>
+      <button type="submit" class="btn btn-delete">削除する</button>
 
       {% if basic_info_id %}
-        <a class="back" href="{% url 'admin_area_map:area_map_detail' basic_info_id %}">一覧へ戻る</a>
+        <a class="btn btn-cancel" href="{% url 'admin_area_map:area_map_detail' basic_info_id %}">一覧へ戻る</a>
       {% else %}
-        <a class="back" href="javascript:history.back()">戻る</a>
+        <a class="btn btn-cancel" href="javascript:history.back()">戻る</a>
       {% endif %}
     </form>
   </div>

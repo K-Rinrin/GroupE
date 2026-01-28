@@ -1,0 +1,12 @@
+
+.wrap{display:flex; gap:24px; align-items:flex-start;}
+#map{width:400px;height:320px;background:#dff2d8;border:1px solid #aaa;}
+.side{min-width:360px;}
+.icon-list{display:flex; flex-direction:column; gap:10px; margin-top:10px;}
+.icon-btn{padding:14px; border:1px solid #aaa; cursor:pointer; background:#fff; text-align:center;}
+.icon-btn.active{outline:3px solid #ff5a5a;}
+.actions{margin-top:16px; display:flex; gap:10px; flex-wrap:wrap;}
+.hint{font-size:12px; opacity:.8; margin-top:6px;}
+.warn{color:#c00; font-size:12px; margin-top:8px;}
+.preview{margin-top:8px; font-size:12px; opacity:.9;}
+.thumb{display:block; margin-top:6px; width:64px; height:64px; object-fit:cover; border:1px solid #aaa; border-radius:8px;}

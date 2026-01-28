@@ -2,55 +2,87 @@
 {% load static %}
 {% block content %}
 <div class="content-container">
-    <h1 class="page-title">公式イベント更新</h1>     
+    <h1 class="page-title">公式イベント更新</h1>  
+    <hr style="width:80%; margin-bottom: 10px; margin-top: 10px;">   
 
     <div class="form-container">
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
+                        <div class="form-group">
+                <table class="basic-info-table" border="1" cellpadding="8" cellspacing="0">
 
-            <div class="form-group">
-                <label for="event_info">イベント名</label>
-                <input type="text" id="event_info" name="event_info" value="{{ object.event_info }}" required>
-            </div>
+                    <!-- イベント名 -->
+                    <tr>
+                        <th>イベント名</th>
+                        <td>
+                            <input type="text" id="title" name="event_info" value="{{ object.event_info }}"required>
+                        </td>
+                    </tr>
 
-            <div class="form-group">
-                <label for="{{ form.venue.id_for_label }}">開催場所（担当お城）</label>
-                {# Viewのget_formで設定した選択肢を出すため、Djangoのタグを使います #}
-                {{ form.venue }} 
-                {% if form.venue.errors %}
-                    <span class="error" style="color: red;">{{ form.venue.errors }}</span>
-                {% endif %}
-            </div>
+                    <!-- お城の選択 -->
+                    <th><label for="{{ form.venue.id_for_label }}">開催場所（担当お城）</label>
+                        <p class="required-point">＊</p>
+                    </th>
+                    <td>
+                        {{ form.venue }} 
+                        {% if form.venue.errors %}
+                            <span class="error">{{ form.venue.errors }}</span>
+                        {% endif %}
+                    </td>
+                    </tr>
 
-            <div class="form-group">
-                <label for="start_date">開始日</label>
-                <input type="date" id="start_date" name="start_date" value="{{ object.start_date|date:'Y-m-d' }}" required>
-            </div>
+                    <!-- 開催日 -->
+                    <tr>
+                    <th><label for="start_date">開始日</label> <p class="required-point">＊</p></th>
+                    <td>
+                        <input type="date" id="start_date" name="start_date" value="{{ object.start_date|date:'Y-m-d' }}" required>
+                    </td>
+                    </tr>
 
-            <div class="form-group">
-                <label for="end_date">終了日</label>
-                <input type="date" id="end_date" name="end_date" value="{{ object.end_date|date:'Y-m-d' }}" required>
-            </div>
+                    <tr>
+                    <th><label for="end_date">終了日</label> <p class="required-point">＊</p></th>
+                    <td>
+                        <input type="date" id="end_date" name="end_date" value="{{ object.end_date|date:'Y-m-d' }}" required>
+                    </td>
+                    </tr>
 
-            <div class="form-group">
-                <label>開催時間</label>
-                <div style="display: flex; gap: 10px; align-items: center;">
-                    <input type="time" id="start_time" name="start_time" value="{{ object.start_time|time:'H:i' }}">
-                    <span>〜</span>
-                    <input type="time" id="end_time" name="end_time" value="{{ object.end_time|time:'H:i' }}">
-                </div>
-            </div>
+                    <!-- 開催時間 -->
+                    <tr>
+                    <th><label>開催時間</label> <p class="required-point">＊</p></th>
+                    <td>
+                        <input type="time" id="start_time" name="start_time" value="{{ object.start_time|time:'H:i' }}">
+                        <span>〜</span>
+                        <input type="time" id="end_time" name="end_time" value="{{ object.end_time|time:'H:i' }}">
+                    </td>
+                    </tr>
 
-            <div class="form-group">
-                <label for="event_overview">イベント説明</label>
-                <textarea id="event_overview" name="event_overview" rows="5">{{ object.event_overview }}</textarea>
-            </div>
+                    <!-- 説明 -->
+                    <tr>
+                    <th><label for="description">イベント説明</label></th>
+                    <td>
+                        <textarea id="description" name="event_overview" rows="5" cols="70">{{ object.event_overview }}</textarea>
+                    </td>
+                    </tr>
 
-            <div class="form-group">
-                <label>
+                    <!-- 画像アップロード -->
+                    <tr>
+                    <th><label for="image">イベント画像（任意）</label></th>
+                    <td>
+                        <input type="file" id="image" name="image">
+                    </td>
+                    </tr>
+
+                    <!-- 公開設定 -->
+                    <tr>
+                    <th><label for="image">公開設定</label></th>
+                    <td>
+                        <label>
                     <input type="checkbox" name="public_settings" {% if object.public_settings %}checked{% endif %}> 公開する
-                </label>
-            </div>
+                    </label>
+                    </td>
+                    </tr>
+                </table>
+            </div>  
 
             <div class="form-buttons">
                 <button type="submit" class="btn btn-update">更新</button>

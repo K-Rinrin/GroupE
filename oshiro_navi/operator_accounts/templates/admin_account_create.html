@@ -1,51 +1,87 @@
 {% extends "operator_base.html" %}
+{% load static %}
+{% block title %}管理者アカウント登録{% endblock %}
 {% block content %}
-<h1>管理者アカウント登録</h1>
 
-<form method="POST"  class="form-container">
-    {% csrf_token %}
-    {% if form.errors %}
-    <div style="background: #ffdada; padding: 10px; border: 1px solid red; margin-bottom: 20px;">
-        <p>エラーが発生しています：</p>
-        <ul>
-        {% for field, errors in form.errors.items %}
-            <li>{{ field }}: {{ errors|striptags }}</li>
-        {% endfor %}
-        </ul>
-    </div>
-{% endif %}
-    {% if form.managed_castles.errors %}
+
+<div class="content-container">
+    <h1>管理者アカウント登録</h1>
+    <hr style="width:80%; margin-bottom: 10px; margin-top: 10px;"> 
+    <p style="color:red;">＊がついている項目は必須です</p>
+    <form method="POST"  class="form-container">
+        {% csrf_token %}
+        {% if form.errors %}
+        <div style="background: #ffdada; padding: 10px; border: 1px solid red; margin-bottom: 20px;">
+            <p>エラーが発生しています：</p>
+            <ul>
+            {% for field, errors in form.errors.items %}
+                <li>{{ field }}: {{ errors|striptags }}</li>
+            {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+        {% if form.managed_castles.errors %}
         <div class="alert alert-danger" style="color: red; border: 1px solid red; padding: 10px; margin-bottom: 10px;">
             {{ form.managed_castles.errors }}
         </div>
-    {% endif %}
+        {% endif %}
+        <table class="basic-info-table" border="1" cellpadding="8" cellspacing="0" style="margin-bottom: 10px;">
+            <!-- アカウント名 -->
+            <tr>
+                <th>アカウント名<p class="required-point">＊</p></th>
+                <td>
+                <input type="account_name" name="account_name" placeholder="アカウント名" required>
+                </td>
+            </tr>
 
-    <input type="account_name" name="account_name" placeholder="アカウント名" required>
-    <input type="text" name="username" placeholder="ID" required>
-    <input type="password" name="password" placeholder="Pass" required>
-    <input type="email" name="email" placeholder="Email" required>
-    
+            <!-- ID -->
+            <tr>
+                <th>ID<p class="required-point">＊</p></th>
+                <td>
+                <input type="text" name="username" placeholder="ID" required>
+                </td>
+            </tr>
 
-    <hr>
-    <h3>担当お城の選択（最大5つ）</h3>
-    
-    {% for i in "12345" %}
-    <div class="my-custom-wrapper">
-        <label>担当お城 {{ forloop.counter }}</label>
-        <select name="managed_castles" class="form-control">
-            <option value="none">お城を選択しない</option>
-            {% for oshiro in castle_list %}
-                <option value="{{ oshiro.id }}">
-                    {{ oshiro.oshiro_name }}
-                </option>
-            {% endfor %}
-        </select>
-    </div>
-    {% endfor %}
+            <!-- Pass -->
+            <tr>
+                <th>Pass <p class="required-point">＊</p></th>
+                <td>
+                <input type="password" name="password" placeholder="Pass" required>
+                </td>
+            </tr>
 
-    <input class="btn btn-register" type="submit" value="登録" />
-    <a href="{% url 'operator_accounts:account_list' %}" class="btn btn-cancel">
-            戻る
-        </a>
-</form>
+            <!-- Email -->
+            <tr>
+                <th>Email <p class="required-point">＊</p></th>
+                <td>
+                <input type="email" name="email" placeholder="Email" required>
+                </td>
+            </tr>
+
+            <!-- 担当お城の選択（最大5つ） -->
+            <tr>
+                <th> 担当お城の選択<br>（最大5つ）<p class="required-point">＊</p></th>
+                <td>
+                    {% for i in "12345" %}
+                    <div class="my-custom-wrapper">
+                        <label>担当お城 {{ forloop.counter }}</label>
+                        <select name="managed_castles" class="form-control">
+                            <option value="none">お城を選択しない</option>
+                            {% for oshiro in castle_list %}
+                                <option value="{{ oshiro.id }}">
+                                    {{ oshiro.oshiro_name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    {% endfor %}
+                </td>
+            </tr>
+        </table>
+        <input class="btn btn-register" type="submit" value="登録" />
+        <a href="{% url 'operator_accounts:account_list' %}" class="btn btn-cancel">
+                戻る
+            </a>
+    </form>
+</div>
 {% endblock %}

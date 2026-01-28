@@ -3,57 +3,86 @@
 {% block content %}
 
 <div class="content-container">
-<h1 class="page-title">イベント登録</h1>    
+<h1 class="page-title">イベント登録</h1> 
+<hr style="width:80%; margin-bottom: 10px; margin-top: 10px;">   
     <div class="form-container">
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
-            <!-- イベント名 -->
             <div class="form-group">
-                <label for="title">イベント名</label>
-                <input type="text" id="title" name="event_info" required>
-            </div>
+                <table class="basic-info-table" border="1" cellpadding="8" cellspacing="0">
 
-            <!-- お城の選択 -->
-            <div class="form-group">
-                <label for="{{ form.venue.id_for_label }}">開催場所（担当お城）</label>
-                {{ form.venue }} 
-                {% if form.venue.errors %}
-                    <span class="error">{{ form.venue.errors }}</span>
-                {% endif %}
-            </div>
+                    <!-- イベント名 -->
+                    <tr>
+                        <th>イベント名</th>
+                        <td>
+                            <input type="text" id="title" name="event_info" required>
+                        </td>
+                    </tr>
 
-            <!-- 開催日 -->
-            <div class="form-group">
-                <label for="start_date">開始日</label>
-                <input type="date" id="start_date" name="start_date" required>
-            </div>
+                    <!-- お城の選択 -->
+                    <th><label for="{{ form.venue.id_for_label }}">開催場所（担当お城）</label>
+                        <p class="required-point">＊</p>
+                    </th>
+                    <td>
+                        {{ form.venue }} 
+                        {% if form.venue.errors %}
+                            <span class="error">{{ form.venue.errors }}</span>
+                        {% endif %}
+                    </td>
+                    </tr>
 
-            <div class="form-group">
-                <label for="end_date">終了日</label>
-                <input type="date" id="end_date" name="end_date" required>
-            </div>
+                    <!-- 開催日 -->
+                    <tr>
+                    <th><label for="start_date">開始日</label> <p class="required-point">＊</p></th>
+                    <td>
+                        <input type="date" id="start_date" name="start_date" required>
+                    </td>
+                    </tr>
 
-            <div class="form-group">
-            <label>開催時間（任意）</label>
-                <div style="display: flex; gap: 10px; align-items: center;">
-                    <input type="time" id="start_time" name="start_time">
-                    <span>〜</span>
-                    <input type="time" id="end_time" name="end_time">
-                </div>
-            </div>
+                    <tr>
+                    <th><label for="end_date">終了日</label> <p class="required-point">＊</p></th>
+                    <td>
+                        <input type="date" id="end_date" name="end_date" required>
+                    </td>
+                    </tr>
 
-            <!-- 説明 -->
-            <div class="form-group">
-                <label for="description">イベント説明</label>
-                <textarea id="description" name="event_overview" rows="5"></textarea>
-            </div>
+                    <!-- 開催時間 -->
+                    <tr>
+                    <th><label>開催時間</label> <p class="required-point">＊</p></th>
+                    <td>
+                        <input type="time" id="start_time" name="start_time">
+                        <span>〜</span>
+                        <input type="time" id="end_time" name="end_time">
+                    </td>
+                    </tr>
 
-            <!-- 画像アップロード -->
-            <div class="form-group">
-                <label for="image">イベント画像（任意）</label>
-                <input type="file" id="image" name="image">
-            </div>
+                    <!-- 説明 -->
+                    <tr>
+                    <th><label for="description">イベント説明</label></th>
+                    <td>
+                        <textarea id="description" name="event_overview" rows="5" cols="70"></textarea>
+                    </td>
+                    </tr>
 
+                    <!-- 画像アップロード -->
+                    <tr>
+                    <th><label for="image">イベント画像（任意）</label></th>
+                    <td>
+                        <input type="file" id="image" name="image">
+                    </td>
+                    </tr>
+
+                    <!-- 公開設定 -->
+                    <tr>
+                    <th><label for="image">公開設定</label></th>
+                    <td>
+                        <label>
+                    <input type="checkbox" name="public_settings" {% if object.public_settings %}checked{% endif %}> 公開する
+                    </label>
+                    </td>
+                    </tr>
+                </table>
+            </div>
             <!-- ボタン -->
             <div class="form-buttons">
                 <button type="submit" class="btn-register">登録</button>

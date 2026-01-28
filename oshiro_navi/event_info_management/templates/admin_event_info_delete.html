@@ -3,14 +3,14 @@
 {% block content %}
 <div class="content-container">
     <h1 class="page-title">イベント削除の確認</h1>
-
+    <hr style="width:80%; margin-bottom: 10px; margin-top: 10px;">
     <div class="form-container">
         <div class="delete-warning" style="background-color: #fff5f5; border: 1px solid #feb2b2; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
             <p style="color: #c53030; font-weight: bold; font-size: 1.1em;">以下のイベントを完全に削除します。よろしいですか？</p>
             <hr style="border: 0; border-top: 1px solid #feb2b2; margin: 15px 0;">
             <p><strong>イベント名：</strong> {{ object.event_info }}</p>
             <p><strong>開催場所：</strong> {{ object.venue }}</p>
-            <p><strong>期間：</strong> {{ object.start_date }} 〜 {{ object.end_date }}</p>
+            <p><strong>期間：</strong> {{ object.start_date|date:"Y/m/d" }} 〜 {{ object.end_date|date:"Y/m/d" }}</p>
         </div>
 
         <form method="POST">

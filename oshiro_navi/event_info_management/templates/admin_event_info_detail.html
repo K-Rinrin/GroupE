@@ -3,6 +3,7 @@
 {% block content %}
 <div class="content-container">
     <h1 class="page-title">イベント詳細確認</h1>
+    <hr style="width:80%; margin-bottom: 10px; margin-top: 10px;">
 
     <div class="detail-container" style="background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
         <h2 style="border-bottom: 2px solid #2c3e50; padding-bottom: 10px; margin-bottom: 20px;">{{ event.event_info }}</h2>
@@ -14,14 +15,14 @@
             </tr>
             <tr>
                 <th style="padding: 10px; border-bottom: 1px solid #eee; background: #f8f9fa;">開催期間</th>
-                <td style="padding: 10px; border-bottom: 1px solid #eee;">{{ event.start_date }} 〜 {{ event.end_date }}</td>
+                <td style="padding: 10px; border-bottom: 1px solid #eee;">{{ event.start_date|date:"Y/m/d" }} 〜 {{ event.end_date|date:"Y/m/d" }}</td>
             </tr>
             <tr>
                 <th style="padding: 10px; border-bottom: 1px solid #eee; background: #f8f9fa;">開催時間</th>
                 <td style="padding: 10px; border-bottom: 1px solid #eee;">
-                    {% if event.start_time %}{{ event.start_time }}{% endif %} 
+                    {{ event.start_time|time:"H:i"|default:"未設定" }}
                     〜 
-                    {% if event.end_time %}{{ event.end_time }}{% endif %}
+                    {{ event.end_time|time:"H:i"|default:"未設定" }}
                 </td>
             </tr>
             <tr>
@@ -41,8 +42,8 @@
         </table>
 
         <div class="form-buttons" style="margin-top: 30px;">
-            <a href="{% url 'event_info_management:admin_event_info_update' event.pk %}" class="btn-update" style="background: #2c3e50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px; margin-right: 10px;">編集する</a>
-            <a href="{% url 'event_info_management:admin_event_info_list' %}" class="btn-cancel" style="background: #95a5a6; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px;">一覧に戻る</a>
+            <a href="{% url 'event_info_management:admin_event_info_update' event.pk %}" class="btn btn-update" >編集する</a>
+            <a href="{% url 'event_info_management:admin_event_info_list' %}" class="btn btn-cancel">一覧に戻る</a>
         </div>
     </div>
 </div>

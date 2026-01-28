@@ -4,7 +4,8 @@
 {% block content %}
 <div class="content-container">
   <h1 class="page-title">お城情報更新</h1>
-
+  <hr style="width:80%; margin-bottom: 10px; margin-top: 10px;"> 
+  <p style="color:red;">＊がついている項目は必須です</p>
   {% if error %}
     <p style="color:red; font-weight:bold;">{{ error }}</p>
   {% endif %}
@@ -13,67 +14,87 @@
   <form action="{% url 'operator_oshiro_info:update' %}" method="POST" enctype="multipart/form-data">
 
     {% csrf_token %}
+        <!-- ✅ 更新対象ID（必須） -->
+        <input type="hidden" name="id" value="{{ oshiro.id }}">
+        <table class="basic-info-table" border="1" cellpadding="8" cellspacing="0">
+          <!-- お城名 -->
+          <tr>
+            <th><label for="oshiro_name">お城名</label><p class="required-point">＊</p></th>
+            <td>
+              <input type="text" id="oshiro_name" name="oshiro_name" 
+              value="{{ oshiro.oshiro_name }}" required>
+            </td>
+          </tr>
 
-    <!-- ✅ 更新対象ID（必須） -->
-    <input type="hidden" name="id" value="{{ oshiro.id }}">
+          <!-- 築城年 -->
+          <tr>
+            <th><label for="built_year">築城年</label> <p class="required-point">＊</p></th>
+            <td>
+              <input type="number" id="built_year" name="built_year" 
+              value="{{ oshiro.built_year }}" required>
+            </td>
+          </tr>
 
-    <!-- お城名 -->
-    <div class="form-group">
-      <label for="oshiro_name">お城名</label>
-      <input type="text" id="oshiro_name" name="oshiro_name"
-             value="{{ oshiro.oshiro_name }}" required>
-    </div>
+          <!-- 住所 -->
+          <tr>
+            <th><label for="address">住所</label> <p class="required-point">＊</p></th>
+            <td>
+              <input type="text" id="address" name="address" 
+              value="{{ oshiro.address }}" required>
+            </td>
+          </tr>
 
-    <!-- 築城年 -->
-    <div class="form-group">
-      <label for="built_year">築城年</label>
-      <input type="number" id="built_year" name="built_year"
-             value="{{ oshiro.built_year }}" required>
-    </div>
+          <!-- 構造 -->
+          <tr>
+            <th><label for="structure">構造</label> <p class="required-point">＊</p></th>
+            <td>
+              <input type="text" id="structure" name="structure" 
+              value="{{ oshiro.structure }}" required>
+            </td>
+          </tr>
 
-    <!-- 住所 -->
-    <div class="form-group">
-      <label for="address">住所</label>
-      <input type="text" id="address" name="address"
-             value="{{ oshiro.address }}" required>
-    </div>
+          <!-- 遺構 -->
+          <tr>
+            <th><label for="ruins">遺構</label> <p class="required-point">＊</p></th>
+            <td>
+              <input type="text" id="ruins" name="ruins" 
+              value="{{ oshiro.ruins }}" required>
+            </td>
+          </tr>
 
-    <!-- 構造 -->
-    <div class="form-group">
-      <label for="structure">構造</label>
-      <input type="text" id="structure" name="structure"
-             value="{{ oshiro.structure }}" required>
-    </div>
+          <!-- お城画像　-->
+          <tr>
+            <th><label for="oshiro_images">お城画像</label> <p class="required-point">＊</p></th>
+            <td>
+              <input type="file" id="oshiro_images" name="oshiro_images" accept="image/*" >
+              {% if oshiro.oshiro_images %}
+              <div class="form-group">
+                <div>現在の画像</div>
+                <img src="{{ oshiro.oshiro_images.url }}" alt="お城画像" style="max-width:240px; height:auto;">
+              </div>
+              {% endif %}
+            </td>
+          </tr>
 
-    <!-- 遺構 -->
-    <div class="form-group">
-      <label for="ruins">遺構</label>
-      <input type="text" id="ruins" name="ruins"
-             value="{{ oshiro.ruins }}" required>
-    </div>
+          <!-- 緯度 -->
+          <tr>
+            <th><label for="latitude">緯度</label> <p class="required-point">＊</p></th>
+            <td>
+              <input type="text" id="latitude" name="latitude"
+                value="{{ oshiro.latitude }}" required>
+            </td>
+          </tr>
 
-    <div class="form-group">
-      <label for="oshiro_images">お城画像（差し替え）</label>
-      <input type="file" id="oshiro_images" name="oshiro_images" accept="image/*">
-    </div>
+          <tr>
+            <th><label for="longitude">経度</label> <p class="required-point">＊</p></th>
+            <td>
+              <input type="text" id="longitude" name="longitude"
+                value="{{ oshiro.longitude }}" required>
+            </td>
+          </tr>
+        </table>
 
-    {% if oshiro.oshiro_images %}
-    <div class="form-group">
-      <div>現在の画像</div>
-      <img src="{{ oshiro.oshiro_images.url }}" alt="お城画像" style="max-width:240px; height:auto;">
-    </div>
-    {% endif %}
 
-    <div class="form-group">
-      <label for="latitude">緯度</label>
-      <input type="text" id="latitude" name="latitude"
-             value="{{ oshiro.latitude }}" required>
-    </div>
-    <div class="form-group">
-      <label for="longitude">経度</label>
-      <input type="text" id="longitude" name="longitude"
-             value="{{ oshiro.longitude }}" required>
-    </div>
 
     <!-- ボタン -->
     <div class="form-buttons">

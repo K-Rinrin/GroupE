@@ -3,8 +3,8 @@
 {% block content %}
 
 <div class="content-container basic-info-list">
-  <h1>周辺MAP（城を選択）</h1>
-  <hr style="width:100%;">
+  <h1>周辺MAP（お城選択）</h1>
+  <hr style="width:80%; margin-bottom: 10px; margin-top: 10px;">
 
   <table class="basic-info-table">
     <thead>
@@ -18,7 +18,7 @@
       <tr class="basic-info-card">
         <td class="castle-name"><strong>{{ b.oshiro_info.oshiro_name }}</strong></td>
         <td class="basic-info-actions">
-          <a class="btn-register" href="{% url 'admin_area_map:area_map_detail' b.id %}">
+          <a class="btn btn-register" href="{% url 'admin_area_map:area_map_detail' b.id %}">
             周辺MAPを開く
           </a>
         </td>
