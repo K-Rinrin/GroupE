@@ -1,101 +1,136 @@
 {% extends "admin_base.html" %}
 {% load static %}
-{% block title %}モデルコース更新 - {{ course.model_course_name }}{% endblock %}
+{% block title %}モデルコース登録 - {{ oshiro.oshiro_name }}{% endblock %}
 
 {% block content %}
 
+
 <div class="content-container basic-info-list">
-    <h1>モデルコース更新</h1>
+    <h1>モデルコース登録</h1>
     <hr style="width:80%; margin-bottom: 10px; margin-top: 10px;">
-    <p>対象のお城：{{ oshiro.oshiro_name }}</p>
-    <hr>
+    <h2><strong>対象のお城：{{ oshiro.oshiro_name }}</strong></h2>
+    <p style="color:red;">＊がついている項目は必須です</p>
 
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
 
-        <h2>コース基本情報</h2>
-        <div class="form-group">
-            <label>モデルコース名 *</label><br>
-            <input type="text" name="course_name" required value="{{ course.model_course_name }}"
-                   style="width: 100%; max-width: 500px;">
-        </div>
-        <div class="form-group">
-            <label>コース概要 *</label><br>
-            <textarea name="course_overview" rows="4" required style="width: 100%; max-width: 500px;">{{ course.course_overview }}</textarea>
-        </div>
-        <div class="form-group">
-            <label>所要時間 * (HH:MM)</label><br>
-            <input type="time" name="required_time" required value="{{ course.required_time|time:'H:i' }}">
-        </div>
-        <div class="form-group">
-            <label>距離 (km) *</label><br>
-            <input type="number" step="0.1" name="distance" required value="{{ course.distance }}">
-        </div>
-        <div class="form-group">
-            <label>難易度 *</label><br>
+        <table class="basic-info-table" border="1" cellpadding="8" cellspacing="0">
+        <!-- モデルコース名 -->
+        <tr>
+            <th><label>モデルコース名 </label><p class="required-point">＊</p><br></th>
+            <td>
+            <input type="text" name="course_name" required 
+            value="{{ course.model_course_name }}"  style="width: 100%; max-width: 500px;">
+            </td>
+        </tr>
+
+        <!-- コース概要 -->
+        <tr>
+            <th><label>コース概要 </label><p class="required-point">＊</p><br></th>
+            <td>
+            <textarea name="course_overview" rows="4" required 
+            style="width: 100%; max-width: 500px;">{{ course.course_overview }}</textarea>
+            </td>
+        </tr>
+
+        <!-- 所要時間 -->
+        <tr>
+            <th><label>所要時間  (HH:MM)</label><p class="required-point">＊</p><br></th>
+            <td>
+            <input type="time" name="required_time" required
+            value="{{ course.required_time|time:'H:i' }}">
+            </td>
+        </tr>
+
+        <!-- 距離 -->
+        <tr>
+            <th><label>距離 (km) </label><p class="required-point">＊</p><br></th>
+            <td>
+            <input type="number" step="0.1" name="distance" placeholder="例: 4.5" required
+            value="{{ course.distance }}">
+            </td>
+        </tr>
+
+        <!-- 難易度 -->
+        <tr>
+            <th><label>難易度</label><p class="required-point">＊</p></th>
+            <td>
             <select name="difficulty" required>
                 <option value="初心者向け" {% if course.difficulty == "初心者向け" %}selected{% endif %}>初心者向け</option>
                 <option value="短時間滞在者向け" {% if course.difficulty == "短時間滞在者向け" %}selected{% endif %}>短時間滞在者向け</option>
                 <option value="長時間滞在者向け" {% if course.difficulty == "長時間滞在者向け" %}selected{% endif %}>長時間滞在者向け</option>
             </select>
-        </div>
+            </td>
+        </tr>
+        </table>
 
-        <hr>
+
+
+        <hr style="width:100%; margin-bottom: 10px; margin-top: 10px;">
 
 
         <div id="spots-container">
             {% for spot in spots %}
             <div class="spot-item" data-index="{{ spot.order }}">
                 <h2>スポット {{ spot.order }}</h2>
-                
-                <div class="form-group">
-                    <label>スポット名</label><br>
-                    <input type="text" name="spot_name_{{ spot.order }}" value="{{ spot.name|default:'' }}" style="width: 100%; max-width: 500px;">
-                </div>
-
-                <div class="form-group">
-                    <label>短い説明文</label><br>
-                    <textarea name="spot_short_{{ spot.order }}" rows="3" style="width: 100%; max-width: 500px;">{{ spot.short_description|default:'' }}</textarea>
-                </div>
-
-                <div class="form-group">
-                    <label>詳細説明文</label><br>
-                    <textarea name="spot_detail_{{ spot.order }}" rows="4" style="width: 100%; max-width: 500px;">{{ spot.detail|default:'' }}</textarea>
-                </div>
-
-                <div class="form-group">
-                    <label>スポット画像</label><br>
-                    {% if spot.image %}
-                        <div style="margin-bottom: 5px;">
-                            <img src="{{ spot.image.url }}" alt="現在の画像" style="max-height: 100px;">
-                            <br><small>現在の画像（変更しない場合は選択不要）</small>
-                        </div>
-                    {% endif %}
-                    <input type="file" name="spot_image_{{ spot.order }}" accept="image/*">
-                </div>
-
-                <div class="form-group">
-                    <label>補足情報</label><br>
-                    <textarea name="spot_note_{{ spot.order }}" rows="2" style="width: 100%; max-width: 500px;">{{ spot.note|default:'' }}</textarea>
-                </div>
-                <hr>
+                <table class="basic-info-table" border="1" cellpadding="8" cellspacing="0">
+                    <tr>
+                        <th><label>スポット名 </label><p class="required-point">＊</p><br></th>
+                        <td>
+                            <input type="text" name="spot_name_{{ spot.order }}" value="{{ spot.name|default:'' }}" 
+                            style="width: 100%; max-width: 500px;">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label>短い説明文 </label><p class="required-point">＊</p><br></th>
+                        <td>
+                            <textarea name="spot_short_{{ spot.order }}" rows="3" style="width: 100%; max-width: 500px;">{{ spot.short_description|default:'' }}</textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label>詳細説明文 </label><p class="required-point">＊</p><br></th>
+                        <td>
+                            <textarea name="spot_detail_{{ spot.order }}" rows="4" style="width: 100%; max-width: 500px;">{{ spot.detail|default:'' }}</textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label>スポット画像 </label><p class="required-point">＊</p><br></th>
+                        <td>
+                            {% if spot.image %}
+                                <div style="margin-bottom: 5px;">
+                                    <img src="{{ spot.image.url }}" alt="現在の画像" style="max-height: 100px;">
+                                    <br><small>現在の画像（変更しない場合は選択不要）</small>
+                                </div>
+                            {% endif %}
+                            <input type="file" name="spot_image_{{ spot.order }}" accept="image/*">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label>補足情報 </label><p class="required-point">＊</p><br></th>
+                        <td>
+                            <textarea name="spot_note_{{ spot.order }}" rows="2" style="width: 100%; max-width: 500px;">{{ spot.note|default:'' }}</textarea>
+                        </td>
+                    </tr>
+                </table>
+                <hr style="width:100%; margin-bottom: 10px; margin-top: 10px;">
             </div>
             {% endfor %}
         </div>
+
 
         <!-- 追加ボタン -->
         <div style="margin-bottom: 20px;">
             <button type="button" id="add-spot-btn" class="btn btn-secondary">＋ スポットを追加</button>
         </div>
 
+        <hr>
+
         <div class="form-actions" style="margin-top: 20px;">
-            <a href="{% url 'admin_model_course:model_couse_list' oshiro_id=oshiro.pk %}" 
-               style="text-decoration: none; color: #666; margin-right: 20px;">
+            <a  class="btn btn-cancel" href="{% url 'admin_model_course:model_couse_list' oshiro_id=oshiro.pk %}" >
                 戻る
             </a>
-            <button type="submit" class="btn btn-primary"
-                    style="padding: 10px 30px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">
-                更新
+            <button class="btn btn-register" type="submit" class="btn btn-primary">
+                登録
             </button>
         </div>
 
@@ -103,9 +138,9 @@
 </div>
 
 <style>
-    .form-group { margin-bottom: 20px; }
-    label { font-weight: bold; display: block; margin-bottom: 5px; }
-    input, textarea, select { padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+    .form-group { margin-bottom: 15px; }
+    label { font-weight: bold; }
+    /* ボタンを目立たせる */
 </style>
 
 
