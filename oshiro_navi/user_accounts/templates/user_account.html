@@ -41,7 +41,7 @@
                 <div class="title"><h1>Signup here</h1></div>
                 
                 <!-- アカウント名 -->
-                <input type="text" name="username" placeholder="アカウント名" id="name" value="{{ values.username|default:'' }}">
+                <input type="text" name="username" placeholder="アカウント名(6文字以内)" id="name" value="{{ values.username|default:'' }}">
                 {% if errors.signup_username %}
                     <div class="error-text">{{ errors.signup_username }}</div>
                 {% endif %}
