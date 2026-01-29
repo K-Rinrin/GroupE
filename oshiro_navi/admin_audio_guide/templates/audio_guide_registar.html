@@ -4,8 +4,8 @@
 {% block content %}
 <div class="content-container">
 
-    <h2>音声ガイド新規登録</h2>
-    <hr style="width: 80%;">
+    <h1>音声ガイド新規登録</h1>
+    <hr style="width:80%; margin-bottom: 10px; margin-top: 10px;">
 
     <!-- 選択中のお城表示 -->
     <p>
@@ -15,27 +15,23 @@
 
     <form method="post">
         {% csrf_token %}
+        <table class="basic-info-table" border="1" cellpadding="8" cellspacing="0">
+            <!-- タイトル -->
+            <tr>
+                <th><label>音声ガイドタイトル</label> <p class="required-point">＊</p></th>
+                <td>
+                <input type="text" name="title" required  placeholder="例：天守の歴史">
+                </td>
+            </tr>
 
-        <!-- タイトル -->
-        <div class="form-group">
-            <label>音声ガイドタイトル</label><br>
-            <input
-                type="text"
-                name="title"
-                required
-                placeholder="例：天守の歴史"
-            >
-        </div>
-
-        <!-- 説明 -->
-        <div class="form-group">
-            <label>ガイド説明</label><br>
-            <textarea
-                name="guide_explanation"
-                rows="5"
-                placeholder="音声ガイドの内容説明を入力してください"
-            ></textarea>
-        </div>
+            <!-- 説明 -->
+            <tr>
+                <th><label>ガイド説明</label><p class="required-point">＊</p></th>
+                <td>
+                <textarea name="guide_explanation"rows="5"placeholder="音声ガイドの内容説明を入力してください"></textarea>
+                </td>
+            </tr>
+        </table>
 
         <!-- ボタン -->
         <div class="form-group">

@@ -354,6 +354,7 @@ nav a {
     align-items: center;
     gap: 15px;
     margin-top: 30px;
+    
 }
 
 /* ボタン */
@@ -376,11 +377,13 @@ nav a {
     font-size: 14px;
     border-radius: 4px;
     transition: background-color 0.2s ease, box-shadow 0.2s ease;
+    
 }
 
 /* 登録（空色・水色） */
 .btn-register {
-    background-color: #4aa3a3; /* 和風の落ち着いた水色 */
+    background-color: #4aa3a3;
+    border: none; /* 和風の落ち着いた水色 */
 }
 .btn-register:hover {
     background-color: #3b8c8c;
@@ -389,7 +392,8 @@ nav a {
 
 /* 更新（若竹色・緑） */
 .btn-update {
-    background-color: #5a8f5a; /* 和風の緑 */
+    background-color: #5a8f5a; 
+    border: none;/* 和風の緑 */
 }
 .btn-update:hover {
     background-color: #4b7a4b;
@@ -398,7 +402,8 @@ nav a {
 
 /* 削除（朱色・赤） */
 .btn-delete {
-    background-color: #b84a3a; /* 和風の朱色 */
+    background-color: #b84a3a; 
+    border: none;/* 和風の朱色 */
 }
 .btn-delete:hover {
     background-color: #9f3f31;
@@ -406,13 +411,22 @@ nav a {
 }
 
 .btn-cancel{
-    background-color: #a0a0a0; /* 和風の灰色 */
+    background-color: #a0a0a0; 
+    border: none;/* 和風の灰色 */
 }
 .btn-cancel:hover {
     background-color: #808080;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
+.btn-search{
+    background-color: #a0a0a0; 
+    border: none;/* 和風の灰色 */
+}
+.btn-search:hover {
+    background-color: #808080;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
 
 /* プロフィール */
 .profile {

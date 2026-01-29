@@ -33,7 +33,7 @@
 
         <!-- 所要時間 -->
         <tr>
-            <th><label>所要時間  (HH:MM)</label><br> </label><p class="required-point">＊</p><br></th>
+            <th><label>所要時間  (HH:MM)</label><p class="required-point">＊</p><br></th>
             <td>
             <input type="time" name="required_time" required>
             </td>
@@ -41,7 +41,7 @@
 
         <!-- 距離 -->
         <tr>
-            <th><label>距離 (km) </label><br> </label><p class="required-point">＊</p><br></th>
+            <th><label>距離 (km) </label><p class="required-point">＊</p><br></th>
             <td>
             <input type="number" step="0.1" name="distance" placeholder="例: 4.5" required>
             </td>
@@ -49,7 +49,7 @@
 
         <!-- 難易度 -->
         <tr>
-            <th><label>難易度</label><br> </label><p class="required-point">＊</p><br></th>
+            <th><label>難易度</label><p class="required-point">＊</p></th>
             <td>
             <select name="difficulty" required>
                 <option value="">選択してください</option>
@@ -67,36 +67,42 @@
 
 
         <div id="spots-container">
-            <table>
-                <tr>
-                    <th></th>
-                </tr>
-            <!-- スポット1 -->
-            <div class="spot-item" data-index="1">
+            <div class="spot-item">
                 <h2>スポット 1</h2>
-                <div class="form-group">
-                    <label>スポット名 *</label><br>
-                    <input type="text" name="spot_name_1" required placeholder="例: 史跡若松城『鶴ヶ城』" style="width: 100%; max-width: 500px;">
-                </div>
-                <div class="form-group">
-                    <label>短い説明文</label><br>
-                    <textarea name="spot_short_1" rows="3" style="width: 100%; max-width: 500px;"></textarea>
-                </div>
-                <div class="form-group">
-                    <label>詳細説明文</label><br>
-                    <textarea name="spot_detail_1" rows="4" style="width: 100%; max-width: 500px;"></textarea>
-                </div>
-                <div class="form-group">
-                    <label>スポット画像</label><br>
-                    <input type="file" name="spot_image_1" accept="image/*">
-                </div>
-                <div class="form-group">
-                    <label>補足情報</label><br>
-                    <textarea name="spot_note_1" rows="2" style="width: 100%; max-width: 500px;"></textarea>
-                </div>
-                <hr>
+                <table class="basic-info-table" border="1" cellpadding="8" cellspacing="0">
+                    <tr>
+                        <th><label>スポット名 </label><p class="required-point">＊</p><br></th>
+                        <td>
+                            <input type="text" name="spot_name_1" required placeholder="例: 史跡若松城『鶴ヶ城』" style="width: 100%; max-width: 500px;">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label>短い説明文 </label><p class="required-point">＊</p><br></th>
+                        <td>
+                            <textarea name="spot_short_1" rows="3" style="width: 100%; max-width: 500px;"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label>詳細説明文 </label><p class="required-point">＊</p><br></th>
+                        <td>
+                            <textarea name="spot_detail_1" rows="4" style="width: 100%; max-width: 500px;"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label>スポット画像 </label><p class="required-point">＊</p><br></th>
+                        <td>
+                            <input type="file" name="spot_image_1" accept="image/*">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label>補足情報 </label><p class="required-point">＊</p><br></th>
+                        <td>
+                            <textarea name="spot_note_1" rows="2" style="width: 100%; max-width: 500px;"></textarea>
+                        </td>
+                    </tr>
+                </table>
+                <hr style="width:100%; margin-bottom: 10px; margin-top: 10px;">
             </div>
-
         </div>
 
 

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>VOICEVOX ずんだもん再生テスト</title>
+</head>
+<body>
+    <h1>ずんだもんの声を聴くのだ！</h1>
+    
+    <input type="text" id="textInput" value="こんにちは！ずんだもんなのだ。" style="width: 300px;">
+    <button onclick="playVoice()">喋らせる</button>
+
+    <script>
+        async function playVoice() {
+            const text = document.getElementById('textInput').value;
+            // ずんだもん（ノーマル）のIDは 3 です
+            const speakerId = 3;
+            // APIキー（持っている場合はここに入力、空でも低速版で動く場合があります）
+            const apiKey = ""; 
+
+            // APIのURL構築
+            const url = `https://deprecatedapis.tts.quest/v2/voicevox/audio/?key=${apiKey}&speaker=${speakerId}&text=${encodeURIComponent(text)}`;
+
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error("合成に失敗したのだ…");
+
+                const blob = await response.blob();
+                const audioUrl = URL.createObjectURL(blob);
+                const audio = new Audio(audioUrl);
+                
+                console.log("再生開始なのだ！");
+                audio.play();
+            } catch (error) {
+                console.error(error);
+                alert("エラーが発生しました。");
+            }
+        }
+    </script>
+</body>
+</html>

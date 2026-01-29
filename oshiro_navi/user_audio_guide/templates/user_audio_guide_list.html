@@ -5,7 +5,6 @@
 
 {% block extra_css %}
 <style>
-    /* 全体のコンテナ */
     .guide-page-container {
         display: flex;
         flex-direction: column;
@@ -15,8 +14,6 @@
         background-color: #f0f2f5;
         min-height: 100vh;
     }
-
-    /* キャラクターカード（つむぎ） */
     .voice-chat-card {
         width: 100%;
         max-width: 400px;
@@ -26,15 +23,13 @@
         overflow: hidden;
         margin-bottom: 30px;
     }
-
     .voice-chat-card-header {
-        background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+        background: linear-gradient(135deg, #a8e063 0%, #56ab2f 100%);
         padding: 20px;
         display: flex;
         align-items: center;
         border-bottom: 1px solid rgba(0,0,0,0.05);
     }
-
     .avatar {
         width: 60px;
         height: 60px;
@@ -43,19 +38,14 @@
         object-fit: cover;
         background-color: #eee;
     }
-
-    .info-group {
-        margin-left: 15px;
-    }
-
+    .info-group { margin-left: 15px; }
     .oshiro_name {
         font-weight: bold;
-        font-size: 1.2rem;
-        color: #333;
+        font-size: 1.1rem;
+        color: white;
         display: flex;
         align-items: center;
     }
-
     .status-dot {
         width: 10px;
         height: 10px;
@@ -64,56 +54,28 @@
         margin-left: 8px;
         box-shadow: 0 0 5px #4cd137;
     }
-
-    /* 音声再生セクション */
-    .voice-chat-card-body {
-        padding: 20px;
-    }
-
+    .voice-chat-card-body { padding: 20px; }
     .guide-item {
         background: #f8f9fa;
         border-radius: 12px;
         padding: 15px;
         margin-bottom: 15px;
-        border-left: 5px solid #a1c4fd;
+        border-left: 5px solid #a8e063;
+        position: relative;
     }
-
-    .guide-title {
-        font-weight: bold;
-        margin-bottom: 8px;
-        color: #444;
-        display: block;
-    }
-
-    .audio-player {
-        width: 100%;
-        height: 40px;
-        margin-top: 5px;
-    }
-
-    /* スピーカー設定エリア（折りたたみ風） */
+    .guide-title { font-weight: bold; margin-bottom: 8px; color: #444; display: block; }
+    .audio-player { width: 100%; height: 40px; margin-top: 10px; }
     .settings-area {
         font-size: 0.8rem;
         color: #666;
         margin-top: 15px;
-        padding-top: 15px;
-        border-top: 1px dashed #ccc;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 10px;
+        padding: 10px;
+        background: #eee;
+        border-radius: 8px;
     }
-
-    select, input {
-        width: 100%;
-        padding: 8px;
-        border-radius: 5px;
-        border: 1px solid #ddd;
-        margin-top: 5px;
-    }
-
+    select { width: 100%; padding: 5px; margin-top: 5px; border-radius: 5px; border: 1px solid #ddd; }
     .btn-play {
-        background: #a1c4fd;
+        background: #56ab2f;
         color: white;
         border: none;
         padding: 10px 20px;
@@ -124,10 +86,8 @@
         font-weight: bold;
         transition: 0.3s;
     }
-
-    .btn-play:hover {
-        background: #89b4f7;
-    }
+    .btn-play:disabled { background: #ccc; cursor: not-allowed; }
+    .loading-text { font-size: 0.7rem; color: #56ab2f; display: none; margin-top: 5px; }
 </style>
 {% endblock %}
 
@@ -135,129 +95,105 @@
 <div class="guide-page-container">
     <div class="voice-chat-card">
         <div class="voice-chat-card-header">
-            <img src="{% static 'image/鶴ヶ城12345.jpg' %}" class="avatar">
+            <img src="{% static 'image/zundamon.png' %}" class="avatar" alt="ずんだもん">
             <div class="info-group">
-                <div class="oshiro_name">{{ oshiro.oshiro_name }}：音声ガイド <span class="status-dot"></span></div>
-                <small style="color: #666;">非公式ガイドボイス：VoiceVox</small>
+                <div class="oshiro_name">{{ oshiro.oshiro_name }} ガイド <span class="status-dot"></span></div>
+                <!-- 利用規約にのっとりました -->
+                <small style="color: rgba(255,255,255,0.9);">VOICEVOX:ずんだもん</small>
             </div>
         </div>
 
         <div class="voice-chat-card-body">
-            <div class="guide-item">
-                <span class="guide-title">音声ガイドプレイヤー</span>
-                <button style="display: none" id="speak" class="btn-play">再生する</button>
-                <audio id="player" class="audio-player" controls></audio>
+            <div class="guide-item" style="border-left: 5px solid #56ab2f;">
+                <span class="guide-title">再生設定</span>
+                <audio id="audioPlayer" class="audio-player" controls></audio>
+                <div id="loadingStatus" class="loading-text">ずんだもんが準備中なのだ...</div>
                 
                 <div class="settings-area">
-                    <label>スタイル変更: <select  id="speaker"></select></label>
+                    <label>ずんだもんのスタイル: 
+                        <select id="speakerSelect">
+                            <option value="3">ノーマル</option>
+                        </select>
+                    </label>
                 </div>
             </div>
 
-            <hr style="border: none; border-top: 1px solid #000000; margin: 20px 0;">
+            <hr style="width:100%; margin-bottom: 10px; margin-top: 10px;">
 
-            <h5 style="margin-bottom: 15px; color: #555;">📜 登録済みガイド</h5>
+            <h5 style="margin-bottom: 15px; color: #555;">📜 観光スポットガイド</h5>
+            
             {% for guide in rows %}
             <div class="guide-item">
-                <span class="guide-title">🔊{{ guide.title }}</span>
-                <p style="font-size: 0.9rem; color: #777;">{{ guide.guide_explanation}}</p>
-                <button class="btn-play btn-inline-play" 
-                        data-text="{{ guide.title }}。{{ guide.guide_explanation }}" 
-                        style="padding: 5px 10px; font-size: 0.8rem; width: auto; margin-bottom: 10px;">
-                    音声ガイドを生成する
+                <span class="guide-title">🔊 {{ guide.title }}</span>
+                <p style="font-size: 0.9rem; color: #777;">{{ guide.guide_explanation }}</p>
+                <button class="btn-play" 
+                        onclick="generateAndPlay('{{ guide.title }}。{{ guide.guide_explanation|escapejs }}', this)">
+                    このガイドを聴く
                 </button>
-                <hr style="border: none; border-top: 1px solid #000000; margin: 20px 0;">
             </div>
+            <hr style="width:100%; margin-bottom: 10px; margin-top: 10px;">
+
             {% empty %}
             <p style="text-align: center; color: #999;">ガイドはまだ登録されていません。</p>
             {% endfor %}
         </div>
-        
     </div>
 </div>
 
 <script>
+    const API_KEY = "Z8f9i-e-T21_388"; 
+    const audioPlayer = document.getElementById('audioPlayer');
+    const loadingStatus = document.getElementById('loadingStatus');
 
-const BASE = "http://127.0.0.1:50021";
-// 対象とするキャラクター名のリスト
-const TARGET_CHARACTERS = ["春日部つむぎ", "玄野武宏"];
-const DEFAULT_STYLE_ID = 8; // つむぎノーマル
-// 登録済みガイドの再生ボタンに対する処理
-document.addEventListener("click", (e) => {
-    // クリックされた要素が 'btn-inline-play' クラスを持っていた場合
-    if (e.target && e.target.classList.contains("btn-inline-play")) {
-        const textToSpeak = e.target.getAttribute("data-text");
-        const speakerId = document.getElementById("speaker").value; // 現在選択中のスタイルID（デフォルトはつむぎ）
-        
-        // 再生中であることを示すためにボタンを少し変える（任意）
-        const originalText = e.target.textContent;
-        e.target.textContent = "生成中...";
-        e.target.disabled = true;
-
-        synthesize(textToSpeak, speakerId).then(() => {
-            e.target.textContent = originalText;
-            e.target.disabled = false;
-        }).catch(() => {
-            e.target.textContent = "エラー";
-            e.target.disabled = false;
-        });
-    }
-});
-
-async function loadSpeakers() {
-    try {
-        const res = await fetch(`${BASE}/speakers`);
-        if (!res.ok) throw new Error("speakers API failed");
-        const data = await res.json();
-
-        const sel = document.getElementById("speaker");
-        sel.innerHTML = "";
-        
-        // 指定したキャラクターたちのスタイルをすべて追加
-        data.forEach((character) => {
-            if (TARGET_CHARACTERS.includes(character.name)) {
-                // キャラクターごとにグループ化（optgroup）すると見やすくなります
-                const group = document.createElement("optgroup");
-                group.label = character.name;
-
-                character.styles.forEach((st) => {
-                    const opt = document.createElement("option");
-                    opt.value = st.id;
-                    opt.textContent = `${character.name}（${st.name}）`;
-                    group.appendChild(opt);
-                });
-                sel.appendChild(group);
+    // 1. スタイル一覧（話者リスト）を取得してセレクトボックスを更新
+    async function fetchSpeakers() {
+        try {
+            const response = await fetch(`https://deprecatedapis.tts.quest/v2/voicevox/speakers/?key=${API_KEY}`);
+            const data = await response.json();
+            const zundamon = data.find(s => s.name === "ずんだもん");
+            if (zundamon) {
+                const select = document.getElementById('speakerSelect');
+                select.innerHTML = zundamon.styles.map(style => 
+                    `<option value="${style.id}">${style.name}</option>`
+                ).join('');
             }
-        });
-
-        // デフォルト値の設定（つむぎノーマルがあれば選択）
-        sel.value = String(DEFAULT_STYLE_ID);
-
-    } catch (e) {
-        console.error("VOICEVOX connection failed:", e);
+        } catch (e) { console.error("スタイル取得失敗", e); }
     }
-}
 
-async function synthesize(text, speaker) {
-    const qRes = await fetch(`${BASE}/audio_query?text=${encodeURIComponent(text)}&speaker=${speaker}`, { method: "POST" });
-    const query = await qRes.json();
-    const sRes = await fetch(`${BASE}/synthesis?speaker=${speaker}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(query),
-    });
-    const blob = await sRes.blob();
-    const url = URL.createObjectURL(blob);
-    const audio = document.getElementById("player");
-    audio.src = url;
-    // audio.play();  オート再生
-}
+    // 2. 音声生成と再生
+    async function generateAndPlay(text, button) {
+        const speakerId = document.getElementById('speakerSelect').value;
+        const originalText = button.innerText;
+        
+        // 状態更新
+        button.disabled = true;
+        button.innerText = "生成中...";
+        loadingStatus.style.display = "block";
 
-document.getElementById("speak").addEventListener("click", () => {
-    const text = document.getElementById("text").value;
-    const speaker = document.getElementById("speaker").value;
-    synthesize(text, speaker);
-});
+        const url = `https://deprecatedapis.tts.quest/v2/voicevox/audio/?key=${API_KEY}&speaker=${speakerId}&text=${encodeURIComponent(text)}`;
 
-loadSpeakers();
+        try {
+            const response = await fetch(url);
+            if (!response.ok) throw new Error("APIエラー");
+
+            const blob = await response.blob();
+            const audioUrl = URL.createObjectURL(blob);
+            
+            audioPlayer.src = audioUrl;
+            audioPlayer.play();
+            
+            console.log("再生開始なのだ！");
+        } catch (error) {
+            console.error(error);
+            alert("エラーが発生したのだ。APIキーや通信を確認してほしいのだ。");
+        } finally {
+            button.disabled = false;
+            button.innerText = originalText;
+            loadingStatus.style.display = "none";
+        }
+    }
+
+    // 初期化
+    fetchSpeakers();
 </script>
 {% endblock %}
