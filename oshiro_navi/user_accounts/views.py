@@ -9,6 +9,8 @@ from operator_oshiro_info.models import OshiroInfo
 from admin_basic_info.models import BasicInfo
 from event_info_management.models import OperatorEvent, AdminEvent
 from django.shortcuts import get_object_or_404
+from django.utils import timezone
+from datetime import timedelta
 
 
 
@@ -24,22 +26,40 @@ class UserTopView(LoginRequiredMixin,TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         
-        # お城リスト（紐づくbasic_infoも一緒に取得）
+        # --- 今週の範囲を計算 (例: 今日から7日間) ---
+        today = timezone.now().date()
+        end_of_week = today + timedelta(days=7)
+        
+        # お城リスト
         context['oshiro_list'] = OshiroInfo.objects.all().select_related('basicinfo')
         
-        # 最新イベント情報
-        # それぞれの最新3件を取得
-        admins = list(AdminEvent.objects.filter(public_settings=True).order_by('-start_date')[:3])
-        operators = list(OperatorEvent.objects.filter(public_settings=True).order_by('-start_date')[:3])
+        # --- 最新イベント情報の取得条件を変更 ---
+        # 1. 公開設定がTrue
+        # 2. 開始日が今週末まで、かつ終了日が今日以降（＝今週開催中）
+        
+        admin_qs = AdminEvent.objects.filter(
+            public_settings=True,
+            start_date__lte=end_of_week,  # 開始日が今週末より前
+            end_date__gte=today           # 終了日が今日より後
+        ).order_by('start_date')
 
-        # 判別用の属性
+        operator_qs = OperatorEvent.objects.filter(
+            public_settings=True,
+            start_date__lte=end_of_week,
+            end_date__gte=today
+        ).order_by('start_date')
+
+        # リスト化して属性付与
+        admins = list(admin_qs)
+        operators = list(operator_qs)
         for e in admins: e.event_type = 'admin'
         for e in operators: e.event_type = 'operator'
 
-        # 2つのリストを合体させ、日付順（降順）でソートして上位3件をとる
-        all_events = sorted(admins + operators, key=lambda x: x.start_date, reverse=True)
-        context['latest_events'] = all_events[:3]
+        # 合体させて日付順にソート
+        all_events = sorted(admins + operators, key=lambda x: x.start_date)
         
+        # 「今週のイベント」としてコンテキストにセット
+        context['latest_events'] = all_events
         return context
 
 

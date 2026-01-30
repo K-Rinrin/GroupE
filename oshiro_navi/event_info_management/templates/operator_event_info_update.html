@@ -64,6 +64,22 @@
                         <textarea id="event_overview" name="event_overview" rows="5">{{ object.event_overview }}</textarea>
                     </td>
                     </tr>
+                    
+
+                    <!-- 画像アップロード -->
+                <tr>
+                    <th>イベント画像</th>
+                    <td>
+                        <input type="file" name="event_image">
+                        
+                        {% if object.event_image %}
+                            <div style="margin-top:8px;">
+                                <div>現在の画像：</div>
+                                <img src="{{ object.event_image.url }}" alt="event" width="220">
+                            </div>
+                        {% endif %}
+                    </td>
+                </tr>
 
 
                     <!-- 公開設定 -->

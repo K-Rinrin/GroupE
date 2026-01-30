@@ -14,28 +14,37 @@ from django.views.generic import TemplateView
 # class OperatorTopView(TemplateView):
 #     template_name = "operator_top.html"
 
+# --- Admin側 Views ---
+
 class AdminEventInfoListView(ListView):
+
     model = AdminEvent
+
     template_name = "admin_event_info_list.html"
+
     context_object_name = 'admin_events'
 
+
+
     def get_queryset(self):
+
         if hasattr(self.request.user, 'admin_profile'):
+
             return AdminEvent.objects.filter(admin=self.request.user.admin_profile).order_by('-start_date')
+
         return AdminEvent.objects.none()
+    
 
 class AdminEventInfoRegisterView(CreateView):
     model = AdminEvent
     template_name = "admin_event_info_register.html"
-    fields = ['event_info', 'event_overview', 'venue', 'start_date', 'end_date', 'start_time', 'end_time', 'public_settings']
+    # モデルのフィールド名に合わせて修正
+    fields = ['event_info', 'event_overview', 'venue', 'start_date', 'end_date', 'start_time', 'end_time', 'event_image', 'public_settings']
     success_url = reverse_lazy('event_info_management:admin_event_info_register_success')
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
         admin_profile = self.request.user.admin_profile
-
-        # 担当しているお城1〜5の中から、データが入っているものだけをリスト化
-        managed_castles = []
         slots = [
             admin_profile.oshiro_management1,
             admin_profile.oshiro_management2,
@@ -43,91 +52,99 @@ class AdminEventInfoRegisterView(CreateView):
             admin_profile.oshiro_management4,
             admin_profile.oshiro_management5,
         ]
-        
-        # Noneでないお城を（ID, 名前）のタプル形式で追加
         choices = [(castle.oshiro_name, castle.oshiro_name) for castle in slots if castle]
-        
-        # venue（開催場所）の入力欄を、テキスト自由入力から「選択式（Select）」に変更
         form.fields['venue'] = forms.ChoiceField(choices=choices, label="開催場所（担当お城）")
-        
         return form
 
     def form_valid(self, form):
         if hasattr(self.request.user, 'admin_profile'):
-            # 【修正】 author → admin に変更
             form.instance.admin = self.request.user.admin_profile
             return super().form_valid(form)
         else:
             raise PermissionDenied("管理者プロフィールがありません")
-
+        
 class AdminEventInfoRegisterSuccessView(TemplateView):
     template_name = "admin_event_info_register_success.html"
-    
+
 class AdminEventInfoUpdateView(UpdateView):
     model = AdminEvent
     template_name = "admin_event_info_update.html"
-    fields = ['event_info', 'event_overview', 'venue', 'start_date', 'end_date', 'start_time', 'end_time', 'public_settings']
+    # fieldsをモデル名 event_image に修正
+    fields = ['event_info', 'event_overview', 'venue', 'start_date', 'end_date', 'start_time', 'end_time', 'event_image', 'public_settings']
     
     def get_success_url(self):
-        # 更新成功時の遷移先
         return reverse_lazy('event_info_management:admin_event_info_update_success')
 
     def get_queryset(self):
-        # 自分が登録したイベントのみ編集可能にする
         return AdminEvent.objects.filter(admin=self.request.user.admin_profile)
 
     def get_form(self, form_class=None):
-        """
-        登録時と同じように、venue（開催場所）を
-        担当お城のプルダウンに変更する処理
-        """
         form = super().get_form(form_class)
         admin_profile = self.request.user.admin_profile
-
-        # 担当しているお城1〜5をリスト化
-        slots = [
-            admin_profile.oshiro_management1,
-            admin_profile.oshiro_management2,
-            admin_profile.oshiro_management3,
-            admin_profile.oshiro_management4,
-            admin_profile.oshiro_management5,
-        ]
-        
-        # 登録されているお城のみをプルダウンの選択肢にする
+        slots = [admin_profile.oshiro_management1, admin_profile.oshiro_management2, admin_profile.oshiro_management3, admin_profile.oshiro_management4, admin_profile.oshiro_management5]
         choices = [(castle.oshiro_name, castle.oshiro_name) for castle in slots if castle]
-        
-        # フォームのvenueフィールドをプルダウンに書き換え
         form.fields['venue'] = forms.ChoiceField(choices=choices, label="開催場所（担当お城）")
-        
         return form
 
 class AdminEventInfoUpdateSuccessView(TemplateView):
     template_name = "admin_event_info_update_success.html"
 
 class AdminEventInfoDeleteView(LoginRequiredMixin, DeleteView):
+
     model = AdminEvent
+
     template_name = "admin_event_info_delete.html"
-    
+
+   
+
     def get_success_url(self):
+
         # 削除成功後の遷移先
+
         return reverse_lazy('event_info_management:admin_event_info_delete_success')
 
+
+
     def get_queryset(self):
+
         # 自分が登録したイベントのみ削除可能にする（セキュリティ対策）
+
         return AdminEvent.objects.filter(admin=self.request.user.admin_profile)
+
+
+
 
 
 class AdminEventInfoDeleteSuccessView(TemplateView):
+
     template_name = "admin_event_info_delete_success.html"
 
+
+
 class AdminEventInfoDetailView(DetailView):
+
     model = AdminEvent
+
     template_name = "admin_event_info_detail.html"
+
     context_object_name = 'event' # テンプレートで使う変数名
 
+
+
     def get_queryset(self):
+
         # セキュリティ：自分が登録したイベントのみ閲覧可能にする
+
         return AdminEvent.objects.filter(admin=self.request.user.admin_profile)
+
+
+
+
+
+
+
+
+
 
 
 # ここからoperator
@@ -162,7 +179,7 @@ class OperatorEventInfoListView(ListView):
 class OperatorEventInfoRegisterView(CreateView):
     model = OperatorEvent
     template_name = "operator_event_info_register.html"
-    fields = ['event_info', 'event_overview', 'venue', 'start_date', 'end_date', 'start_time', 'end_time', 'public_settings']
+    fields = ['event_info', 'event_overview', 'venue', 'start_date', 'end_date', 'start_time', 'end_time','event_image', 'public_settings']
     success_url = reverse_lazy('event_info_management:operator_event_info_register_success')
 
     def form_valid(self, form):
@@ -181,7 +198,7 @@ class OperatorEventInfoRegisterSuccessView(TemplateView):
 class OperatorEventInfoUpdateView(UpdateView):
     model = OperatorEvent
     template_name = "operator_event_info_update.html"
-    fields = ['event_info', 'event_overview', 'venue', 'start_date', 'end_date', 'start_time', 'end_time', 'public_settings']
+    fields = ['event_info', 'event_overview', 'venue', 'start_date', 'end_date', 'start_time', 'end_time','event_image', 'public_settings']
     
     def get_success_url(self):
         return reverse_lazy('event_info_management:operator_event_info_update_success')

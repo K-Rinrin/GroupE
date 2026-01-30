@@ -42,35 +42,40 @@
 <hr>
 
     <!-- 最新イベント情報エリア-->
-    <!-- 最新のイベント情報を表示する
-    DBから最新のイベント情報を3件まで持ってきて表示する
-    イベント情報にはタイトル、開催期間、簡単な説明文を表示する
-    -->
+    <!-- 今週のイベント情報を表示する-->
 
 <div class="latest-events-container">
-    <h2 class="section-title">最新イベント情報</h2>
+    <h2 class="section-title">今週のイベント</h2>
     <div class="event-list">
         {% for event in latest_events %}
-        <div class="event-item">
-            <div class="event-image">
-                {% if oshiro.oshiro_images %}
-                    <img class="avatar" src="{{ oshiro.oshiro_images.url }}" alt="{{ oshiro.oshiro_name }}">
-                {% else %}
-                    <img class="avatar" src="{% static 'image/お城ナビアイコン.png' %}" alt="画像なし">
-                {% endif %}
-            </div>
-            <div class="event-content">
-                <h3 class="event-title">
-                    <span class="arrow">➔</span> {{ event.event_info }}
+        <div class="event-item" style="background-color: #888; border: 1px solid #eee; padding: 15px; margin-bottom: 10px; display: flex;">
+            <div class="event-content" style="flex: 1;">
+                <p class="event-date-range" style="color: #888; font-size: 0.9em;">
+                    {{ event.start_date|date:"Y/m/d" }}（{{ event.start_date|date:"D" }}）
+                    〜 {{ event.end_date|date:"Y/m/d" }}（{{ event.end_date|date:"D" }}）
+                </p>
+                <h3 class="event-title" style="margin: 5px 0;">
+                    <span class="badge" style="background: #eee; padding: 2px 5px; font-size: 0.8em;">姫路城</span> 
+                    {{ event.event_info }}
                 </h3>
                 <p class="event-description">
-                    {{ event.event_overview|truncatechars:50 }}
+                    {{ event.event_overview|truncatechars:100 }}
                 </p>
-                <small class="event-date">開催：{{ event.start_date|date:"Y/m/d" }} 〜</small>
+                <div class="event-details" style="font-size: 0.85em; background: #f9f9f9; padding: 10px;">
+                    <div><strong>会場名：</strong>{{ event.venue_name|default:"姫路城" }}</div>
+                    </div>
+            </div>
+            
+            <div class="event-image" style="width: 150px; margin-left: 15px;">
+                {% if event.event_image %}
+                    <img src="{{ event.event_image.url }}" alt="{{ event.event_info }}" style="width: 100%;">
+                {% else %}
+                    <img src="{% static 'image/default_castle.jpg' %}" alt="画像なし" style="width: 100%;">
+                {% endif %}
             </div>
         </div>
         {% empty %}
-        <p class="no-events">現在、開催中のイベントはありません。</p>
+        <p class="no-events">今週開催予定のイベントはありません。</p>
         {% endfor %}
     </div>
 </div>

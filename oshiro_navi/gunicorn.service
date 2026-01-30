@@ -1,0 +1,15 @@
+[Unit]
+Description=gunicorn daemon for oshiro_navi
+After=network.target
+
+[Service]
+User=ec2-user
+Group=ec2-user
+WorkingDirectory=/home/ec2-user/GroupE-AWS/oshiro_navi
+Environment="PATH=/home/ec2-user/GroupE-AWS/oshiro_navi/venv/bin"
+ExecStart=/home/ec2-user/GroupE-AWS/oshiro_navi/venv/bin/gunicorn --workers 3 --bind 127.0.0.1:8000 oshiro_navi.wsgi:application
+ExecReload=/bin/kill -s HUP $MAINPID
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
