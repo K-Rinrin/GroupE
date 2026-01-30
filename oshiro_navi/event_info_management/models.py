@@ -11,6 +11,7 @@ class EventBase(models.Model):
     end_date = models.DateField(help_text="終了日")
     start_time = models.TimeField(help_text="開始時間")
     end_time = models.TimeField(help_text="終了時間")
+    event_image = models.ImageField(upload_to="event_images/", blank=True, help_text="イベント画像")
     
     public_settings = models.BooleanField(default=False, help_text="公開設定")
 
