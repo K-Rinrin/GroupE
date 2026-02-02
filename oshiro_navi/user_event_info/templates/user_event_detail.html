@@ -29,17 +29,48 @@
                     {{ event.start_time|time:"H:i" }} 〜 {{ event.end_time|time:"H:i" }}
                 </td>
             </tr>
-            <tr>
+            <tr style="border-bottom: 1px solid #eee;">
                 <th style="text-align: left; padding: 15px; background: #f9f9f9; font-weight: bold; color: #555; vertical-align: top;">イベント概要</th>
                 <td style="padding: 15px; line-height: 1.8; white-space: pre-wrap;">{{ event.event_overview|default:"詳細情報はありません。" }}</td>
             </tr>
+            <tr style="border-bottom: 1px solid #eee;">
+                <th style="text-align: left; padding: 15px; background: #f9f9f9; font-weight: bold; color: #555;">イベント画像</th>
+                <td style="padding: 15px;">
+                    <div class="event-image" style="width: 150px; cursor: zoom-in;">
+                        {% if event.event_image %}
+                            <img src="{{ event.event_image.url }}" alt="{{ event.event_info }}" style="width: 100%; border-radius: 5px;" onclick="openModal(this.src)">
+                        {% else %}
+                            <p style="color: #999;">画像なし</p>
+                        {% endif %}
+                    </div>
+                </td> 
+            </tr>
+            </div>
         </table>
     </div>
-
+        <div id="imageModal" onclick="closeModal()" style="display: none; position: fixed; z-index: 1000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); cursor: zoom-out; align-items: center; justify-content: center;">
+            <img id="modalImg" style="max-width: 90%; max-height: 90%; border: 3px solid #fff; border-radius: 5px; box-shadow: 0 0 20px rgba(0,0,0,0.5);">
+            <p style="position: absolute; bottom: 20px; color: #151414; font-size: 14px;">タップして閉じる</p>
+        </div>
     <div class="button-group" style="margin-top: 30px; text-align: center;">
         <a href="{% url 'user_event_info:event_info' %}" class="btn-cancel" style="background: #666; color: #fff; padding: 10px 25px; text-decoration: none; border-radius: 5px;">
             カレンダーに戻る
         </a>
     </div>
 </div>
+
+<script>
+function openModal(src) {
+    document.getElementById('modalImg').src = src;
+    document.getElementById('imageModal').style.display = 'flex';
+    // 背景スクロールを止める（任意）
+    document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+    document.getElementById('imageModal').style.display = 'none';
+    // 背景スクロールを戻す
+    document.body.style.overflow = 'auto';
+}
+</script>
 {% endblock %}

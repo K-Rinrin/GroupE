@@ -20,27 +20,24 @@ User = get_user_model()
 # 1. ログイン後のtop画面
 class UserTopView(LoginRequiredMixin,TemplateView):
     template_name = "user_top.html"
-    login_url = reverse_lazy("user_accounts:account")  # ←ここが重要
+    login_url = reverse_lazy("user_accounts:account")
     redirect_field_name = "next"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         
-        # --- 今週の範囲を計算 (例: 今日から7日間) ---
         today = timezone.now().date()
         end_of_week = today + timedelta(days=7)
         
-        # お城リスト
-        context['oshiro_list'] = OshiroInfo.objects.all().select_related('basicinfo')
+        # --- お城リストをランダムに3つだけ取得するように修正 ---
+        # order_by('?') でランダムに並び替え、[:3] で先頭の3件を取得します
+        context['oshiro_list'] = OshiroInfo.objects.all().select_related('basicinfo').order_by('?')[:3]
         
-        # --- 最新イベント情報の取得条件を変更 ---
-        # 1. 公開設定がTrue
-        # 2. 開始日が今週末まで、かつ終了日が今日以降（＝今週開催中）
-        
+        # --- 最新イベント情報の取得 ---
         admin_qs = AdminEvent.objects.filter(
             public_settings=True,
-            start_date__lte=end_of_week,  # 開始日が今週末より前
-            end_date__gte=today           # 終了日が今日より後
+            start_date__lte=end_of_week,
+            end_date__gte=today
         ).order_by('start_date')
 
         operator_qs = OperatorEvent.objects.filter(
@@ -49,16 +46,13 @@ class UserTopView(LoginRequiredMixin,TemplateView):
             end_date__gte=today
         ).order_by('start_date')
 
-        # リスト化して属性付与
         admins = list(admin_qs)
         operators = list(operator_qs)
         for e in admins: e.event_type = 'admin'
         for e in operators: e.event_type = 'operator'
 
-        # 合体させて日付順にソート
         all_events = sorted(admins + operators, key=lambda x: x.start_date)
         
-        # 「今週のイベント」としてコンテキストにセット
         context['latest_events'] = all_events
         return context
 
@@ -78,10 +72,25 @@ class UserlogoutView(View):
 
 # 3. アカウント処理（ログイン画面表示・登録・ログイン処理）
 class UserAccountView(View):
-    
-    def get(self, request):
-        return render(request, 'user_account.html')
+    def get_context_with_bg(self, extra_context=None):
+        """背景画像を含めたコンテキストを作成する共通メソッド"""
+        # 公開設定のお城からランダムに1つ取得（画像があるものに限定）
+        # select_relatedなどは不要なのでシンプルに取得
+        random_oshiro = OshiroInfo.objects.exclude(oshiro_images="").order_by('?').first()
+        
+        context = {
+            'bg_image_url': random_oshiro.oshiro_images.url if random_oshiro else None,
+            'oshiro_name': random_oshiro.oshiro_name if random_oshiro else ""
+        }
+        if extra_context:
+            context.update(extra_context)
+        return context
 
+    def get(self, request):
+        # 共通メソッドを使って画像付きでレンダリング
+        return render(request, 'user_account.html', self.get_context_with_bg())
+    
+    
     def post(self, request):
         action_type = request.POST.get('action')
         errors = {}

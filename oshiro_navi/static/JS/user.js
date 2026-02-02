@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const dropdown = document.querySelector(".dropdown");
     const btn = document.querySelector(".dropdown-btn");
     const menu = document.querySelector(".dropdown-menu");
+    
 
     if (btn && menu) {
         let fixed = false; // 固定状態のフラグ
@@ -62,3 +63,47 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         }
     });
+
+document.addEventListener("DOMContentLoaded", () => {
+    const openMenu = document.getElementById("openMenu");
+    const closeMenu = document.getElementById("closeMenu");
+    const sideMenu = document.getElementById("sideMenu");
+    const overlay = document.getElementById("overlay");
+
+    const mobileSwitchBtn = document.getElementById("mobileSwitchBtn");
+    const container = document.getElementById("container"); // ← 追加！
+
+    // --- ハンバーガーメニュー（スマホ） ---
+    if (openMenu && sideMenu && overlay) {
+        openMenu.addEventListener("click", (e) => {
+            if (window.innerWidth <= 600) {
+                e.preventDefault();
+                sideMenu.classList.add("active");
+                overlay.classList.add("active");
+            }
+        });
+    }
+
+    // 閉じる処理を関数化
+    const closeSideMenu = () => {
+        sideMenu.classList.remove("active");
+        overlay.classList.remove("active");
+    };
+
+    closeMenu?.addEventListener("click", closeSideMenu);
+    overlay?.addEventListener("click", closeSideMenu);
+
+    // --- ログイン / 新規登録 切り替え（スマホ） ---
+    if (mobileSwitchBtn && container) {
+        mobileSwitchBtn.addEventListener("click", () => {
+            container.classList.toggle("right-panel-active");
+
+            mobileSwitchBtn.textContent =
+                container.classList.contains("right-panel-active")
+                    ? "ログインに戻る"
+                    : "新規登録はこちら";
+        });
+    }
+});
+
+

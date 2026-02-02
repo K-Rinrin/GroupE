@@ -445,3 +445,112 @@ input {
     font-size: 50px;
 }
 
+
+/* ====================================
+    スマホ表示（600px以下）
+   ==================================== */
+@media screen and (max-width: 600px) {
+    /* コンテナを全画面に */
+
+    /* フォームコンテナの共通設定 */
+    .form-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        transition: opacity 0.4s ease-in-out;
+        background: transparent; /* 背景画像を見せるため */
+        z-index: 5;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    form {
+        background: rgba(255, 255, 255, 0.9); /* フォームを半透明の白に */
+        padding: 30px;
+        width: 85%;
+        max-width: 320px;
+        border-radius: 15px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    /* ログインとサインアップの切り替え表示 */
+    /* デフォルト：ログインを表示、サインアップを隠す */
+    .signup-container {
+        opacity: 0;
+        pointer-events: none;
+        z-index: 1;
+    }
+    .login-container {
+        opacity: 1;
+        pointer-events: all;
+        z-index: 10;
+    }
+
+    /* サインアップアクティブ時 */
+    .container.right-panel-active .signup-container {
+        opacity: 1;
+        pointer-events: all;
+        z-index: 10;
+    }
+    .container.right-panel-active .login-container {
+        opacity: 0;
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    /* 背景オーバーレイを全画面固定 */
+    .overlay-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        transform: none !important; /* PCのスライド効果を無効化 */
+    }
+
+    .overlay {
+        width: 100%;
+        left: 0;
+        transform: none !important;
+    }
+
+    /* PC用のパネルを非表示 */
+    .overlay-panel {
+        display: none !important;
+    }
+
+    /* --- 切り替え用リンク（下部に配置） --- */
+    /* フォーム内に切り替え用テキストを追加するための疑似要素設定 */
+    .login-container form::after {
+        content: "アカウントをお持ちでない方はこちら";
+        display: block;
+        margin-top: 20px;
+        font-size: 13px;
+        color: #d4a024; /* 金色 */
+        text-decoration: underline;
+        cursor: pointer;
+    }
+
+    /* スマホ専用の切り替えボタン（オーバーレイの代わりに表示） */
+    .mobile-switch-area {
+        position: absolute;
+        bottom: 40px;
+        left: 0;
+        width: 100%;
+        text-align: center;
+        z-index: 20;
+    }
+
+    .btn-mobile-switch {
+        background: rgba(0, 0, 0, 0.6);
+        color: #fff;
+        border: 1px solid #fff;
+        padding: 8px 20px;
+        border-radius: 20px;
+        font-size: 12px;
+    }
+}

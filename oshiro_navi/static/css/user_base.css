@@ -42,7 +42,7 @@ html {
     overflow: hidden;
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     height: auto;
-    border: 1px solid #eee;
+    border: 1px solid #8e8a8a;
     transition: transform 0.3s ease;
 }
 
@@ -120,6 +120,77 @@ html {
 
 
 
+    /* 全体の中央寄せと最大幅の制限 */
+    .latest-events-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+    }
+
+    .section-title {
+        text-align: center;
+        margin-bottom: 30px;
+        color: #333;
+    }
+
+    /* イベントアイテムのスタイル */
+    .event-item {
+        background-color: #fdfcf0; /* 白っぽい黄色の背景 */
+        border: 1px solid #f1eec9; /* 少し濃いめの黄色で縁取り */
+        border-radius: 15px;       /* 角を丸くする */
+        padding: 20px;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;       /* 縦方向を中央に揃える */
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05); /* 軽い影で浮き出し効果 */
+        transition: transform 0.2s;
+    }
+
+    .event-item:hover {
+        transform: translateY(-3px); /* ホバー時に少し浮く */
+    }
+
+    .event-content {
+        flex: 1;
+    }
+
+    .event-date-range {
+        color: #b0a040;            /* 文字色も少し黄色系に合わせる */
+        font-weight: bold;
+        font-size: 0.9em;
+        margin-bottom: 8px;
+    }
+
+    .event-title {
+        margin: 5px 0;
+        color: #222;
+    }
+
+    .badge {
+        background: #e9e4b2;
+        padding: 2px 8px;
+        font-size: 0.8em;
+        border-radius: 5px;
+        margin-right: 5px;
+    }
+
+    .event-description {
+        font-size: 0.95em;
+        color: #555;
+        line-height: 1.6;
+    }
+
+    .event-details {
+        font-size: 0.85em;
+        background: rgba(255, 255, 255, 0.5); /* 中の背景を少し透かす */
+        padding: 10px;
+        border-radius: 10px;
+        margin-top: 10px;
+    }
+
+
+
 
 
 /* ロゴ周り */
@@ -134,7 +205,7 @@ html {
 }
 
 .logo_img {
-    width: 100%;
+    width: 150%;
     height: auto;
     border-radius: 8px;  /* 少し丸く */
 }
@@ -965,202 +1036,411 @@ h1, h2, h3, .page-title, .section-title {
 }
 
 
+/* 音声ガイド */
 
 
-/* ====================================
-スマホ表示 600px以下
-==================================== */
-@media screen and (max-width: 600px) {
-
-    /* --- ナビゲーションバー（下固定） --- */
-    .user-container {
-        position: fixed !important; /* 強制的に固定 */
-        top: auto;
-        bottom: 0;
-        left: 0;
+.guide-page-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+        background-color: #f0f2f5;
+        min-height: 100vh;
+    }
+    .voice-chat-card {
         width: 100%;
-        height: 70px; /* 高さを少し調整 */
-        background: #ffffff;
+        max-width: 400px;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        overflow: hidden;
+        margin-bottom: 30px;
+    }
+    .voice-chat-card-header {
+        background: linear-gradient(135deg, #a8e063 0%, #56ab2f 100%);
+        padding: 20px;
         display: flex;
         align-items: center;
-        justify-content: space-around; /* アイコンを均等に配置 */
-        z-index: 9999; /* 他の要素より必ず上にくるように大きな値を設定 */
-        box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-        padding-bottom: env(safe-area-inset-bottom); /* iPhone等のノッチ対策 */
+        border-bottom: 1px solid rgba(0,0,0,0.05);
     }
-
-    /* ナビゲーションのリストも横幅いっぱいに */
-    .user-container .nav {
-        width: 100%;
-        margin: 0;
-        padding: 0;
+    .avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        border: 3px solid white;
+        object-fit: cover;
+        background-color: #eee;
+    }
+    .info-group { margin-left: 15px; }
+    .oshiro_name {
+        font-weight: bold;
+        font-size: 1.1rem;
+        color: white;
         display: flex;
-        justify-content: space-around;
+        align-items: center;
+    }
+    .status-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: #4cd137;
+        margin-left: 8px;
+        box-shadow: 0 0 5px #4cd137;
+    }
+    .voice-chat-card-body { padding: 20px; }
+    .guide-item {
+        background: #f8f9fa;
+        border-radius: 12px;
+        padding: 15px;
+        margin-bottom: 15px;
+        border-left: 5px solid #a8e063;
+        position: relative;
+    }
+        .guide-details {
+        margin-bottom: 15px;
+    }
+    /* 「音声ガイドを見る ▼」の部分 */
+    .guide-summary {
+        font-size: 0.85rem;
+        color: #34681b; /* ずんだもんカラーに合わせる */
+        cursor: pointer;
+        outline: none;
+        list-style: none; /* デフォルトの三角形を消す（任意） */
+        font-weight: bold;
+        display: inline-block;
+        padding: 5px 0;
     }
 
-    /* ロゴは非表示 */
-    .logo_content {
-        display: none; 
+    /* クリックした時に三角形を切り替えたい場合（任意） */
+    .guide-details[open] .guide-summary {
+        color: #444;
     }
 
-    /* アイコンの間隔調整
-    .user-container .nav {
+    /* 中身のテキスト */
+    .guide-text {
+        font-size: 0.9rem;
+        color: #666;
+        background: #fff;
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid #eee;
+        margin-top: 5px;
+        line-height: 1.5;
+    }
+    .guide-title { font-weight: bold; margin-bottom: 8px; color: #444; display: block; }
+    .audio-player { width: 100%; height: 40px; margin-top: 10px; }
+    .settings-area {
+        font-size: 0.8rem;
+        color: #666;
+        margin-top: 15px;
+        padding: 10px;
+        background: #eee;
+        border-radius: 8px;
+    }
+    select { width: 100%; padding: 5px; margin-top: 5px; border-radius: 5px; border: 1px solid #ddd; }
+    .btn-play {
+        background: #56ab2f;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 20px;
         width: 100%;
+        margin-top: 10px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+    .btn-play:disabled { background: #ccc; cursor: not-allowed; }
+    .loading-text { font-size: 0.7rem; color: #56ab2f; display: none; margin-top: 5px; }
+
+
+    .custom-player-container {
+        background: #fdfdfd;
+        border: 1px solid #e0e0e0;
+        border-radius: 15px;
+        padding: 15px;
+        margin: 10px 0;
+    }
+
+.help-header {
+    display: flex;
+    align-items: center; /* 上下中央揃え */
+    gap: 8px;            /* アイコンと文字の間隔 */
+    color: #56ab2f;      /* アイコンの色をお城ガイドの色に合わせる */
+}
+
+/* アイコン自体のサイズ調整（必要に応じて） */
+.material-symbols-outlined {
+    font-size: 20px;
+    vertical-align: middle;
+}
+
+
+/* モーダルの背景（暗くする） */
+.modal-overlay {
+    display: none; /* 初期状態は非表示 */
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ポップアップの中身 */
+.modal-content {
+    background: white;
+    padding: 25px;
+    border-radius: 20px;
+    max-width: 320px;
+    width: 90%;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    text-align: left;
+}
+
+.modal-content h3 {
+    margin-top: 0;
+    color: #56ab2f;
+    font-size: 1.2rem;
+    border-bottom: 2px solid #f0f2f5;
+    padding-bottom: 10px;
+}
+
+.help-list {
+    list-style: none;
+    padding: 0;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: #555;
+}
+
+.help-list li {
+    margin-bottom: 12px;
+}
+
+.btn-close {
+    background: #56ab2f;
+    color: white;
+    border: none;
+    padding: 10px;
+    width: 100%;
+    border-radius: 10px;
+    margin-top: 15px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+
+/* 無効化されている時のボタンやスライダーの見た目 */
+button:disabled, 
+input:disabled, 
+select:disabled {
+    opacity: 0.5;
+    cursor: not-allowed !important;
+}
+
+.play-toggle-btn:disabled {
+    background-color: #ccc; /* グレーにする */
+    box-shadow: none;
+}
+
+/* 再生・一時停止ボタンのシンプルデザイン */
+.play-toggle-btn {
+    background-color: #56ab2f; /* ずんだもんカラー */
+    color: white;
+    border: none;
+    width: 25px;   /* 少し大きめにして押しやすく */
+    height: 25px;
+    border-radius: 50%; /* 完全な円形 */
+    cursor: pointer;
+    font-size: 0.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(86, 171, 47, 0.3); /* 軽い影で浮かせる */
+    transition: all 0.2s ease;
+    padding: 0;
+    line-height: 1;
+}
+
+    /* ホバー（マウスを乗せた時）の反応 */
+    .play-toggle-btn:hover {
+        background-color: #4ca12a;
+        transform: scale(1.05); /* わずかに大きく */
+    }
+
+    /* 押した時の反応 */
+    .play-toggle-btn:active {
+        transform: scale(0.95);
+    }
+
+    .play-toggle-btn.paused {
+        padding-left: 3px;
+    }
+
+    /* 上段：再生ボタンとバー */
+    .player-main-row {
         display: flex;
-        justify-content: space-between; /* 均等配置 */
-        /* padding: 0;
-        margin: 0;
-    } */ 
-
-    .user-container .nav li a {
-        flex-direction: column;
-        font-size: 10px; /* 文字サイズ調整 */
-        padding: 5px;
-        color: #475569;
-        text-align: center;
-    }
-
-    .user-container .nav i {
-        font-size: 24px;
-        margin: 0 0 4px 0; /* アイコン下の余白 */
-    }
-
-    /* --- メインコンテンツの余白調整（重要） --- */
-    .home_content {
-        margin-top: 20px;
-        /* 下のバー(75px) + 余白分を確保して、ボタンが隠れないようにする */
-        padding-bottom: 120px; 
-        margin-bottom: 0;
-    }
-
-    /* --- マイページメニュー（上向きに開く） --- */
-    .dropdown {
-        position: static; /* 親の制約を解除 */
-    }
-
-    /* ボタンのスタイル調整 */
-    .dropdown-btn {
-        flex-direction: column;
-        font-size: 10px;
-        padding: 5px;
-        color: #475569;
-        gap: 0;
-    }
-    
-    .dropdown-btn i {
-        font-size: 24px;
-        margin-bottom: 4px;
-    }
-
-    .dropdown-btn .link_name::after {
-        content: ""; /* 矢印消去 */
-    }
-
-    /* ▼ メニューを上に表示させる設定 ▼ */
-    .dropdown-menu {
-        top: auto;          /* 上からの位置指定を解除 */
-        bottom: 80px;       /* 下から80px（バーの上）に配置 */
-        right: 10px;        /* 右寄せ */
-        width: 200px;       /* 少し幅広に */
-        transform-origin: bottom right; /* アニメーションの基点（必要なら） */
-    }
-
-    /* --- スタンプ帳のレイアウト（スマホ用） --- */
-    .mypage-container {
-        padding: 20px;
-        margin: 0 auto;
-        border: none;    /* スマホでは枠線を消してスッキリさせる */
-        box-shadow: none;
-    }
-
-    .stamp-grid {
-        /* スマホでは3列だと狭すぎるため2列にする */
-        grid-template-columns: repeat(2, 1fr); 
-        grid-auto-rows: 110px;
-        gap: 10px;
-    }
-    
-    /* 文字サイズ調整 */
-    .castle-name {
-        font-size: 13px;
-    }
-    .stamp-date {
-        font-size: 11px;
-    }
-
-    .stamp-grid {
-        /* スマホだと3列は狭すぎるため2列にするのが一般的ですが、
-           どうしても3列維持したい場合は repeat(3, 1fr) のままで
-           文字サイズを小さくします */
-        grid-template-columns: repeat(2, 1fr); 
-        grid-auto-rows: 110px;
-        gap: 10px;
-    }
-
-    .simple-menu-list {
-        max-width: 100%; /* スマホでは幅いっぱいに */
+        align-items: center;
         gap: 15px;
     }
 
-    .simple-menu-btn {
-        padding: 18px; /* スマホでは少し高さを抑える */
-    }
-
-     /* 削除確認画面 */
-    .mypage-container.delete-confirm-container {
-        padding: 30px 20px;
-    }
-
-    .confirm-text {
-        font-size: 16px;
-    }
-
-    .highlight-text {
-        font-size: 20px;
-    }
-    
-    /* ボタン幅を少し調整 */
-    .btn-confirm-back,
-    .btn-confirm-delete {
-        width: 110px;
-        height: 40px;
-        font-size: 14px;
-    }
-
-    .mypage-container.mylist-container {
-        padding: 20px 15px;
-    }
-
-    /* 検索行を縦並びにする場合 */
-    /*
-    .search-row {
+    .progress-wrapper {
+        flex-grow: 1;
+        display: flex;
         flex-direction: column;
     }
-    .btn-search {
-        padding: 10px;
-    }
-    */
-    
-    /* ボタンの幅調整 */
-    .btn-purple-add {
+
+    #progressSlider {
         width: 100%;
-        max-width: none;
-    }
-    
-    .list-item {
-        padding: 12px;
-    }
-    .item-name {
-        font-size: 14px;
-    }
-.top-carousel-container {
-        padding: 0 10px; /* 左右の余白を最小限にして中央に寄せる */
-        margin: 20px auto; /* 左右のオートマージンで中央寄せ */
-        width: 95%;      /* 画面幅に対して少し余裕を持たせる */
+        accent-color: #56ab2f;
+        cursor: pointer;
     }
 
-    .castle-card {
-        margin: 0 auto;  /* カード自体も中央に */
+    .time-display {
+        font-size: 11px;
+        color: #888;
+        margin-top: 4px;
+        text-align: right;
     }
+
+    /* 下段：音量と速度 */
+    .player-sub-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-top: 1px solid #eee;
+        padding-top: 10px;
+    }
+
+    .volume-group, .speed-group {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+        color: #666;
+    }
+
+    #volumeSlider {
+        width: 70px;
+        accent-color: #56ab2f;
+    }
+
+    #speedSelect {
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 11px;
+        padding: 2px;
+    }
+
+
+
+
+/* ====================================
+    スマホ表示（600px以下）
+   ==================================== */
+@media screen and (max-width: 600px) {
+
+    .user-top-logo {
+        display: none !important;
+    }
+    /* ナビゲーションバー全体の調整 */
+    .user-container {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0;
+        width: 100%;
+        height: 60px;
+        background: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center; /* ロゴを中央に寄せる */
+        z-index: 10000;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    /* --- ロゴ以外の要素をすべて非表示にする --- */
+    /* 左側のマイページ/メニューボタン */
+    .dropdown {
+        display: none !important;
+    }
+
+    /* 右側のナビゲーションリスト */
+    .nav {
+        display: none !important;
+    }
+
+    /* --- ロゴの表示調整 --- */
+    .logo_content {
+        display: flex !important;
+        margin: 0 auto;
+    }
+
+    .logo_img {
+        height: 35px; /* お好みのサイズに調整してください */
+        width: auto;
+    }
+
+    /* メインコンテンツがヘッダーに隠れないように調整 */
+    .home_content {
+        margin-top: 70px !important;
+    }
+    
+    /* オーバーレイなどもスマホでは不要なため隠す */
+    .overlay {
+        display: none !important;
+    }
+
+.top-carousel-container {
+    padding: 20px 0 40px; /* 下側にドット（ページネーション）用の余白を確保 */
+    background: transparent;
 }
+
+/* --- カードのデザイン（高級感アップ） --- */
+.castle-card {
+    background: #fff;
+    border-radius: 15px;
+    border: none; /* 太い線はやめて、薄い影で立体感を出す */
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08); /* 柔らかく深い影 */
+    transition: all 0.3s ease;
+    height: auto;
+}
+
+/* --- 画像エリア --- */
+.card-image {
+    height: 200px;
+    border-radius: 15px 15px 0 0; /* 上側だけ丸く */
+    position: relative;
+    overflow: hidden;
+}
+
+
+/* --- テキストエリア --- */
+.card-body {
+    padding: 20px 15px;
+}
+
+.castle-title {
+    font-family: "Yu Mincho", serif; /* お城なので明朝体で高級感を */
+    font-size: 1.2rem;
+    color: #1e2a4a; /* 落ち着いた藍色 */
+    margin-bottom: 10px;
+}
+
+.castle-ex {
+    color: #666;
+    line-height: 1.6;
+    min-height: 3.2em; /* 2行分の高さを常に確保してガタつき防止 */
+}
+
+
+
+    
+    .swiper-button-prev, .swiper-button-next {
+        display: none;  
+    }
+}   
+
 
