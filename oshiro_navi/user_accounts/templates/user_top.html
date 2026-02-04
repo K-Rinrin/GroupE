@@ -5,6 +5,7 @@
 <div class="user-top-logo" style="display: flex; justify-content: center; margin-bottom: 20px;">
     <img src="{% static 'image/top_logo.png' %}" alt="お城ナビロゴ" class="logo-image" style="width: 300px; height: auto;">
 </div>
+
 <hr>
 <hr>
     <!--　お城写真スライダーエリア　-->
@@ -15,14 +16,13 @@
     写真をクリック、もしくは写真のところにある詳細ボタンを押すとそのお城情報ページへ飛ぶ
     -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-<h3>城と歩む、日本を旅する。</h3>
+<h3 class="wafu-title">城と歩む、日本を旅する。</h3>
 <div class="top-carousel-container">
     <div class="swiper multiSwiper">
         <div class="swiper-wrapper">
             {% for oshiro in oshiro_list %}
             <div class="swiper-slide castle-card">
                 <div class="card-image" style="background-image: url('{{ oshiro.oshiro_images.url }}');">
-                    <span class="tag-gold">100名城</span>
                     <a href="{% url 'usermy_list:oshiroinfo' oshiro.id %}" class="full-link"></a>
                 </div>
                 <div class="card-body" style="padding: 15px;">
@@ -30,6 +30,9 @@
                         {{ oshiro.oshiro_name }}
                     </h3>
                     <p class="castle-ex" style="color: #666; line-height: 1.6;">{{ oshiro.basicinfo.highlights|truncatechars:25 }}</p>
+                    <a href="{% url 'usermy_list:oshiroinfo' oshiro.id %}" class="btn btn-detail-gold">
+                        詳細を見る
+                    </a>
                 </div>
             </div>
             {% endfor %}
@@ -75,6 +78,9 @@
                 <p class="event-description" style="color: #666; font-size: 0.9em; margin-top: 10px;">
                     {{ event.event_overview|truncatechars:100 }}
                 </p>
+                <a href="{% url 'user_event_info:event_detail' event.event_type event.id %}" class="btn btn-detail-gold">
+                    詳細を見る
+                </a>
             </div>
             
             <div class="event-image" style="width: 150px; margin-left: 15px;">
@@ -84,7 +90,9 @@
                     <img src="{% static 'image/default_castle.jpg' %}" alt="画像なし" style="width: 100%;">
                 {% endif %}
             </div>
+            
         </div>
+
         {% empty %}
         <div class="no-events" style="text-align: center; padding: 40px; color: #999;">
             <p>現在、開催予定のイベントはありません。</p>
