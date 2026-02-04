@@ -108,9 +108,23 @@
             <div class="input-section">
                 <table class="basic-info-table" border="1" cellpadding="8" cellspacing="0" style="width: 100%;">
                     <tr>
+                        <th><label for="oshiro">対象のお城</label></th>
+                        <td>
+                            <select id="oshiro">
+                                <option value="">お城を選択してください</option>
+                                {% for oshiro in oshiro_list %}
+                                    <option value="{{ oshiro.id }}">
+                                        {{ oshiro.oshiro_name }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                    </tr>
+
+                    <tr>
                         <th><label for="text">ユーザー側QR：URL</label></th>
                         <td>
-                            <input style="background-color: #b2b2b2;" readonly id="text" type="text" value="http://127.0.0.1:8000/user/audio_guide/oshiro_list/">
+                            <input id="text"    type="text"    readonly    style="background-color: #b2b2b2;"    data-base-url="{{ base_url }}">
                         </td>
                     </tr>
                     <tr>
@@ -264,6 +278,58 @@
             modal.style.display = "none";
         }
     });
+
+    const elOshiro = document.getElementById("oshiro");
+
+    function updateUrl() {
+        const baseUrl = elText.dataset.baseUrl;
+        const oshiroId = elOshiro.value;
+
+        if (!oshiroId) {
+            elText.value = "";
+            return;
+        }
+
+        elText.value = baseUrl + oshiroId + "/";
+    }
+
+    // お城選択時にURL更新
+    elOshiro.addEventListener("change", () => {
+        updateUrl();
+        clearQrcode(); // 選び直したらQRを消す
+    });
+
+    function generateQrcode() {
+    if (!elOshiro.value) {
+        alert("お城を選択してください。");
+        return;
+    }
+
+    const text = elText.value.trim();
+    if (!text) {
+        alert("URLが生成されていません。");
+        return;
+    }
+
+    clearQrcode();
+
+    const size = parseInt(elSize.value, 10) || 256;
+    const ec = elEC.value || 'M';
+
+    qr = new QRCode(elQrcode, {
+        text: text,
+        width: size,
+        height: size,
+        correctLevel: QRCode.CorrectLevel[ec]
+    });
+
+    setTimeout(() => {
+        insertLogo(size);
+        elDownload.disabled = false;
+    }, 300);
+}
+
+
     </script>
 
 </div>

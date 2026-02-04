@@ -205,10 +205,38 @@ class AudioGuideDeleteSuccessView(LoginRequiredMixin,TemplateView):
         return context
 
 # QRコード作成画面
-class QRcodeGeneretorView(TemplateView):
+class QRcodeGeneretorView(LoginRequiredMixin, TemplateView):
     template_name = "qr_generetor.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["oshiro_id"] = self.kwargs.get("oshiro_id")
+
+        # 管理者プロフィールを持っているか確認
+        if not hasattr(self.request.user, 'admin_profile'):
+            raise PermissionDenied("管理者のみアクセス可能です")
+
+        admin_profile = self.request.user.admin_profile
+
+        # 管理しているお城IDを取得
+        managed_castle_ids = [
+            admin_profile.oshiro_management1_id,
+            admin_profile.oshiro_management2_id,
+            admin_profile.oshiro_management3_id,
+            admin_profile.oshiro_management4_id,
+            admin_profile.oshiro_management5_id,
+        ]
+        managed_castle_ids = [cid for cid in managed_castle_ids if cid is not None]
+
+        # お城情報取得
+        oshiro_list = OshiroInfo.objects.filter(
+            id__in=managed_castle_ids
+        ).order_by("id")
+
+        context["oshiro_list"] = oshiro_list
+
+        # QR用の固定URL
+        context["base_url"] = (
+            "http://10.250.156.81:8080/user/audio_guide/guide_list/"
+        )
+
         return context
