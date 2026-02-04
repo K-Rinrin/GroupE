@@ -15,19 +15,21 @@
     写真をクリック、もしくは写真のところにある詳細ボタンを押すとそのお城情報ページへ飛ぶ
     -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-
+<h3>城と歩む、日本を旅する。</h3>
 <div class="top-carousel-container">
     <div class="swiper multiSwiper">
         <div class="swiper-wrapper">
             {% for oshiro in oshiro_list %}
             <div class="swiper-slide castle-card">
                 <div class="card-image" style="background-image: url('{{ oshiro.oshiro_images.url }}');">
+                    <span class="tag-gold">100名城</span>
                     <a href="{% url 'usermy_list:oshiroinfo' oshiro.id %}" class="full-link"></a>
                 </div>
-                <div class="card-body">
-                    <h3 class="castle-title">{{ oshiro.oshiro_name }}</h3>
-                    <p class="castle-ex">{{ oshiro.basicinfo.highlights|truncatechars:25 }}</p>
-                    <a href="{% url 'usermy_list:oshiroinfo' oshiro.id %}" class="btn-detail-gold">詳細を見る</a>
+                <div class="card-body" style="padding: 15px;">
+                    <h3 class="castle-title" style="border-left: 4px solid #d4af37; padding-left: 10px; margin-bottom: 10px;">
+                        {{ oshiro.oshiro_name }}
+                    </h3>
+                    <p class="castle-ex" style="color: #666; line-height: 1.6;">{{ oshiro.basicinfo.highlights|truncatechars:25 }}</p>
                 </div>
             </div>
             {% endfor %}
@@ -40,7 +42,6 @@
 </div>
 
 <hr>
-
 
 
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>

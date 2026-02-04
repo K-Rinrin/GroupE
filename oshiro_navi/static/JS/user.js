@@ -106,4 +106,43 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
+document.addEventListener('DOMContentLoaded', function() {
+    const menuToggle = document.getElementById('menu-toggle');
+    const menuIconText = document.getElementById('menu-icon-text');
+    const userContainer = document.querySelector('.user-container');
 
+    menuToggle.addEventListener('click', function() {
+        // activeクラスを切り替え
+        userContainer.classList.toggle('active');
+
+        // アイコンを menu ↔ close で切り替え
+        if (userContainer.classList.contains('active')) {
+            menuIconText.textContent = 'close';
+        } else {
+            menuIconText.textContent = 'menu';
+        }
+    });
+
+    // メニュー内のリンクをクリックしたらメニューを閉じる
+    const navLinks = document.querySelectorAll('.nav a, .dropdown-menu a');
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            userContainer.classList.remove('active');
+            menuIconText.textContent = 'menu';
+        });
+    });
+});
+
+const toggleBtn = document.getElementById("menu-toggle");
+    const nav = document.getElementById("mobile-nav");
+    const iconText = document.getElementById("menu-icon-text");
+
+    toggleBtn.addEventListener("click", () => {
+    nav.classList.toggle("active");
+
+    if (nav.classList.contains("active")) {
+        iconText.textContent = "close";
+    } else {
+        iconText.textContent = "menu";
+    }
+    });

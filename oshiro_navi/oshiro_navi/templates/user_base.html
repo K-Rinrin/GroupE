@@ -29,6 +29,57 @@
             <img src="{% static 'image/top_logo.png' %}" alt="お城ナビロゴ" class="logo_img">
         </a>
     </div>
+    <header class="header">
+
+
+
+        <!-- スマホ用メニューアイコン -->
+        <div class="menu-icon" id="menu-toggle">
+            <span class="material-symbols-outlined" id="menu-icon-text">
+            menu
+            </span>
+        </div>
+    </header>
+
+            <!-- ナビゲーションバー -->
+        <nav class="mobile-nav" id="mobile-nav">
+        <ul>
+            <li>
+            <a style="background-color: white;" href="{% url 'user_accounts:top' %}" class="logo">
+                <img src="{% static 'image/top_logo.png' %}" alt="お城ナビロゴ" class="logo_img">
+            </a>
+            </li>
+            <li>
+            <a href="{% url 'usermy_list:oshirolist' %}">
+                <i class="material-symbols-outlined">manage_search</i>
+                <span class="link_name">お城リスト</span>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'user_event_info:event_info' %}">
+                <i class="material-symbols-outlined">calendar_month</i>
+                <span class="link_name">イベント</span>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'user_model_course:modelcoursechoose' %}">
+                <i class="material-symbols-outlined">alt_route</i> 
+                <span class="link_name">モデルコース</span>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'user_audio_guide:qr_scan' %}">
+                <i class="material-symbols-outlined">qr_code_2_add</i>
+                <span class="link_name">QRコード読み込み</span>
+            </a>
+        </li>
+        <span>マイページ</span>
+        <li><a href="{% url 'usermy_page:profile' %}">プロフィール</a></li>
+        <li><a href="{% url 'usermy_page:oshirostampregistar' %}">お城スタンプ</a></li>
+        <li><a href="{% url 'usermy_page:mylistregistar' %}">お城マイリスト</a></li>
+        <li><a href="{% url 'user_accounts:logout_check' %}">ログアウト</a></li>
+        </ul>
+        </nav>
 
     <ul class="nav">
         <li>
@@ -81,6 +132,20 @@
     {% endblock %}
 </div>
 
+
+
 <script src="{% static 'JS/user.js' %}"></script>
 </body>
+<footer class="footer">
+    <div class="footer-inner">
+
+        <div class="footer-section">
+            <h3>お城ナビ</h3>
+            <p>あなたと名城を、もっと近くに。</p>
+        </div>
+    </div>
+    <p class="copyright">
+        © お城ナビ 日本お城情報サイト
+    </p>
+</footer>
 </html>

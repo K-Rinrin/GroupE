@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+    <html lang="ja">
+    <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>会津観光サイト（サンプル）</title>
+    <link rel="stylesheet" href="styles.css" />
+    </head>
+    <body>
+
+    <header class="header">
+        <div class="logo">お城ナビ</div>
+
+        <!-- スマホ用メニューアイコン -->
+        <div class="menu-icon" id="menu-toggle">
+            <span class="material-symbols-outlined" id="menu-icon-text">
+            menu
+            </span>
+        </div>
+    </header>
+
+        <!-- ナビゲーションバー -->
+        <nav class="mobile-nav" id="mobile-nav">
+        <ul>
+            <li><a href="#">HOME</a></li>
+            <li><a href="#">お城一覧</a></li>
+            <li><a href="#">モデルコース</a></li>
+            <li><a href="#">音声ガイド</a></li>
+            <li><a href="#">スタンプラリー</a></li>
+        </ul>
+        </nav>
+
+
+    <section class="hero-slider">
+    <div class="slide active">城と歩む、日本を旅する。</div>
+    <div class="slide">猪苗代湖の絶景</div>
+    <div class="slide">会津のグルメ</div>
+    <button id="prev">◀</button>
+    <button id="next">▶</button>
+    </section>
+
+    <section class="news">
+    <h2>最新ニュース</h2>
+    <ul>
+        <li>鶴ヶ城さくらまつり 開催決定！</li>
+        <li>冬のイベント情報更新しました</li>
+        <li>観光パンフレットダウンロード公開中</li>
+    </ul>
+    </section>
+
+    <footer class="footer">
+    <p>© 会津若松観光ビューロー All Rights Reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+    </body>
+    </html>
+
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    }
+
+    /* 共通 */
+    .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background: #222;
+    color: #fff;
+    }
+
+    .menu-icon {
+    display: none;
+    cursor: pointer;
+    }
+
+    /* ナビ本体（初期は画面外） */
+    .mobile-nav {
+    position: fixed;
+    top: 0;
+    right: -260px;   /* ← ここ重要（右から出す） */
+    width: 260px;
+    height: 100vh;
+    background: #111;
+    transition: right 0.3s ease;
+    padding-top: 60px;
+    z-index: 1000;
+    }
+
+    .mobile-nav ul {
+    list-style: none;
+    padding: 0;
+    }
+
+    .mobile-nav li {
+    margin: 20px;
+    }
+
+    .mobile-nav a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.1rem;
+    }
+
+    /* 表示状態 */
+    .mobile-nav.active {
+    right: 0;
+    }
+
+    /* スマホ版 */
+    @media screen and (max-width: 768px) {
+    .menu-icon {
+        display: block;
+    }
+    }
+
+    .nav {
+    display: inline-block;
+    margin-left: 30px;
+    }
+    .nav a {
+    color: white;
+    margin-right: 15px;
+    text-decoration: none;
+    }
+
+    .hero-slider {
+    position: relative;
+    height: 300px;
+    background: #eee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    }
+    .hero-slider .slide {
+    position: absolute;
+    opacity: 0;
+    font-size: 2rem;
+    transition: opacity 0.5s ease;
+    }
+    .hero-slider .slide.active {
+    opacity: 1;
+    }
+    .hero-slider button {
+    position: absolute;
+    background: rgba(0,0,0,0.5);
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    font-size: 1.2rem;
+    }
+    #prev { left: 10px; }
+    #next { right: 10px; }
+
+    .news {
+    padding: 20px;
+    }
+    .news h2 {
+    margin-top: 0;
+    }
+
+    .footer {
+    background: #222;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    }
+
+    </style>
+
+    <script>
+    const slides = document.querySelectorAll('.slide');
+    const toggleBtn = document.getElementById("menu-toggle");
+    const nav = document.getElementById("mobile-nav");
+    const iconText = document.getElementById("menu-icon-text");
+
+    toggleBtn.addEventListener("click", () => {
+    nav.classList.toggle("active");
+
+    if (nav.classList.contains("active")) {
+        iconText.textContent = "close";
+    } else {
+        iconText.textContent = "menu";
+    }
+    });
+
+
+    let currentIndex = 0;
+
+    document.getElementById('next').addEventListener('click', () => {
+    slides[currentIndex].classList.remove('active');
+    currentIndex = (currentIndex + 1) % slides.length;
+    slides[currentIndex].classList.add('active');
+    });
+
+    document.getElementById('prev').addEventListener('click', () => {
+    slides[currentIndex].classList.remove('active');
+    currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+    slides[currentIndex].classList.add('active');
+    });
+    </script>

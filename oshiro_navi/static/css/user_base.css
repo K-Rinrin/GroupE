@@ -4,6 +4,46 @@ PC / Web 表示
 html {
     overflow-y: scroll;
 }
+
+    .footer {
+    background: #1f1f1f;
+    color: #fff;
+    padding: 40px 20px 20px;
+    }
+
+    .footer-inner {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 30px;
+    max-width: 1000px;
+    margin: 0 auto;
+    }
+
+    .footer-section h3 {
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+    }
+
+
+    .footer a {
+    color: #ccc;
+    text-decoration: none;
+    }
+
+    .footer a:hover {
+    color: #fff;
+    }
+
+    .copyright {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 0.9rem;
+    color: #aaa;
+    }
+/* ====================================
+    ユーザーナビゲーションバー・共通スタイル
+
 /* なびばー用 */
 .user-container {
     position: fixed;
@@ -35,6 +75,52 @@ html {
     position: relative;
 }
 
+/* hrの代わりに使う装飾ライン */
+.section-divider {
+    border: none;
+    height: 1px;
+    background: linear-gradient(to right, transparent, #d4af37, transparent);
+    margin: 40px 0;
+    position: relative;
+}
+
+.section-divider::after {
+    content: "🏯"; /* ここをお城のアイコンやロゴに変えるとより◎ */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #f9f7f2;
+    padding: 0 15px;
+    color: #d4af37;
+}
+
+
+/* カード内の画像エリア */
+/* .card-image {
+    height: 180px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+} */
+
+.card-image {
+    height: 250px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+/* 画像の上にグラデーションを重ねて、タイトルを際立たせる */
+.card-image::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 40%;
+    background: linear-gradient(transparent, rgba(0,0,0,0.6));
+}
 /* カード自体のデザイン */
 .castle-card {
     background: #fff;
@@ -50,13 +136,7 @@ html {
     transform: translateY(-5px);
 }
 
-/* カード内の画像エリア */
-.card-image {
-    height: 180px;
-    background-size: cover;
-    background-position: center;
-    position: relative;
-}
+
 
 .full-link {
     position: absolute;
@@ -853,8 +933,8 @@ html {
 }
 
 /* ====================================
-   和風デザインテーマ (お城ナビ用)
-   ==================================== */
+和風デザインテーマ (お城ナビ用)
+==================================== */
 
 :root {
     /* 日本の伝統色パレット */
@@ -867,10 +947,10 @@ html {
     --japan-border: #dcd6ce;    /* 鈍色：薄い枠線 */
 }
 
-/* 全体のフォント設定（見出しは明朝、本文はゴシック） */
 body {
-    background-color: var(--japan-bg); /* 背景を和紙っぽい色に */
-    color: var(--japan-text);
+    background-color: #f9f7f2; /* 柔らかな生成り色 */
+    background-image: url('https://www.transparenttextures.com/patterns/handmade-paper.png'); /* 非常に薄い和紙風テクスチャ */
+    color: #332f21;
 }
 
 h1, h2, h3, .page-title, .section-title {
@@ -909,8 +989,8 @@ h1, h2, h3, .page-title, .section-title {
 }
 
 /* ====================================
-   モデルコース検索（和風Ver）
-   ==================================== */
+モデルコース検索（和風Ver）
+==================================== */
 
 /* 検索エリアのボックス */
 .search-area-box {
@@ -1337,11 +1417,303 @@ select:disabled {
 
 
 
+/* 全体レイアウト */
+    .stamp-book-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+    }
+
+    /* ヘッダー */
+    .stamp-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 3px solid #000;
+        margin-bottom: 10px;
+        padding-bottom: 5px;
+    }
+    .stamp-header h1 { font-size: 24px; margin: 0; }
+
+    /* 登録ボタンエリア */
+    .btn-group-top {
+        text-align: center;
+        margin-bottom: 30px;
+        padding: 20px;
+        background: #f9f9f9;
+        border-radius: 8px;
+    }
+    .btn-get-stamp {
+        padding: 15px 60px;
+        border: 2px solid #000;
+        background: #fff;
+        font-weight: bold;
+        cursor: pointer;
+        font-size: 18px;
+        box-shadow: 4px 4px 0px #000;
+        transition: 0.1s;
+    }
+    .btn-get-stamp:active {
+        box-shadow: 0px 0px 0px #000;
+        transform: translate(4px, 4px);
+    }
+
+    /* 矢印とスタンプ枠の横並び */
+    .stamp-main-area {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+    }
+
+    /* 矢印ボタン */
+    .nav-arrow {
+        font-size: 40px;
+        color: #000;
+        text-decoration: none;
+        width: 60px;
+        height: 120px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #eee;
+        border: 2px solid #000;
+        border-radius: 10px;
+        transition: 0.2s;
+    }
+    .nav-arrow:hover { background: #ddd; }
+    .nav-arrow.disabled {
+        color: #ccc;
+        border-color: #ccc;
+        background: #fafafa;
+        pointer-events: none;
+    }
+
+    /* スタンプグリッド（3列×2段） */
+    .stamp-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(2, 200px);
+        gap: 20px;
+        flex-grow: 1;
+    }
+
+    /* スタンプ1つの箱 */
+    .stamp-box {
+        border: 2px solid #000;
+        background: #fff;
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        height: 100%;
+        box-sizing: border-box;
+        position: relative;
+    }
+    .stamp-box.empty {
+        border: 1px dashed #bbb;
+        background: #fcfcfc;
+    }
+
+    .castle-name { font-weight: bold; font-size: 14px; text-align: center; }
+    
+    /* 画像エリア */
+    .stamp-image-wrap {
+        flex-grow: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        cursor: pointer;
+        overflow: hidden;
+    }
+    .stamp-image-wrap img {
+        max-width: 100%;
+        max-height: 110px;
+        object-fit: contain;
+    }
+
+    .stamp-date { font-size: 12px; color: #666; }
+
+    /* ページ表示 */
+    .page-indicator {
+        text-align: center;
+        margin-top: 25px;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    /* 拡大モーダル */
+    #image-modal {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(0,0,0,0.85);
+        align-items: center;
+        justify-content: center;
+    }
+    #modal-img { max-width: 90%; max-height: 80%; border: 5px solid #fff; }
+    .close-modal { position: absolute; top: 30px; right: 40px; color: #fff; font-size: 50px; cursor: pointer; }
+
+    /* 基本は非表示（PC） */
+    .menu-icon {
+        display: none;
+        cursor: pointer;
+        padding: 10px;
+    }
+
+
+    /* アイコン自体のサイズ調整（お好みで） */
+    .material-symbols-outlined {
+        font-size: 32px;
+        user-select: none;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* =========================
+スマホ用 ナビゲーション
+========================= */
+
+/* メニューアイコン */
+.menu-icon {
+display: none;
+cursor: pointer;
+z-index: 1100;
+}
+
+/* モバイルナビ本体 */
+.mobile-nav {
+position: fixed;
+top: 0;
+right: -280px;          /* 初期は画面外 */
+width: 280px;
+height: 100vh;
+background: #111;
+transition: right 0.3s ease;
+padding-top: 80px;
+z-index: 1000;
+}
+
+.mobile-nav ul {
+list-style: none;
+padding: 0;
+margin: 0;
+}
+
+.mobile-nav li {
+margin: 20px;
+}
+
+.mobile-nav a {
+display: flex;
+align-items: center;
+gap: 10px;
+color: #fff;
+text-decoration: none;
+font-size: 1rem;
+}
+
+.mobile-nav span {
+color: #aaa;
+margin: 10px 20px 0;
+font-size: 0.9rem;
+}
+
+/* 表示状態 */
+.mobile-nav.active {
+right: 0;
+}
+
+
+
+
+
+
+
+
+
+
+
 
 /* ====================================
     スマホ表示（600px以下）
-   ==================================== */
+==================================== */
 @media screen and (max-width: 600px) {
+        .PC-nav,
+    .dropdown {
+        display: none;
+    }
+
+    .user-container.active .logo {
+        align-items: center;
+        justify-content: center;
+        
+        /* 楕円を作る設定 */
+        width: 160px;          /* 横幅 */
+        height: 80px;         /* 縦幅（横より短くすることで楕円に） */
+        background-color: white !important;
+        border-radius: 50px / 50px; /* 横の半径 / 縦の半径 で綺麗な楕円に */
+        
+        /* 装飾 */
+        margin: 0 auto 10px;   /* 下のメニューとの間隔 */
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2); /* 少し浮かせる */
+        padding: 10px;
+        overflow: hidden;
+    }
+
+    /* 中の画像が楕円からはみ出ないように */
+    .user-container.active .logo_img {
+        max-width: 60%;
+        max-height: 80%;
+        object-fit: contain;
+    }
+
+        .menu-icon {
+        display: block; /* スマホで出現 */
+        position: absolute;
+        left: 15px;
+        top: 15px;
+        z-index: 1001; /* メニューより上に表示 */
+        /* background: #fff; */
+        border-radius: 50%;
+        padding: 5px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
 
     .user-top-logo {
         display: none !important;
@@ -1393,54 +1765,144 @@ select:disabled {
         display: none !important;
     }
 
-.top-carousel-container {
-    padding: 20px 0 40px; /* 下側にドット（ページネーション）用の余白を確保 */
-    background: transparent;
-}
-
-/* --- カードのデザイン（高級感アップ） --- */
-.castle-card {
-    background: #fff;
-    border-radius: 15px;
-    border: none; /* 太い線はやめて、薄い影で立体感を出す */
-    box-shadow: 0 10px 25px rgba(0,0,0,0.08); /* 柔らかく深い影 */
-    transition: all 0.3s ease;
-    height: auto;
-}
-
-/* --- 画像エリア --- */
-.card-image {
-    height: 200px;
-    border-radius: 15px 15px 0 0; /* 上側だけ丸く */
-    position: relative;
-    overflow: hidden;
-}
-
-
-/* --- テキストエリア --- */
-.card-body {
-    padding: 20px 15px;
-}
-
-.castle-title {
-    font-family: "Yu Mincho", serif; /* お城なので明朝体で高級感を */
-    font-size: 1.2rem;
-    color: #1e2a4a; /* 落ち着いた藍色 */
-    margin-bottom: 10px;
-}
-
-.castle-ex {
-    color: #666;
-    line-height: 1.6;
-    min-height: 3.2em; /* 2行分の高さを常に確保してガタつき防止 */
-}
-
-
-
-    
-    .swiper-button-prev, .swiper-button-next {
-        display: none;  
+    /* ナビゲーションを全画面メニュー化 */
+    .nav, .dropdown {
+        display: none; /* 初期状態は隠す */
     }
-}   
 
+    /* メニューが開いた時のスタイル */
+    .user-container.active {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.98);/* ほぼ真っ白な背景 */
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .user-container.active .nav,
+    .user-container.active .dropdown {
+        display: block;
+        width: 100%;
+        text-align: center;
+    }
+
+    .user-container.active .nav li {
+        margin: 20px 0;
+    }
+
+    .user-container.active .nav li a {
+        font-size: 1.5rem;
+        flex-direction: column; /* アイコンと文字を縦並びに */
+    }
+
+
+        .mobile-nav {
+    position: fixed;
+    top: 0;
+    right: -280px;          /* 初期は画面外 */
+    width: 280px;
+    height: 100vh;
+    background: #1e2a4a; /* 背景色を設定 */
+    background-image: url('https://www.transparenttextures.com/patterns/handmade-paper.png'); /* 非常に薄い和紙風テクスチャ */;
+    transition: right 0.3s ease;
+    padding-top: 80px;
+    z-index: 1000;
+    }
+
+
+
+    .top-carousel-container {
+        padding: 20px 0 40px; /* 下側にドット（ページネーション）用の余白を確保 */
+        background: transparent;
+    }
+
+    /* --- カードのデザイン（高級感アップ） --- */
+    .castle-card {
+        background: #fff;
+        border-radius: 15px;
+        border: none; /* 太い線はやめて、薄い影で立体感を出す */
+        box-shadow: 0 10px 25px rgba(0,0,0,0.08); /* 柔らかく深い影 */
+        transition: all 0.3s ease;
+        height: auto;
+    }
+
+    /* --- 画像エリア --- */
+    .card-image {
+        height: 200px;
+        border-radius: 15px 15px 0 0; /* 上側だけ丸く */
+        position: relative;
+        overflow: hidden;
+    }
+
+
+    /* --- テキストエリア --- */
+    .card-body {
+        padding: 20px 15px;
+    }
+
+    .castle-title {
+        font-family: "Yu Mincho", serif; /* お城なので明朝体で高級感を */
+        font-size: 1.2rem;
+        color: #1e2a4a; /* 落ち着いた藍色 */
+        margin-bottom: 10px;
+    }
+
+    .castle-ex {
+        color: #666;
+        line-height: 1.6;
+        min-height: 3.2em; /* 2行分の高さを常に確保してガタつき防止 */
+    }
+
+
+    .stamp-book-container {
+        padding: 10px;
+    }
+
+    /* 矢印を上下に配置してスタンプの横幅を確保 */
+    .stamp-main-area {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    /* 矢印を横長にして押しやすく */
+    .nav-arrow {
+        width: 100%;
+        height: 45px;
+        font-size: 24px;
+    }
+
+    /* ★ここがポイント：スマホ時は2x2のグリッドにする */
+    .stamp-grid {
+        grid-template-columns: repeat(2, 1fr); /* 横に2つ */
+        grid-template-rows: repeat(2, 180px);  /* 縦に2つ (高さ180px) */
+        gap: 12px;
+        width: 100%;
+        flex-grow: 0; /* 余計な広がりを抑える */
+    }
+
+    /* スタンプ内の画像サイズ調整 */
+    .stamp-box {
+        padding: 8px;
+    }
+    .castle-name {
+        font-size: 13px;
+    }
+    .stamp-image-wrap img {
+        max-height: 90px;
+    }
+
+    /* 登録ボタンの幅調整 */
+    .btn-get-stamp {
+        padding: 15px 0;
+        width: 100%;
+    }
+
+
+}   
 
