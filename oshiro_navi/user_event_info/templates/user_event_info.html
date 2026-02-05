@@ -4,62 +4,226 @@
 {% block title %}イベントカレンダー{% endblock %}
 
 {% block content %}
-<div class="mypage-container">
+<div class="calendar-container">
     
-    <div class="calendar-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-        <a href="?year={{ prev_year }}&month={{ prev_month }}" 
-           style="text-decoration: none; background: #eee; padding: 10px 20px; border-radius: 5px; color: #333; font-weight: bold;">
-           &lt; 前の月
+    <div class="calendar-header">
+        <a href="?year={{ prev_year }}&month={{ prev_month }}" class="btn-month-nav">
+            &lt; <span>前の月</span>
         </a>
         
-        <h1 class="page-title" style="margin: 0;">{{ year }}年 {{ month }}月</h1>
+        <h1 class="calendar-current-title">{{ year }}年 {{ month }}月</h1>
         
-        <a href="?year={{ next_year }}&month={{ next_month }}" 
-           style="text-decoration: none; background: #eee; padding: 10px 20px; border-radius: 5px; color: #333; font-weight: bold;">
-           次の月 &gt;
+        <a href="?year={{ next_year }}&month={{ next_month }}" class="btn-month-nav">
+            <span>次の月</span> &gt;
         </a>
     </div>
 
-    <table class="calendar-table" style="width: 100%; border-collapse: collapse; background: #fff; table-layout: fixed;">
-        <thead>
-            <tr style="background: #fdf2f2;">
-                <th style="border: 1px solid #ddd; padding: 10px; color: red;">日</th>
-                <th style="border: 1px solid #ddd; padding: 10px;">月</th>
-                <th style="border: 1px solid #ddd; padding: 10px;">火</th>
-                <th style="border: 1px solid #ddd; padding: 10px;">水</th>
-                <th style="border: 1px solid #ddd; padding: 10px;">木</th>
-                <th style="border: 1px solid #ddd; padding: 10px;">金</th>
-                <th style="border: 1px solid #ddd; padding: 10px; color: blue;">土</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for week in month_days %}
-            <tr>
-                {% for day in week %}
-                <td style="border: 1px solid #ddd; height: 120px; vertical-align: top; padding: 5px;">
-                    {% if day != 0 %}
-                        <div style="font-weight: bold; margin-bottom: 5px;">{{ day }}</div>
-                        
-                        {% for d, items in event_dict.items %}
-                            {% if d == day %}
-                                {% for item in items %}
-                                <a href="{% url 'user_event_info:event_detail' item.event_type item.id %}" 
-                                   style="display: block; background: #d9534f; color: #fff; text-decoration: none; font-size: 11px; padding: 4px; margin-bottom: 3px; border-radius: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-                                    {% if item.event_type == 'admin' %} {% endif %}{{ item.event_info }}
-                                </a>
+    <div class="calendar-scroll-wrap">
+        <table class="calendar-table">
+            <thead>
+                <tr>
+                    <th class="sun">日</th>
+                    <th>月</th>
+                    <th>火</th>
+                    <th>水</th>
+                    <th>木</th>
+                    <th>金</th>
+                    <th class="sat">土</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for week in month_days %}
+                <tr>
+                    {% for day in week %}
+                    <td class="{% if day == 0 %}empty-day{% endif %}">
+                        {% if day != 0 %}
+                            <div class="day-number">{{ day }}</div>
+                            
+                            <div class="event-list-in-day">
+                                {% for d, items in event_dict.items %}
+                                    {% if d == day %}
+                                        {% for item in items %}
+                                        <a href="{% url 'user_event_info:event_detail' item.event_type item.id %}" 
+                                        class="calendar-event-link 
+                                                {% if item.start_date.day == day %}event-start{% endif %}
+                                                {% if item.end_date.day == day %}event-end{% endif %}
+                                                {% if item.start_date.day < day and item.end_date.day > day %}event-middle{% endif %}">
+                                            {{ item.event_info }}
+                                        </a>
+                                        {% endfor %}
+                                    {% endif %}
                                 {% endfor %}
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                </td>
+                            </div>
+                        {% endif %}
+                    </td>
+                    {% endfor %}
+                </tr>
                 {% endfor %}
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-
-    <div class="button-group" style="margin-top: 25px;">
-        <a href="{% url 'usermy_page:mypage' %}" class="btn-cancel">マイページに戻る</a>
+            </tbody>
+        </table>
     </div>
+
 </div>
+
+<style>
+    /* --- カレンダー全体のコンテナ --- */
+.calendar-container {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 0 10px;
+}
+
+/* --- 月の切り替えヘッダー --- */
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    background: #fff;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.calendar-current-title {
+    margin: 0;
+    font-size: 1.4rem;
+    font-family: "Yuji Syuku", serif;
+    color: #1e2a4a;
+}
+
+.btn-month-nav {
+    text-decoration: none;
+    background: #f8f9fa;
+    padding: 8px 15px;
+    border-radius: 5px;
+    color: #666;
+    font-size: 0.9rem;
+    border: 1px solid #eee;
+    transition: 0.3s;
+}
+
+.btn-month-nav:hover {
+    background: #d4af37;
+    color: #fff;
+}
+
+/* --- カレンダーテーブル --- */
+.calendar-scroll-wrap {
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+.calendar-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.calendar-table th {
+    padding: 12px 0;
+    background: #fdfcf0; /* 和紙風の薄い黄色 */
+    border: 1px solid #eee;
+    font-size: 0.9rem;
+}
+
+.calendar-table th.sun { color: #d9534f; }
+.calendar-table th.sat { color: #382dd1; }
+
+.calendar-table td {
+    height: 100px;
+    vertical-align: top;
+    padding: 5px;
+    border: 1px solid #eee;
+    transition: background 0.2s;
+}
+
+.calendar-table td:hover {
+    background: #fffdf5;
+}
+
+.day-number {
+    font-weight: bold;
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+    color: #444;
+}
+
+/* --- カレンダー内のイベントラベル --- */
+.calendar-event-link {
+    display: block;
+    background: #d4af37; /* 会津ゴールド */
+    color: #fff;
+    text-decoration: none;
+    font-size: 10px;
+    padding: 3px 5px;
+    margin-bottom: 2px;
+    position: relative;
+    z-index: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 開始日の角丸（左側だけ丸める） */
+.event-start {
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    margin-left: 2px;
+}
+
+/* 最終日の角丸（右側だけ丸める） */
+.event-end {
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    margin-right: 2px;
+}
+
+/* 中間の日は角丸をなくし、左右の隙間を埋める */
+.event-middle {
+    border-radius: 0;
+    margin-left: -6px;  /* セルのpadding分外に出す */
+    margin-right: -6px; /* セルのpadding分外に出す */
+    width: calc(100% + 12px); /* 幅を広げて隣のセルと密着させる */
+    z-index: 0;
+}
+
+/* 中間の日は文字を透明にする（または表示しない）と、一本の線に見えます */
+.event-middle {
+    color: transparent; 
+}
+
+.calendar-event-link:hover {
+    opacity: 0.8;
+}
+
+/* --- スマホ表示（600px以下） --- */
+@media screen and (max-width: 600px) {
+    .calendar-container { margin: 10px 0; }
+    
+    .calendar-header {
+        padding: 10px;
+        border-radius: 0;
+    }
+
+    .calendar-current-title { font-size: 1.1rem; }
+    
+    .btn-month-nav span { display: none; } /* スマホでは「前の月」などの文字を隠して矢印のみに */
+
+    .calendar-table td {
+        height: 70px; /* スマホでは高さを抑える */
+        padding: 2px;
+    }
+
+    .day-number { font-size: 0.8rem; }
+
+    /* スマホでイベントが多いと見づらいため、高さを自動調節 */
+    .calendar-event-link {
+        font-size: 9px;
+        padding: 2px;
+    }
+}
+</style>
 {% endblock %}

@@ -4,58 +4,117 @@
 {% block title %}{{ oshiro.oshiro_name }} - お城情報{% endblock %}
 
 {% block content %}
-<div class="container" style="max-width: 800px; margin: 30px auto; background: #fff; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+<style>
+    /* --- ベースコンテナ --- */
+.oshiro-info-container {
+    max-width: 800px;
+    margin: 30px auto;
+    background: #fff;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+.oshiro-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.oshiro-table th {
+    width: 130px;
+    text-align: left;
+    vertical-align: top;
+    color: #8b7d3a; /* 金茶色 */
+    font-weight: bold;
+    padding: 20px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.oshiro-table td {
+    padding: 20px 0 20px 20px;
+    color: #333;
+    border-bottom: 1px solid #f0f0f0;
+    line-height: 1.6;
+}
+
+.back-nav {
+    margin-top: 40px;
+    text-align: center;
+}
+
+.btn-back {
+    color: #999;
+    text-decoration: none;
+    font-size: 0.9em;
+    border: 1px solid #eee;
+    padding: 8px 20px;
+    border-radius: 20px;
+}
+
+/* ====================================
+    スマホ最適化（600px以下）
+==================================== */
+@media screen and (max-width: 600px) {
+    .oshiro-info-container {
+        margin: 0;
+        width: 100%;
+        border-radius: 0;
+    }
+
+    .info-content { padding: 20px 15px; }
+
+    /* 表のパディングを詰める */
+    .oshiro-table th {
+        width: 80px;
+        font-size: 0.85rem;
+        padding: 15px 0;
+    }
+    .oshiro-table td {
+        padding: 15px 0 15px 10px;
+        font-size: 0.9rem;
+    }
+}
+</style>
+<div class="oshiro-info-container">
     
-    <div class="oshiro-image-header" style="width: 100%; height: 350px; overflow: hidden; position: relative; background: #eee;">
-        {% if oshiro.info.oshiro_images %}
-            <img src="{{ oshiro.info.oshiro_images.url }}" alt="{{ oshiro.oshiro_name }}" style="width: 100%; height: 100%; object-fit: cover;">
-        {% elif oshiro.oshiro_images %}
-            <img src="{{ oshiro.oshiro_images.url }}" alt="{{ oshiro.oshiro_name }}" style="width: 100%; height: 100%; object-fit: cover;">
+    <div class="oshiro-image-header">
+        {% if oshiro.info.oshiro_images or oshiro.oshiro_images %}
+            <img src="{% if oshiro.info.oshiro_images %}{{ oshiro.info.oshiro_images.url }}{% else %}{{ oshiro.oshiro_images.url }}{% endif %}" alt="{{ oshiro.oshiro_name }}">
         {% else %}
-            <div style="text-align: center; padding-top: 150px; color: #aaa;">No Image Available</div>
+            <div class="no-image-msg">No Image Available</div>
         {% endif %}
         
-        <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.7)); padding: 40px 20px 20px;">
-            <h1 style="color: white; margin: 0; font-size: 2em; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">{{ oshiro.oshiro_name }}</h1>
+        <div class="header-overlay">
+            <h1>{{ oshiro.oshiro_name }}</h1>
         </div>
     </div>
 
-    <div class="info-tabs" style="display: flex; border-bottom: 2px solid #eee; background: #fdfdfd;">
-        <a href="{% url 'usermy_list:oshiroinfo' oshiro.id %}" class="tab-item" style="flex: 1; text-align: center; padding: 15px; text-decoration: none; color: #d9534f; border-bottom: 3px solid #d9534f; font-weight: bold;">お城情報</a>
-        <a href="{% url 'usermy_list:oshirobasicinfo' oshiro.id %}" class="tab-item" style="flex: 1; text-align: center; padding: 15px; text-decoration: none; color: #888; font-weight: bold;">基本情報</a>
-        <a href="{% url 'usermy_list:oshiroreview' oshiro.id %}" class="tab-item" style="flex: 1; text-align: center; padding: 15px; text-decoration: none; color: #888; font-weight: bold;">口コミ</a>
-        <a href="{% url 'usermy_list:oshiromap' oshiro.id %}" class="tab-item" style="flex: 1; text-align: center; padding: 15px; text-decoration: none; color: #888; font-weight: bold;">周辺MAP</a>
-
+    <div class="info-tabs">
+        <a href="{% url 'usermy_list:oshiroinfo' oshiro.id %}" class="tab-item active">お城情報</a>
+        <a href="{% url 'usermy_list:oshirobasicinfo' oshiro.id %}" class="tab-item">基本情報</a>
+        <a href="{% url 'usermy_list:oshiroreview' oshiro.id %}" class="tab-item">口コミ</a>
+        <a href="{% url 'usermy_list:oshiromap' oshiro.id %}" class="tab-item">周辺MAP</a>
     </div>
 
-    <div class="info-content" style="padding: 40px 50px;">
-        <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
+    <div class="info-content">
+        <table class="oshiro-table">
             <tr>
-                <th style="width: 150px; text-align: left; vertical-align: top; color: #888; font-weight: normal; padding: 15px 0; border-bottom: 1px solid #f0f0f0;">住所</th>
-                <td style="padding: 15px 0 15px 20px; color: #333; border-bottom: 1px solid #f0f0f0;">{{ oshiro.address }}</td>
+                <th>住所</th>
+                <td>{{ oshiro.address }}</td>
             </tr>
             <tr>
-                <th style="width: 150px; text-align: left; vertical-align: top; color: #888; font-weight: normal; padding: 15px 0; border-bottom: 1px solid #f0f0f0;">築城年</th>
-                <td style="padding: 15px 0 15px 20px; color: #333; border-bottom: 1px solid #f0f0f0;">{{ oshiro.built_year }}年</td>
+                <th>築城年</th>
+                <td>{{ oshiro.built_year }}年</td>
             </tr>
             <tr>
-                <th style="width: 150px; text-align: left; vertical-align: top; color: #888; font-weight: normal; padding: 15px 0; border-bottom: 1px solid #f0f0f0;">遺構</th>
-                <td style="padding: 15px 0 15px 20px; color: #333; border-bottom: 1px solid #f0f0f0;">{{ oshiro.ruins|default:"なし" }}</td>
+                <th>遺構</th>
+                <td>{{ oshiro.ruins|default:"なし" }}</td>
             </tr>
             <tr>
-                <th style="width: 150px; text-align: left; vertical-align: top; color: #888; font-weight: normal; padding: 15px 0; border-bottom: 1px solid #f0f0f0;">構造</th>
-                <td style="padding: 15px 0 15px 20px; color: #333; border-bottom: 1px solid #f0f0f0;">{{ oshiro.structure|linebreaksbr }}</td>
+                <th>構造</th>
+                <td>{{ oshiro.structure|linebreaksbr }}</td>
             </tr>
         </table>
-        
-        <div style="margin-top: 40px; text-align: center;">
-            <a href="{% url 'usermy_list:oshiroinfo' oshiro.id %}" style="color: #999; text-decoration: none; font-size: 0.9em; border: 1px solid #eee; padding: 8px 20px; border-radius: 20px;">← 戻る</a>
-        </div>
     </div>
 </div>
-
-<style>
-    .tab-item { transition: 0.3s; }
-    .tab-item:hover { background: #fff5f5; color: #d9534f !important; }
-</style>
 {% endblock %}

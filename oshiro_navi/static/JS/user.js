@@ -64,47 +64,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-document.addEventListener("DOMContentLoaded", () => {
-    const openMenu = document.getElementById("openMenu");
-    const closeMenu = document.getElementById("closeMenu");
-    const sideMenu = document.getElementById("sideMenu");
-    const overlay = document.getElementById("overlay");
-
-    const mobileSwitchBtn = document.getElementById("mobileSwitchBtn");
-    const container = document.getElementById("container"); // ← 追加！
-
-    // --- ハンバーガーメニュー（スマホ） ---
-    if (openMenu && sideMenu && overlay) {
-        openMenu.addEventListener("click", (e) => {
-            if (window.innerWidth <= 600) {
-                e.preventDefault();
-                sideMenu.classList.add("active");
-                overlay.classList.add("active");
-            }
-        });
-    }
-
-    // 閉じる処理を関数化
-    const closeSideMenu = () => {
-        sideMenu.classList.remove("active");
-        overlay.classList.remove("active");
-    };
-
-    closeMenu?.addEventListener("click", closeSideMenu);
-    overlay?.addEventListener("click", closeSideMenu);
-
-    // --- ログイン / 新規登録 切り替え（スマホ） ---
-    if (mobileSwitchBtn && container) {
-        mobileSwitchBtn.addEventListener("click", () => {
-            container.classList.toggle("right-panel-active");
-
-            mobileSwitchBtn.textContent =
-                container.classList.contains("right-panel-active")
-                    ? "ログインに戻る"
-                    : "新規登録はこちら";
-        });
-    }
-});
 
 document.addEventListener('DOMContentLoaded', function() {
     const menuToggle = document.getElementById('menu-toggle');
@@ -146,3 +105,43 @@ const toggleBtn = document.getElementById("menu-toggle");
         iconText.textContent = "menu";
     }
     });
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    const container = document.getElementById("container");
+
+    const signupBtn = document.getElementById("signup");   // PC用
+    const loginBtn  = document.getElementById("login");    // PC用
+
+    const mobileSwitchBtn = document.getElementById("mobileSwitchBtn");
+
+    // ===== PC用切り替え =====
+    if (signupBtn) {
+        signupBtn.addEventListener("click", () => {
+            container.classList.add("right-panel-active");
+        });
+    }
+
+    if (loginBtn) {
+        loginBtn.addEventListener("click", () => {
+            container.classList.remove("right-panel-active");
+        });
+    }
+
+    // ===== スマホ用切り替え =====
+    if (mobileSwitchBtn) {
+        mobileSwitchBtn.addEventListener("click", () => {
+            const isSignup = container.classList.contains("right-panel-active");
+
+            if (isSignup) {
+                // サインアップ → ログイン
+                container.classList.remove("right-panel-active");
+                mobileSwitchBtn.textContent = "新規登録はこちら";
+            } else {
+                // ログイン → サインアップ
+                container.classList.add("right-panel-active");
+                mobileSwitchBtn.textContent = "ログインはこちら";
+            }
+        });
+    }
+});

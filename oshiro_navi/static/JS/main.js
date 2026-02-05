@@ -83,3 +83,38 @@ window.onload = function() {
         login();
     });
 };
+
+document.addEventListener("DOMContentLoaded", () => {
+    const container = document.getElementById("container");
+
+    const signupBtn = document.getElementById("signup");       // PC
+    const loginBtn  = document.getElementById("login");        // PC
+    const mobileBtn = document.getElementById("mobileSwitchBtn"); // スマホ
+
+    // サインアップ表示
+    const showSignup = () => {
+        container.classList.add("mobile-signup-active");
+        if (mobileBtn) mobileBtn.textContent = "ログインはこちら";
+    };
+
+    // ログイン表示
+    const showLogin = () => {
+        container.classList.remove("mobile-signup-active");
+        if (mobileBtn) mobileBtn.textContent = "新規登録はこちら";
+    };
+
+    // PC用
+    if (signupBtn) signupBtn.addEventListener("click", showSignup);
+    if (loginBtn)  loginBtn.addEventListener("click", showLogin);
+
+    // スマホ用（トグル）
+    if (mobileBtn) {
+        mobileBtn.addEventListener("click", () => {
+            container.classList.contains("mobile-signup-active")
+                ? showLogin()
+                : showSignup();
+        });
+    }
+});
+
+

@@ -5,6 +5,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
 from event_info_management.models import OperatorEvent, AdminEvent
 
+from datetime import date, timedelta, datetime
+
 class EventCalendarView(LoginRequiredMixin, TemplateView):
     template_name = "user_event_info.html"
 
@@ -17,36 +19,52 @@ class EventCalendarView(LoginRequiredMixin, TemplateView):
         cal = calendar.Calendar(firstweekday=6)
         month_days = cal.monthdayscalendar(year, month)
 
-        first_day_of_month = date(year, month, 1)
-        prev_month_date = first_day_of_month - timedelta(days=1)
-        next_month_date = (first_day_of_month + timedelta(days=32)).replace(day=1)
+        # 表示月の範囲（開始日と終了日）を取得
+        first_day = date(year, month, 1)
+        # 次の月の1日の前日が今月の末日
+        if month == 12:
+            last_day = date(year, month, 31)
+        else:
+            last_day = date(year, month + 1, 1) - timedelta(days=1)
 
-        # 1. 両方のモデルからイベントを取得する
+        # 1. 期間が今月にかかっているイベントをすべて取得
+        # (開始日が今月末以前) かつ (終了日が今月初日以降)
         admin_events = AdminEvent.objects.filter(
             public_settings=True,
-            start_date__year=year,
-            start_date__month=month
+            start_date__lte=last_day,
+            end_date__gte=first_day
         )
         operator_events = OperatorEvent.objects.filter(
             public_settings=True,
-            start_date__year=year,
-            start_date__month=month
+            start_date__lte=last_day,
+            end_date__gte=first_day
         )
 
-        # 2. 辞書にまとめる（どちらのイベントか判別できるように属性を追加）
         event_dict = {}
 
-        # 管理者イベントの処理
-        for event in admin_events:
-            event.event_type = 'admin' # テンプレートでURLを分けるために使う
-            day = event.start_date.day
-            event_dict.setdefault(day, []).append(event)
+        # 共通の処理用関数
+        def add_events_to_dict(events, e_type):
+            for event in events:
+                event.event_type = e_type
+                
+                # イベントの期間中、今月に含まれる日をすべてループ
+                curr_date = max(event.start_date, first_day)
+                end_limit = min(event.end_date, last_day)
+                
+                while curr_date <= end_limit:
+                    d = curr_date.day
+                    # テンプレート判定用に開始/終了フラグを持たせる
+                    # ※ これによりCSSで線を繋げられるようになります
+                    event_copy = event # 同一インスタンスに属性をつけると上書きされるため注意
+                    event_dict.setdefault(d, []).append(event)
+                    curr_date += timedelta(days=1)
 
-        # 運営イベントの処理
-        for event in operator_events:
-            event.event_type = 'operator' # テンプレートでURLを分けるために使う
-            day = event.start_date.day
-            event_dict.setdefault(day, []).append(event)
+        add_events_to_dict(admin_events, 'admin')
+        add_events_to_dict(operator_events, 'operator')
+
+        # 前後の月計算
+        prev_month_date = first_day - timedelta(days=1)
+        next_month_date = last_day + timedelta(days=1)
 
         context.update({
             'month_days': month_days,
@@ -59,7 +77,6 @@ class EventCalendarView(LoginRequiredMixin, TemplateView):
             'next_month': next_month_date.month,
         })
         return context
-
 class EventDetailView(LoginRequiredMixin, DetailView):
     template_name = "user_event_detail.html"
     context_object_name = "event"

@@ -4,87 +4,272 @@
 {% block title %}{{ oshiro.oshiro_name }} - 基本情報{% endblock %}
 
 {% block content %}
-<div class="container" style="max-width: 800px; margin: 30px auto; background: #fff; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+<div class="basic-info-container">
     
-    <div class="oshiro-image-header" style="width: 100%; height: 350px; overflow: hidden; position: relative; background: #eee;">
-        {% if oshiro.info.oshiro_images %}
-            <img src="{{ oshiro.info.oshiro_images.url }}" alt="{{ oshiro.oshiro_name }}" style="width: 100%; height: 100%; object-fit: cover;">
-        {% elif oshiro.oshiro_images %}
-            <img src="{{ oshiro.oshiro_images.url }}" alt="{{ oshiro.oshiro_name }}" style="width: 100%; height: 100%; object-fit: cover;">
+    <div class="oshiro-image-header">
+        {% if oshiro.info.oshiro_images or oshiro.oshiro_images %}
+            <img src="{% if oshiro.info.oshiro_images %}{{ oshiro.info.oshiro_images.url }}{% else %}{{ oshiro.oshiro_images.url }}{% endif %}" alt="{{ oshiro.oshiro_name }}">
         {% else %}
-            <div style="text-align: center; padding-top: 150px; color: #aaa;">No Image Available</div>
+             <div class="no-image-placeholder">No Image Available</div>
         {% endif %}
         
-        <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.7)); padding: 40px 20px 20px;">
-            <h1 style="color: white; margin: 0; font-size: 2em; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">{{ oshiro.oshiro_name }}</h1>
+        <div class="header-overlay">
+            <h1>{{ oshiro.oshiro_name }}</h1>
         </div>
     </div>
 
-    <div class="info-tabs" style="display: flex; border-bottom: 2px solid #eee; background: #fdfdfd;">
-        <a href="{% url 'usermy_list:oshiroinfo' oshiro.id %}" class="tab-item" style="flex: 1; text-align: center; padding: 15px; text-decoration: none; color: #888; font-weight: bold;">お城情報</a>
-        <a href="{% url 'usermy_list:oshirobasicinfo' oshiro.id %}" class="tab-item" style="flex: 1; text-align: center; padding: 15px; text-decoration: none; color: #d9534f; border-bottom: 3px solid #d9534f; font-weight: bold;">基本情報</a>
-        <a href="{% url 'usermy_list:oshiroreview' oshiro.id %}" class="tab-item" style="flex: 1; text-align: center; padding: 15px; text-decoration: none; color: #888; font-weight: bold;">口コミ</a>
-        <a href="{% url 'usermy_list:oshiromap' oshiro.id %}" class="tab-item" style="flex: 1; text-align: center; padding: 15px; text-decoration: none; color: #888; font-weight: bold;">周辺MAP</a>
+    <div class="info-tabs">
+        <a href="{% url 'usermy_list:oshiroinfo' oshiro.id %}" class="tab-item">お城情報</a>
+        <a href="{% url 'usermy_list:oshirobasicinfo' oshiro.id %}" class="tab-item active">基本情報</a>
+        <a href="{% url 'usermy_list:oshiroreview' oshiro.id %}" class="tab-item">口コミ</a>
+        <a href="{% url 'usermy_list:oshiromap' oshiro.id %}" class="tab-item">周辺MAP</a>
     </div>
 
-    <div class="info-content" style="padding: 40px 50px;">
+    <div class="info-content">
         {% with basic=oshiro.basicinfo %}
         {% if basic %}
-            <h2 style="font-size: 1.2em; border-left: 5px solid #d9534f; padding-left: 10px; margin-bottom: 20px; color: #333;">施設案内</h2>
-            <table style="width: 100%; border-collapse: collapse; table-layout: fixed; margin-bottom: 40px;">
-                <tr>
-                    <th style="width: 150px; text-align: left; vertical-align: top; color: #888; font-weight: normal; padding: 15px 0; border-bottom: 1px solid #f0f0f0;">入場料</th>
-                    <td style="padding: 15px 0 15px 20px; color: #333; border-bottom: 1px solid #f0f0f0;">{{ basic.admission }} 円</td>
-                </tr>
-                <tr>
-                    <th style="width: 150px; text-align: left; vertical-align: top; color: #888; font-weight: normal; padding: 15px 0; border-bottom: 1px solid #f0f0f0;">営業時間</th>
-                    <td style="padding: 15px 0 15px 20px; color: #333; border-bottom: 1px solid #f0f0f0;">{{ basic.business_opening_hours|time:"H:i" }} ～ {{ basic.business_closing_hours|time:"H:i" }}</td>
-                </tr>
-                <tr>
-                    <th style="width: 150px; text-align: left; vertical-align: top; color: #888; font-weight: normal; padding: 15px 0; border-bottom: 1px solid #f0f0f0;">アクセス</th>
-                    <td style="padding: 15px 0 15px 20px; color: #333; border-bottom: 1px solid #f0f0f0;">{{ basic.access_info|linebreaksbr }}</td>
-                </tr>
-            </table>
+            
+            <h2 class="wafu-sub-title">施設案内</h2>
+            <div class="table-wrapper">
+                <table class="facility-table">
+                    <tr>
+                        <th>入場料</th>
+                        <td class="price-text">{{ basic.admission }} <span>円</span></td>
+                    </tr>
+                    <tr>
+                        <th>営業時間</th>
+                        <td>{{ basic.business_opening_hours|time:"H:i" }} ～ {{ basic.business_closing_hours|time:"H:i" }}</td>
+                    </tr>
+                    <tr>
+                        <th>アクセス</th>
+                        <td>{{ basic.access_info|linebreaksbr }}</td>
+                    </tr>
+                </table>
+            </div>
 
-            <h2 style="font-size: 1.2em; border-left: 5px solid #d9534f; padding-left: 10px; margin-bottom: 20px; color: #333;">見どころ</h2>
-            <div style="margin-bottom: 40px;">
+            <h2 class="wafu-sub-title">見どころ</h2>
+            <div class="highlights-section">
                 {% if basic.highlights_img %}
-                <div style="margin-bottom: 20px; text-align: center;">
-                    <img src="{{ basic.highlights_img.url }}" style="max-width: 100%; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                <div class="highlights-image-wrap">
+                    <img src="{{ basic.highlights_img.url }}" alt="見どころ写真">
                 </div>
                 {% endif %}
-                <div style="color: #444; line-height: 1.8; padding: 0 5px;">
+                <div class="highlights-text">
                     {{ basic.highlights|linebreaksbr }}
                 </div>
             </div>
 
             {% if basic.gojoin_stamp or basic.gojoin %}
-            <h2 style="font-size: 1.2em; border-left: 5px solid #d9534f; padding-left: 10px; margin-bottom: 20px; color: #333;">御城印</h2>
-            <div style="display: flex; gap: 25px; align-items: flex-start; background: #fafafa; padding: 25px; border-radius: 10px; border: 1px solid #eee;">
+            <h2 class="wafu-sub-title">御城印</h2>
+            <div class="gojoin-box">
                 {% if basic.gojoin_stamp %}
-                    <img src="{{ basic.gojoin_stamp.url }}" style="width: 160px; height: auto; border-radius: 5px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); flex-shrink: 0;">
+                    <div class="gojoin-stamp-img">
+                        <img src="{{ basic.gojoin_stamp.url }}" alt="御城印サンプル">
+                    </div>
                 {% endif %}
-                <div style="color: #444; line-height: 1.6; margin: 0; flex-grow: 1;">
+                <div class="gojoin-info-text">
                     {{ basic.gojoin|linebreaksbr|default:"御城印に関する情報はありません。" }}
                 </div>
             </div>
             {% endif %}
 
         {% else %}
-            <div style="text-align: center; padding: 80px 0; color: #bbb;">
+            <div class="no-data-msg">
                 <p>基本情報がまだ登録されていません。</p>
             </div>
         {% endif %}
         {% endwith %}
 
-        <div style="margin-top: 50px; text-align: center;">
-            <a href="{% url 'usermy_list:oshirobasicinfo' oshiro.id %}" style="color: #999; text-decoration: none; font-size: 0.9em; border: 1px solid #eee; padding: 8px 25px; border-radius: 20px; transition: 0.3s;">← 戻る</a>
-        </div>
     </div>
 </div>
 
 <style>
-    .tab-item { transition: 0.3s; }
-    .tab-item:hover { background: #fff5f5; color: #d9534f !important; }
+    /* --- ベースコンテナ --- */
+.basic-info-container {
+    max-width: 800px;
+    margin: 30px auto;
+    background: #fff;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+.wafu-sub-title {
+    font-size: 1.2em;
+    border-left: 5px solid #d4af37;
+    padding-left: 12px;
+    margin: 40px 0 20px;
+    color: #333;
+    font-family: "Yuji Syuku", serif;
+}
+
+.wafu-sub-title:first-of-type {
+    margin-top: 0;
+}
+
+/* --- 施設案内テーブル --- */
+.facility-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 40px;
+}
+
+.facility-table th {
+    width: 140px;
+    text-align: left;
+    vertical-align: top;
+    color: #888;
+    font-weight: normal;
+    padding: 15px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.facility-table td {
+    padding: 15px 0 15px 20px;
+    color: #333;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.price-text {
+    font-weight: bold;
+    color: #d4af37 !important;
+    font-size: 1.1em;
+}
+
+/* --- 見どころセクション --- */
+.highlights-image-wrap {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.highlights-image-wrap img {
+    max-width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.highlights-text {
+    color: #444;
+    line-height: 1.8;
+    letter-spacing: 0.02em;
+}
+
+/* --- 御城印ボックス --- */
+.gojoin-box {
+    display: flex;
+    gap: 25px;
+    align-items: flex-start;
+    background: #fafafa;
+    padding: 25px;
+    border-radius: 10px;
+    border: 1px solid #eee;
+}
+
+.gojoin-stamp-img img {
+    width: 140px;
+    height: auto;
+    border-radius: 5px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.gojoin-info-text {
+    color: #444;
+    line-height: 1.6;
+    flex: 1;
+}
+
+/* --- その他 --- */
+.no-data-msg {
+    text-align: center;
+    padding: 80px 0;
+    color: #bbb;
+}
+
+.back-nav {
+    margin-top: 50px;
+    text-align: center;
+}
+
+.btn-back {
+    color: #999;
+    text-decoration: none;
+    font-size: 0.9em;
+    border: 1px solid #eee;
+    padding: 8px 25px;
+    border-radius: 20px;
+}
+
+/* ====================================
+    スマホ最適化（600px以下）
+==================================== */
+@media screen and (max-width: 600px) {
+    .basic-info-container {
+        margin: 0;
+        width: 100%;
+        border-radius: 0;
+    }
+
+
+    .info-content { padding: 25px 15px; }
+
+    /* --- 見どころセクションをコンパクトに --- */
+    .highlights-section {
+        display: flex;
+        flex-direction: column; /* 縦並びを維持しつつ、要素を整理 */
+        gap: 12px;
+    }
+
+    .highlights-image-wrap {
+        margin-bottom: 0; /* 余計な隙間をカット */
+        width: 80%;
+        max-height: 180px; /* 画像の高さを制限して縦長を防止 */
+        overflow: hidden;
+        border-radius: 8px;
+    }
+
+    .highlights-image-wrap img {
+        width: 100%;
+        height: 180px;
+        object-fit: cover; /* 枠に合わせてトリミングし、伸びを防止 */
+    }
+
+    .highlights-text {
+        font-size: 0.9rem; /* 文字サイズを微調整 */
+        line-height: 1.6;
+        padding: 0 5px;
+    }
+
+    /* 2つ以上の見どころがある場合を想定して、セクションごとの間隔を調整 */
+    .highlights-section {
+        margin-bottom: 25px;
+        padding-bottom: 15px;
+        border-bottom: 1px dashed #eee; /* 区切り線を入れて見やすく */
+    }
+
+    .facility-table th { width: 90px; font-size: 0.85rem; }
+    /* --- 御城印エリアをさらにコンパクトに --- */
+    .gojoin-box {
+        flex-direction: row; /* 縦並びをやめて横並びに戻す（省スペース化） */
+        align-items: center;
+        padding: 12px;      /* 余白を半分に */
+        gap: 15px;          /* 画像と文字の間隔 */
+        text-align: left;   /* 左寄せに戻して視認性アップ */
+    }
+
+    .gojoin-stamp-img {
+        margin-bottom: 0;   /* 下の余白を消す */
+        flex: 0 0 80px;     /* 画像の横幅を80pxに固定（小さく！） */
+    }
+
+    .gojoin-stamp-img img {
+        width: 80px;        /* 画像サイズを小さく */
+        height: auto;
+    }
+
+    .gojoin-info-text {
+        font-size: 0.85rem; /* 文字を少し小さく */
+        line-height: 1.4;
+    }
+}
 </style>
 {% endblock %}

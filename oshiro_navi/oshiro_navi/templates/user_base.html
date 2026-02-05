@@ -45,10 +45,16 @@
         <nav class="mobile-nav" id="mobile-nav">
         <ul>
             <li>
-            <a style="background-color: white;" href="{% url 'user_accounts:top' %}" class="logo">
+            <a style="background-color: white;" href="{% url 'user_accounts:top' %}" class="nav-logo">
                 <img src="{% static 'image/top_logo.png' %}" alt="お城ナビロゴ" class="logo_img">
             </a>
             </li>
+            <li>
+            <a href="{% url 'user_accounts:top' %}">
+                <i class="material-symbols-outlined">home</i>
+                <span class="link_name">トップ</span>
+            </a>
+        </li>
             <li>
             <a href="{% url 'usermy_list:oshirolist' %}">
                 <i class="material-symbols-outlined">manage_search</i>
@@ -73,15 +79,25 @@
                 <span class="link_name">QRコード読み込み</span>
             </a>
         </li>
-        <span>マイページ</span>
-        <li><a href="{% url 'usermy_page:profile' %}">プロフィール</a></li>
-        <li><a href="{% url 'usermy_page:oshirostampregistar' %}">お城スタンプ</a></li>
-        <li><a href="{% url 'usermy_page:mylistregistar' %}">お城マイリスト</a></li>
-        <li><a href="{% url 'user_accounts:logout_check' %}">ログアウト</a></li>
+        <div class="nav-my-page">
+            <span class="my-page-text">マイページ</span>
+            <li><a href="{% url 'usermy_page:profile' %}">プロフィール</a></li>
+            <li><a href="{% url 'usermy_page:oshirostampregistar' %}">お城スタンプ</a></li>
+            <li><a href="{% url 'usermy_page:mylistregistar' %}">お城マイリスト</a></li>
+            <li><a href="{% url 'user_accounts:logout_check' %}">ログアウト</a></li>
+        </div>
         </ul>
         </nav>
 
+        <!-- PC -->
     <ul class="nav">
+        <li>
+            <a href="{% url 'user_accounts:top' %}">
+                <i class="material-symbols-outlined">home</i>
+                <span class="link_name">トップ</span>
+            </a>
+        </li>
+        
         <li>
             <a href="{% url 'usermy_list:oshirolist' %}">
                 <i class="material-symbols-outlined">manage_search</i>
@@ -140,11 +156,13 @@
     <div class="footer-inner">
 
         <div class="footer-section">
-            <h2 class="wafu-title">あなたと名城を、もっと近くに。</h2>
+            <h3 class="wafu-title">あなたと名城を、もっと近くに。</h3>
         </div>
+        
     </div>
     <p class="copyright">
         © お城ナビ 日本お城情報サイト
     </p>
+    
 </footer>
 </html>

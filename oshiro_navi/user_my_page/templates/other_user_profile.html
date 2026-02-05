@@ -1,46 +1,236 @@
 {% extends "user_base.html" %}
+{% load static %}
+
+{% block title %}{{ target_user.account.username }}さんのプロフィール{% endblock %}
+
 {% block content %}
-<div class="container" style="max-width: 800px; margin: 30px auto; font-family: 'Hiragino Kaku Gothic ProN', sans-serif;">
+<div class="profile-container">
     
-    <div style="background: white; border-radius: 15px; padding: 30px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
-        {% if target_user.profile_image %}
-            <img src="{{ target_user.profile_image.url }}" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 4px solid #f8f9fa;">
-        {% else %}
-            <div style="width: 120px; height: 120px; border-radius: 50%; background: #eee; line-height: 120px; margin: 0 auto; color: #ccc;">No Image</div>
-        {% endif %}
+    <div class="profile-header-card">
+        <div class="profile-avatar-wrap">
+            {% if target_user.profile_image %}
+                <img src="{{ target_user.profile_image.url }}" alt="avatar" class="profile-avatar">
+            {% else %}
+                <div class="profile-avatar-none">No Image</div>
+            {% endif %}
+        </div>
         
-        <h2 style="margin-top: 15px; color: #333;">{{ target_user.account.username }}</h2>
-        <p style="color: #666; font-size: 0.95em; line-height: 1.6; max-width: 500px; margin: 15px auto;">
+        <h2 class="profile-username">{{ target_user.account.username }}</h2>
+        <p class="profile-about">
             {{ target_user.user_about|default:"自己紹介はまだありません。" }}
         </p>
     </div>
 
-    <div style="margin-top: 30px;">
-        <h3 style="font-size: 1.1em; border-left: 5px solid #ffc107; padding-left: 10px; margin-bottom: 20px;">獲得したお城スタンプ ({{ stamps.count }})</h3>
-        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 15px;">
+    <div class="profile-section">
+        <h3 class="wafu-sub-title">獲得したお城スタンプ ({{ stamps.count }})</h3>
+        <div class="stamp-grid">
             {% for stamp in stamps %}
-                <div style="text-align: center; background: white; padding: 10px; border-radius: 10px;">
-                    <img src="{{ stamp.oshiro_stamp_info.oshiro_stamp_image.url }}" style="width: 60px; height: 60px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));">
-                    <p style="font-size: 0.7em; margin-top: 5px; color: #555;">{{ stamp.oshiro_stamp_info.stamp_name }}</p>
+                <div class="stamp-item">
+                    <img src="{{ stamp.oshiro_stamp_info.oshiro_stamp_image.url }}" class="stamp-img">
+                    <p class="stamp-name">{{ stamp.oshiro_stamp_info.stamp_name }}</p>
                 </div>
             {% empty %}
-                <p style="color: #999; font-size: 0.9em;">まだスタンプを持っていません。</p>
+                <p class="no-data-text">まだスタンプを持っていません。</p>
             {% endfor %}
         </div>
     </div>
 
-    <div style="margin-top: 30px; background: white; border-radius: 15px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
-        <h3 style="font-size: 1.1em; margin-bottom: 15px;">お気に入りのお城</h3>
-        <ul style="list-style: none; padding: 0;">
+    <div class="profile-section fav-section">
+        <h3 class="wafu-sub-title">お気に入りのお城</h3>
+        <ul class="fav-list">
             {% for item in my_list %}
-                <li style="padding: 12px 0; border-bottom: 1px solid #eee; display: flex; justify-content: space-between;">
-                    <span style="font-weight: bold; color: #444;">{{ item.oshiro_info.oshiro_name }}</span>
-                    <span style="font-size: 0.8em; color: #888;">📍 {{ item.oshiro_info.address }}</span>
+                <li class="fav-item">
+                    <span class="oshiro-name">{{ item.oshiro_info.oshiro_name }}</span>
+                    <span class="oshiro-address">📍 {{ item.oshiro_info.address }}</span>
                 </li>
             {% empty %}
-                <li style="color: #999; font-size: 0.9em;">登録しているお城はありません。</li>
+                <li class="no-data-text">登録しているお城はありません。</li>
             {% endfor %}
         </ul>
     </div>
+
+    <div class="back-nav">
+        <a href="javascript:history.back();" class="btn-back">← 戻る</a>
+    </div>
 </div>
+
+<style>
+    /* --- コンテナ設定 --- */
+.profile-container {
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 0; /* スマホ用 */
+    font-family: 'Hiragino Kaku Gothic ProN', sans-serif;
+}
+
+/* --- ヘッダーカード --- */
+.profile-header-card {
+    background: white;
+    border-radius: 15px;
+    padding: 40px 30px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    margin-bottom: 30px;
+}
+
+.profile-avatar-wrap {
+    margin-bottom: 15px;
+}
+
+.profile-avatar, .profile-avatar-none {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    margin: 0 auto;
+    border: 4px solid #fdfcf0; /* 和風クリーム色 */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.profile-avatar { object-fit: cover; }
+
+.profile-avatar-none {
+    background: #eee;
+    line-height: 120px;
+    color: #ccc;
+}
+
+.profile-username {
+    margin-top: 15px;
+    color: #333;
+    font-family: "Yuji Syuku", serif;
+    font-size: 1.5rem;
+}
+
+.profile-about {
+    color: #666;
+    font-size: 0.95em;
+    line-height: 1.6;
+    max-width: 500px;
+    margin: 15px auto 0;
+}
+
+/* --- セクション共通 --- */
+.profile-section {
+    margin-top: 30px;
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.wafu-sub-title {
+    font-size: 1.1em;
+    border-left: 5px solid #d4af37; /* 会津ゴールド */
+    padding-left: 12px;
+    margin-bottom: 25px;
+    color: #333;
+    font-family: "Yuji Syuku", serif;
+}
+
+/* --- スタンプグリッド（縦長回避） --- */
+.stamp-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 15px;
+}
+
+.stamp-item {
+    text-align: center;
+    background: #fafafa;
+    padding: 15px 10px;
+    border-radius: 12px;
+    transition: transform 0.2s;
+}
+
+.stamp-item:hover { transform: translateY(-3px); }
+
+.stamp-img {
+    width: 60px;
+    height: 60px;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+}
+
+.stamp-name {
+    font-size: 0.75rem;
+    margin-top: 8px;
+    color: #555;
+    font-weight: bold;
+}
+
+/* --- お気に入りリスト --- */
+.fav-list {
+    list-style: none;
+    padding: 0;
+}
+
+.fav-item {
+    padding: 15px 0;
+    border-bottom: 1px solid #f0f0f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.oshiro-name {
+    font-weight: bold;
+    color: #1e2a4a; /* 藍色 */
+}
+
+.oshiro-address {
+    font-size: 0.8em;
+    color: #888;
+}
+
+/* --- その他 --- */
+.no-data-text {
+    color: #999;
+    font-size: 0.9em;
+    text-align: center;
+    padding: 20px 0;
+}
+
+.back-nav {
+    margin: 40px 0;
+    text-align: center;
+}
+
+.btn-back {
+    color: #999;
+    text-decoration: none;
+    font-size: 0.9em;
+    border: 1px solid #eee;
+    padding: 8px 25px;
+    border-radius: 25px;
+}
+
+/* ====================================
+    スマホ表示（600px以下）
+==================================== */
+@media screen and (max-width: 600px) {
+    .profile-container { margin: 0; width: 100%; }
+    
+    .profile-header-card, .profile-section {
+        border-radius: 0;
+        padding: 30px 20px;
+        box-shadow: none;
+        border-bottom: 1px solid #eee;
+    }
+
+    .profile-avatar, .profile-avatar-none {
+        width: 100px;
+        height: 100px;
+    }
+
+    .stamp-grid {
+        grid-template-columns: repeat(3, 1fr); /* スマホは横3つ並べて縦長を抑える */
+        gap: 10px;
+    }
+
+    .fav-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+}
+</style>
 {% endblock %}

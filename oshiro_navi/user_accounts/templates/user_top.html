@@ -1,6 +1,13 @@
 {% extends "user_base.html" %}
 {% load static %}
 {% block content %}
+<style>
+
+/* Swiper スライダーのカスタマイズ */
+.top-carousel-container {
+    padding: 20px 0 50px;
+}
+</style>
 
 <div class="user-top-logo" style="display: flex; justify-content: center; margin-bottom: 20px;">
     <img src="{% static 'image/top_logo.png' %}" alt="お城ナビロゴ" class="logo-image" style="width: 300px; height: auto;">
@@ -103,5 +110,4 @@
 
 <hr>
 <hr>
-
 {% endblock %}

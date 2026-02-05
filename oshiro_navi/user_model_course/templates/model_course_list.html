@@ -9,30 +9,30 @@
 <div class="mypage-container model-course-container">
 
     {% if oshiro %}
-        <h1 class="page-title">{{ oshiro.oshiro_name }} のモデルコース</h1>
+        <h1 class="page-title">{{ oshiro.oshiro_name }} モデルコース</h1>
         
         <!--  カテゴリ選択 -->
         <div class="category-tabs">
             <a href="?oshiro_id={{ oshiro_id }}&difficulty=" 
-               class="tab-item {% if not current_difficulty %}active{% endif %}">
+               class="tab-category {% if not current_difficulty %}active{% endif %}">
                すべて
             </a>
             
             <!-- 初心者向け -->
             <a href="?oshiro_id={{ oshiro_id }}&difficulty=初心者向け" 
-               class="tab-item {% if current_difficulty == '初心者向け' %}active{% endif %}">
+               class="tab-category {% if current_difficulty == '初心者向け' %}active{% endif %}">
                初心者向け
             </a>
 
             <!-- 短時間滞在者向け -->
             <a href="?oshiro_id={{ oshiro_id }}&difficulty=短時間滞在者向け" 
-               class="tab-item {% if current_difficulty == '短時間滞在者向け' %}active{% endif %}">
+               class="tab-category {% if current_difficulty == '短時間滞在者向け' %}active{% endif %}">
                短時間滞在者向け
             </a>
 
             <!-- 長時間滞在者向け -->
             <a href="?oshiro_id={{ oshiro_id }}&difficulty=長時間滞在者向け" 
-               class="tab-item {% if current_difficulty == '長時間滞在者向け' %}active{% endif %}">
+               class="tab-category {% if current_difficulty == '長時間滞在者向け' %}active{% endif %}">
                長時間滞在者向け
             </a>
         </div>
