@@ -63,7 +63,6 @@
                 {% endif %}
 
                 <button type="submit" style="margin-top: 10px;">Signup</button>
-               
             </form>
         </div>
         
@@ -77,7 +76,7 @@
 
                 {% if success_message %}
                     <div class="alert alert-success" style="color: green; font-weight: bold; margin-bottom: 15px; text-align: center;">
-                         {{ success_message }}
+                        {{ success_message }}
                     </div>
                 {% endif %}
                 
@@ -126,16 +125,107 @@
                 </div>
                 </div>
             </div>
-            <div class="mobile-switch-area d-block d-sm-none">
-                <button class="btn-mobile-switch" id="mobileSwitchBtn">新規登録はこちら</button>
-            </div>
         </div>
     </div>
 
+
+    <!-- ▼ モバイル用フリップカード ▼ -->
+<div class="mb-wrapper">
+    <div class="overlay" style="{% if bg_image_url %}background-image: url('{{ bg_image_url }}'); background-size: cover; background-position: center;{% endif %}"></div>
+    <div class="mb-card-switch">
+        <div class="mb-switch">
+            <input type="checkbox" class="mb-toggle" id="mb-flip-checkbox" style="display:none;">
+
+            <div class="mb-flip-card__inner">
+                <div class="mb-flip-card__front">
+                    <div class="mb-title">Login here</div>
+                    <form class="mb-flip-card__form" method="post" action="{% url 'user_accounts:account' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="login">
+                        {% if success_message %}
+                            <div class="alert alert-success" style="color: green; font-weight: bold; margin-bottom: 15px; text-align: center;">
+                                {{ success_message }}
+                            </div>
+                        {% endif %}
+                        
+                        <input class="mb-flip-card__input" type="email" name="email" placeholder="Email" id="mb-email_login" value="{{ values.email|default:'' }}">
+                        {% if errors.login_email %}
+                            <div class="error-text">{{ errors.login_email }}</div>
+                        {% endif %}
+
+                        <input class="mb-flip-card__input" type="password" name="password" placeholder="Pass" id="mb-pass_login">
+                        {% if errors.login_password %}
+                            <div class="error-text">{{ errors.login_password }}</div>
+                        {% endif %}
+
+                        {% if errors.login_common %}
+                            <div class="error-text" style="text-align: center;">{{ errors.login_common }}</div>
+                        {% endif %}
+                        
+                        <button type="submit" class="mb-flip-card__btn" style="margin-top: 10px;">Login</button>
+                    </form>
+                    <small>アカウントがまだない方はこちら</small>
+                    <button type="button" class="mb-flip-card_signup_btn" id="mb-to-signup">signup →</button> 
+                </div> <div class="mb-flip-card__back">
+                    <div class="mb-title">Signup here</div>
+                    <form class="mb-flip-card__form" method="post" action="{% url 'user_accounts:account' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="signup">
+                        
+                        <input class="mb-flip-card__input" type="text" name="username" placeholder="アカウント名(6文字以内)" id="mb_name" value="{{ values.username|default:'' }}">
+                        {% if errors.signup_username %}
+                            <div class="error-text">{{ errors.signup_username }}</div>
+                        {% endif %}
+
+                        <input class="mb-flip-card__input" type="email" name="email" placeholder="Email" id="mb-email_signup" value="{{ values.email|default:'' }}">
+                        {% if errors.signup_email %}
+                            <div class="error-text">{{ errors.signup_email }}</div>
+                        {% endif %}
+
+                        <input class="mb-flip-card__input" type="password" name="password" placeholder="Pass" id="mb-pass_signup">
+                        {% if errors.signup_password %}
+                            <div class="error-text">{{ errors.signup_password }}</div>
+                        {% endif %}
+                        
+                        {% if errors.signup_common %}
+                            <div class="error-text">{{ errors.signup_common }}</div>
+                        {% endif %}
+
+                        <button type="submit" class="mb-flip-card__btn" style="margin-top: 10px;">Signup</button>
+                    </form>
+                    <small>アカウントをお持ちの方はこちら</small>
+                    <button type="button" class="mb-flip-card_login_btn" id="mb-to-login">Login ←</button> 
+                </div>
+            </div> 
+        </div> 
+    </div> 
+</div>
+
+
+
     <script src="{% static 'js/main.js' %}"></script>
 
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const mbToggle = document.getElementById('mb-flip-checkbox');
+        const toSignup = document.getElementById('mb-to-signup');
+        const toLogin = document.getElementById('mb-to-login');
 
-    
+        // スマホ用：Signupボタンを押した時だけ回転
+        if (toSignup) {
+            toSignup.addEventListener('click', function() {
+                mbToggle.checked = true;
+            });
+        }
+
+        // スマホ用：Loginボタンを押した時だけ戻る
+        if (toLogin) {
+            toLogin.addEventListener('click', function() {
+                mbToggle.checked = false;
+            });
+        }
+    });
+    </script>
     <!-- エラー発生時に正しいパネルを表示するためのスクリプト -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {

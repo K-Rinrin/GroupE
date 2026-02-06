@@ -84,37 +84,50 @@ window.onload = function() {
     });
 };
 
+
 document.addEventListener("DOMContentLoaded", () => {
-    const container = document.getElementById("container");
+    const container = document.getElementById('container');
+    const signupBtn = document.getElementById('signup');
+    const loginBtn = document.getElementById('login');
 
-    const signupBtn = document.getElementById("signup");       // PC
-    const loginBtn  = document.getElementById("login");        // PC
-    const mobileBtn = document.getElementById("mobileSwitchBtn"); // スマホ
+    // 1. PC/スマホ共通の切り替え処理
+    signupBtn.addEventListener('click', () => {
+        container.classList.add("right-panel-active");
+    });
 
-    // サインアップ表示
-    const showSignup = () => {
-        container.classList.add("mobile-signup-active");
-        if (mobileBtn) mobileBtn.textContent = "ログインはこちら";
+    loginBtn.addEventListener('click', () => {
+        container.classList.remove("right-panel-active");
+    });
+
+    // 2. スマホ時のみの「ボタンお引っ越し」大作戦
+    const moveButtonsForMobile = () => {
+        if (window.innerWidth <= 600) {
+            // ログインフォームの中に、PC用の「Sign up→」ボタンを移動
+            const loginForm = document.querySelector('.login-container form');
+            if (loginForm && signupBtn) {
+                // 「アカウントをお持ちでない方はこちら」というラベルを付ける（任意）
+                if (!document.getElementById('mobile-hint-text')) {
+                    const hint = document.createElement('p');
+                    hint.id = 'mobile-hint-text';
+                    hint.textContent = "アカウントをお持ちでない方はこちら";
+                    hint.style.cssText = "font-size:12px; color:#d4a024; margin-top:20px; margin-bottom:0;";
+                    loginForm.appendChild(hint);
+                }
+                loginForm.appendChild(signupBtn);
+            }
+
+            // 新規登録フォームの中に、PC用の「Login ←」ボタンを移動
+            const signupForm = document.querySelector('.signup-container form');
+            if (signupForm && loginBtn) {
+                signupForm.appendChild(loginBtn);
+            }
+        }
     };
 
-    // ログイン表示
-    const showLogin = () => {
-        container.classList.remove("mobile-signup-active");
-        if (mobileBtn) mobileBtn.textContent = "新規登録はこちら";
-    };
-
-    // PC用
-    if (signupBtn) signupBtn.addEventListener("click", showSignup);
-    if (loginBtn)  loginBtn.addEventListener("click", showLogin);
-
-    // スマホ用（トグル）
-    if (mobileBtn) {
-        mobileBtn.addEventListener("click", () => {
-            container.classList.contains("mobile-signup-active")
-                ? showLogin()
-                : showSignup();
-        });
-    }
+    // 実行
+    moveButtonsForMobile();
+    // 画面サイズが変わったときにも対応
+    window.addEventListener('resize', moveButtonsForMobile);
 });
 
 
