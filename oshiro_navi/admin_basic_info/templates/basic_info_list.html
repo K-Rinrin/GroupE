@@ -44,7 +44,7 @@
                 <!-- アクセス -->
                 <td class="castle-row">
                     {% if row.basic %}
-                        {{ row.basic.access_info }}
+                        {{ row.basic.access_info|truncatechars:8 }}
                     {% else %}
                         -
                     {% endif %}
