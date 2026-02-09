@@ -171,13 +171,18 @@ function closeModal() {
     flex-direction: column;
 }
 
+/* 修正部分 */
 .modal-content {
     max-width: 90%;
     max-height: 85%;
+    width: auto;
+    height: auto;
+    object-fit: contain; /* ← 最重要 */
     border: 2px solid #fff;
     border-radius: 5px;
     box-shadow: 0 0 30px rgba(0,0,0,0.5);
 }
+
 
 .modal-close-text {
     color: #fff;
