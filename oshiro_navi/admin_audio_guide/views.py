@@ -236,7 +236,7 @@ class QRcodeGeneretorView(LoginRequiredMixin, TemplateView):
 
         # QR用の固定URL
         context["base_url"] = (
-            "http://34.207.123.32/user/audio_guide/guide_list/"
+            "http://10.250.156.81:8080/user/audio_guide/guide_list/"
         )
 
         return context
